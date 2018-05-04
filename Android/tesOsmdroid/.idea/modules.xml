@@ -2,8 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
-      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
-      <module fileurl="file://$PROJECT_DIR$/tesOsmdroid.iml" filepath="$PROJECT_DIR$/tesOsmdroid.iml" />
+      <module fileurl="file://$PROJECT_DIR$/.idea/tesOsmdroid.iml" filepath="$PROJECT_DIR$/.idea/tesOsmdroid.iml" />
     </modules>
   </component>
 </project>

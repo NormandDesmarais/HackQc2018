@@ -1,0 +1,11 @@
+<resources>
+    <string name="app_name">simpleTestApp</string>
+
+    <string name="action_settings">Settings</string>
+    <string name="posBtn">posBtn</string>
+    <string name="centerBtn">centerBtn</string>
+    <string name="highlight">highlight</string>
+    <string name="removeAll">removeAll</string>
+    <string name="addPin">addPin</string>
+    <string name="circleBtn">circleBtn</string>
+</resources>
