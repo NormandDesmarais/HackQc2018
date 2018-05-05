@@ -11,7 +11,6 @@ import org.osmdroid.util.GeoPoint;
 
 import java.io.File;
 
-
 public class Manager {
 
     public static final String SERVER_ADDR = "10.240.201.81";
@@ -21,12 +20,15 @@ public class Manager {
 
     public ServerConnection mainServer;
     public MainActivity mainActivity;
+    public MapDisplay myMap;
 
-    public static final String testURL = "https://hackqc.herokuapp.com/api/testPoint";
+    public static final String testURL = "https://hackqc.herokuapp.com/api";
 
-    public Manager(MainActivity act) throws Exception {
+
+    public Manager(MainActivity act, MapDisplay myMap) throws Exception {
 
         this.mainActivity = act;
+        this.myMap = myMap;
 
         this.setupStorage();
 
@@ -34,48 +36,50 @@ public class Manager {
         mainServer = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
         ServerConnection testServer = new ServerConnection(testURL);
 
-        String response = testServer.getRequest();
-        // test
-        Log.w("test server : ", response) ;
-        JSONObject JSONtest = JSONWrapper.createJSON(response);
+        String response = testServer.ping("/latest", myMap.map.getBoundingBox());
 
-        Alerte testAlerte = JSONWrapper.parseGEOJson(JSONtest);
+        myMap.updateLists(new JSONObject(response));
 
-        Log.w("testAlerte : ", testAlerte.toString());
-
-        mainActivity.myMap.addAlertPin(testAlerte);
-        mainActivity.myMap.map.setExpectedCenter(
-                new GeoPoint(testAlerte.getLattitude(), testAlerte.getLongitude()));
     }
-
 
     public void drawPolygon(JSONObject polyPoints){
 
         this.mainActivity.myMap.drawPolygon(polyPoints);
+
+
     }
 
     private void setupStorage(){
 
         // check if notification File exist on device and create one if needed
         File notif = new File(
-                        mainActivity.getApplicationContext().getFilesDir(),
-                        Manager.NOTIFICATION_FILE_PATH);
+                mainActivity.getApplicationContext().getFilesDir(),
+                Manager.NOTIFICATION_FILE_PATH);
         if(notif.exists()){
-            Toast.makeText(mainActivity, "Fichier de notification détecté", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mainActivity, "Fichier de notification dÃ©tectÃ©", Toast.LENGTH_SHORT).show();
         }
         else {
             JSONWrapper.createNotificationFile(mainActivity);
         }
 
-        // check if alert File exist on device and create one if needed
-        File alertes = new File(
-                mainActivity.getApplicationContext().getFilesDir(),
-                Manager.ALERT_FILE_PATH);
-        if(alertes.exists()){
-            Toast.makeText(mainActivity, "Fichier d'alertes détecté", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            JSONWrapper.createNotificationFile(mainActivity);
+        // get all alerts from server
+        String result;
+        try {
+
+            result = mainServer.ping("/latest", MapDisplay.MONTREAL_BOUNDING_BOX);
+
+            // check if alert File exist on device and create one if needed
+            File alertes = new File(
+                    mainActivity.getApplicationContext().getFilesDir(),
+                    Manager.ALERT_FILE_PATH);
+            if(alertes.exists()){
+                Toast.makeText(mainActivity, "Fichier d'alertes détecté", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                JSONWrapper.createAlertFile(mainActivity, result);
+            }
+        } catch (Exception e){
+            Toast.makeText(mainActivity, "impossible de crÃ©er le fichier d'alerte", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -86,7 +90,6 @@ public class Manager {
 
     }
 
-<<<<<<< HEAD
     public String AlertFile(String newFileFromServer){
 
         String currentFile;
@@ -98,11 +101,11 @@ public class Manager {
 
 
 
-        // merge file
+            // merge file
 
-        JSONObject jsonServer = new JSONObject(newFileFromServer);
+            JSONObject jsonServer = new JSONObject(newFileFromServer);
 
-        return result;
+            return result;
 
         } catch (Exception e){
             e.printStackTrace();
@@ -112,30 +115,6 @@ public class Manager {
 
     }
 
-    /**
-     * INCOMPLETE
-     *
-     * @param file1
-     * @param file2
-     * @return
-     */
-    public JSONObject mergeJSONFile(JSONObject file1, JSONObject file2){
-
-        try {
-
-            JSONArray alertes1 = file1.getJSONArray("alertes");
-            JSONArray alertes2 = file2.getJSONArray("alertes");
-
-
-        } catch (JSONException j){
-            j.printStackTrace();
-        }
-
-        return null;
-    }
-
-=======
->>>>>>> 3dfa7e67f8d4b4cf865cd9b910f65ef13f5d41bd
 
 
 
