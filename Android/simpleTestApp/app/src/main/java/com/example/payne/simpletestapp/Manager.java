@@ -1,5 +1,6 @@
 package com.example.payne.simpletestapp;
 
+import android.util.Log;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -11,7 +12,7 @@ public class Manager {
 
     public static final boolean USE_TEST_SERVER_POST = true;
 
-    public static final String SERVER_ADDR = "10.240.201.81";
+    public static final String SERVER_ADDR = "https://hackqc.herokuapp.com/api/alertes";
     public static final int PORT = 8080;
     public static final String NOTIFICATION_FILE_PATH = "acclimate/notifications";
     public static final String ALERT_FILE_PATH = "acclimate/alertes";
@@ -34,6 +35,9 @@ public class Manager {
         // test server setup
         this.mainServer = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
         this.testServer = new ServerConnection(testPushURL);
+
+        String quebec = mainServer.ping("", MapDisplay.QUEBEC_BOUNDING_BOX);
+        Log.w("QUEBEC : ", quebec);
 
     }
 
