@@ -33,6 +33,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+        // setup app backend
+        Manager.setup();
 
         //handle permissions first, before map is created. not depicted here
 
