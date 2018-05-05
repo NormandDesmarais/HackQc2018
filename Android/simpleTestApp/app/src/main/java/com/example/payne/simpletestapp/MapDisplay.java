@@ -1,5 +1,6 @@
 package com.example.payne.simpletestapp;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
@@ -33,12 +34,12 @@ public class MapDisplay {
 
     public MapView map;
     private double[] lastTouch = {0, 0};
+    private Context ctx;
 
 
-    public MapDisplay(MapView map){
-
+    public MapDisplay(MapView map, Context ctx){
         this.map = map;
-
+        this.ctx = ctx;
         }
 
 
@@ -126,9 +127,19 @@ public class MapDisplay {
         pin.setSnippet("A snippet");
 
         switch (type) {
-            case "water" :
-                
+            case "eau" :
+                pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_goutte));
                 break;
+            case "seisme" :
+                pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_seisme));
+                break;
+            case "vent" :
+                pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_vent));
+                break;
+            case "feu" :
+                pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_feu));
+                break;
+
         }
 
         map.getOverlays().add(pin);
