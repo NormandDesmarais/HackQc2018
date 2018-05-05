@@ -22,6 +22,10 @@ public class JSONWrapper {
     }
 
 
+    public static JSONObject createJSON(String s) throws Exception{
+        return new JSONObject(s);
+    }
+
     /* https://stackoverflow.com/
     questions/12910503/read-file-as-string
     ?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
