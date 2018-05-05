@@ -4,6 +4,13 @@
     tools:context="com.example.payne.simpletestapp.MainActivity">
 
     <item
+        android:id="@+id/action_search"
+        android:icon="@android:drawable/ic_menu_search"
+        android:title="@string/action_search"
+        android:visible="true"
+        app:actionViewClass="android.support.v7.widget.SearchView"
+        app:showAsAction="always" />
+    <item
         android:id="@+id/posBtn"
         android:orderInCategory="100"
         android:title="@string/posBtn"
@@ -56,21 +63,14 @@
         android:id="@+id/extraBtn"
         android:orderInCategory="106"
         android:title="@string/extraBtn"
-        app:showAsAction="always" />
+        android:visible="true"
+        app:showAsAction="always"
+        android:icon="@drawable/test" />
 
 
     <!-- Icons: https://material.io/icons/ -->
     <!-- https://developer.android.com/guide/topics/resources/menu-resource -->
 
     <!-- "Mark Favorite", should appear as action button if possible -->
-
-    <!--
-    <item
-        android:id="@+id/action_mainBtn"
-        android:title="title1"
-        app:showAsAction="ifRoom" />
-    -->
-
-    <!-- Settings, should always be in the overflow -->
 
 </menu>
