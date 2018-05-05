@@ -15,10 +15,11 @@ public class Manager {
     public static final String ALERT_FILE_PATH = "acclimate/alertes";
 
     public ServerConnection mainServer;
+    public ServerConnection testServer;
     public MainActivity mainActivity;
     public MapDisplay myMap;
 
-    public static final String testURL = "https://hackqc.herokuapp.com/api";
+    public static final String testPushURL = "https://hackqc.herokuapp.com/api/putAlert";
 
 
     public Manager(MainActivity act, MapDisplay myMap) throws Exception {
@@ -30,9 +31,9 @@ public class Manager {
 
         // test server setup
         mainServer = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
-        ServerConnection testServer = new ServerConnection(testURL);
+        this.testServer = new ServerConnection(testPushURL);
 
-        String response = testServer.ping("/latest", myMap.map.getBoundingBox());
+        String response = testServer.ping("", myMap.map.getBoundingBox());
 
         myMap.updateLists(new JSONObject(response));
 
