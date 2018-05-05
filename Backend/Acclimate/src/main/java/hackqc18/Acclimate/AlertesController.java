@@ -11,9 +11,11 @@ public class AlertesController {
 
     @RequestMapping(value="/alertes",produces="application/json")
     public String alertes(
-            @RequestParam(value="lat", defaultValue="0.") double latitude,
-            @RequestParam(value="lng", defaultValue="0.") double longitude) {
-        return new Alertes(latitude, longitude).toString();
+            @RequestParam(value="nord", defaultValue="63.") double nord,
+            @RequestParam(value="sud", defaultValue="40.") double sud,
+            @RequestParam(value="est", defaultValue="-58.") double est,
+            @RequestParam(value="ouest", defaultValue="-84.") double ouest) {
+        return new Alertes(nord, sud, est, ouest).toString();
     }
 }
 
