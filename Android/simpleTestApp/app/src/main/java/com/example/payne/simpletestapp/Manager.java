@@ -11,6 +11,7 @@ import org.osmdroid.util.GeoPoint;
 
 import java.io.File;
 
+
 public class Manager {
 
     public static final String SERVER_ADDR = "10.240.201.81";
@@ -34,10 +35,10 @@ public class Manager {
         ServerConnection testServer = new ServerConnection(testURL);
 
         String response = testServer.getRequest();
-
         // test
         Log.w("test server : ", response) ;
         JSONObject JSONtest = JSONWrapper.createJSON(response);
+
         Alerte testAlerte = JSONWrapper.parseGEOJson(JSONtest);
 
         Log.w("testAlerte : ", testAlerte.toString());
@@ -47,19 +48,18 @@ public class Manager {
                 new GeoPoint(testAlerte.getLattitude(), testAlerte.getLongitude()));
     }
 
+
     public void drawPolygon(JSONObject polyPoints){
 
         this.mainActivity.myMap.drawPolygon(polyPoints);
-
-
     }
 
     private void setupStorage(){
 
         // check if notification File exist on device and create one if needed
         File notif = new File(
-                mainActivity.getApplicationContext().getFilesDir(),
-                Manager.NOTIFICATION_FILE_PATH);
+                        mainActivity.getApplicationContext().getFilesDir(),
+                        Manager.NOTIFICATION_FILE_PATH);
         if(notif.exists()){
             Toast.makeText(mainActivity, "Fichier de notification détecté", Toast.LENGTH_SHORT).show();
         }
@@ -67,23 +67,15 @@ public class Manager {
             JSONWrapper.createNotificationFile(mainActivity);
         }
 
-        // get alerts from server
-        String result;
-        try {
-            result = mainServer.ping();
-
-            // check if alert File exist on device and create one if needed
-            File alertes = new File(
-                    mainActivity.getApplicationContext().getFilesDir(),
-                    Manager.ALERT_FILE_PATH);
-            if(alertes.exists()){
-                Toast.makeText(mainActivity, "Fichier d'alertes détecté", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                JSONWrapper.createAlertFile(mainActivity, result);
-            }
-        } catch (Exception e){
-            Toast.makeText(mainActivity, "impossible de créer le fichier d'alerte", Toast.LENGTH_SHORT).show();
+        // check if alert File exist on device and create one if needed
+        File alertes = new File(
+                mainActivity.getApplicationContext().getFilesDir(),
+                Manager.ALERT_FILE_PATH);
+        if(alertes.exists()){
+            Toast.makeText(mainActivity, "Fichier d'alertes détecté", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            JSONWrapper.createNotificationFile(mainActivity);
         }
 
     }
@@ -94,6 +86,7 @@ public class Manager {
 
     }
 
+<<<<<<< HEAD
     public String AlertFile(String newFileFromServer){
 
         String currentFile;
@@ -141,6 +134,8 @@ public class Manager {
         return null;
     }
 
+=======
+>>>>>>> 3dfa7e67f8d4b4cf865cd9b910f65ef13f5d41bd
 
 
 
