@@ -2,15 +2,15 @@ var app = angular.module('appController', [])
 
 app.controller('mainController', ['$scope', 'Request', function($scope, Request) {
 
-    Request.get("Inondations").then(function(data){
-        console.log(data);
-    })
-
     $scope.risques = [
         {
             show: false,
             title: "Inondations",
-            icon: "icon_goutte.png"
+            icon: "icon_goutte.png",
+            date:{
+                debut:"",
+                fin:""
+            }
         },
         {
             show: false,
@@ -33,7 +33,6 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
         $scope.risques[i].show = !$scope.risques[i].show;
         if($scope.risques[i].show){
             loadPins($scope.risques[i].title)
-            console.log("alo");
         }
         else{
             removeLayer($scope.risques[i].title)
@@ -43,7 +42,6 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
     function loadPins(type){
         Request.get(type).then(function(data){
             pinsToMap(type, data.data);
-            console.log(data);
         })
     }
 
