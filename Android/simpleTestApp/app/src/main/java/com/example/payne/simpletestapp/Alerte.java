@@ -1,7 +1,6 @@
 package com.example.payne.simpletestapp;
 
 import android.util.Log;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -11,16 +10,16 @@ public class Alerte {
 
     private double lattitude;
     private double longitude;
-    private String nom;
-    private String source;
-    private String territoire;
-    private String certitude;
-    private String severite;
-    private String type;
-    private String dateDeMiseAJour;
-    private String idAlerte;
-    private String urgence;
-    private String description;
+    public String nom;
+    public String source;
+    public String territoire;
+    public String certitude;
+    public String severite;
+    public String type;
+    public String dateDeMiseAJour;
+    public String idAlerte;
+    public String urgence;
+    public String description;
 
     /**
      * Create an Alert object from the a JSON file (GEOJSON format)
@@ -71,9 +70,17 @@ public class Alerte {
         String result = "";
 
         result += "nom : " + this.nom + "\n";
-        result += "position : lat = " + this.lattitude + " - longitude = " + this.longitude;
+        result += "position : lat = " + this.getLattitude() + " - longitude = " + this.getLongitude();
         result += "type : " + this.type;
 
         return result;
+    }
+
+    public double getLattitude() {
+        return lattitude;
+    }
+
+    public double getLongitude() {
+        return longitude;
     }
 }

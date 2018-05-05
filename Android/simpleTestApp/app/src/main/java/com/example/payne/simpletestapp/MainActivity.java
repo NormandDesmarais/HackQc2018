@@ -64,9 +64,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         https://developer.android.com/guide/topics/location/strategies
          */
 
-
         map = findViewById(R.id.map);
-        myMap = new MapDisplay(map);
+        myMap = new MapDisplay(map, this);
         map.setTileSource(TileSourceFactory.MAPNIK);
 
         // set zoom control and multi-touch gesture
@@ -197,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 break;
 
             case (R.id.addPin):
-                myMap.addPin(myMap.getCenter());
+                myMap.addPin(myMap.getCenter(), "eau");
                 break;
 
             case (R.id.circleBtn):

@@ -1,5 +1,6 @@
 package com.example.payne.simpletestapp;
 
+import android.content.Context;
 import android.graphics.Color;
 import android.util.Log;
 import android.view.View;
@@ -10,6 +11,8 @@ import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.ItemizedIconOverlay;
+import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Overlay;
@@ -31,10 +34,14 @@ public class MapDisplay {
 
     public MapView map;
     private double[] lastTouch = {0, 0};
+    private Context ctx;
 
-    public MapDisplay(MapView map){
+
+    public MapDisplay(MapView map, Context ctx){
         this.map = map;
-    }
+        this.ctx = ctx;
+        }
+
 
     /**
      * North, south, east, west
@@ -108,6 +115,38 @@ public class MapDisplay {
 
     }
 
+
+    public void addPin(GeoPoint pos, String type){
+
+        Marker pin = new Marker(map);
+        pin.setPosition(pos);
+        pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+
+        pin.setTitle("TITLE : A pin");
+        pin.setSubDescription("A subdescripton");
+        pin.setSnippet("A snippet");
+
+        switch (type) {
+            case "eau" :
+                pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_goutte));
+                break;
+            case "seisme" :
+                pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_seisme));
+                break;
+            case "vent" :
+                pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_vent));
+                break;
+            case "feu" :
+                pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_feu));
+                break;
+
+        }
+
+        map.getOverlays().add(pin);
+        this.map.invalidate();
+
+    }
+
     public void drawCircleAtCenter(int radius, int shade){
 
         for (int i = 1; i <= shade + 1; i++){
@@ -149,7 +188,21 @@ public class MapDisplay {
 
     public void addAlertPin(Alerte alerte){
 
+        GeoPoint pos = new GeoPoint(alerte.getLattitude(), alerte.getLongitude());
+        Marker pin = new Marker(map);
+        pin.setPosition(pos);
+        pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
+        pin.setTitle(alerte.nom);
+
+        String description = alerte.description + " " +alerte.type;
+        pin.setSubDescription(description);
+
+        String snippet = alerte.dateDeMiseAJour + " " + alerte.urgence;
+        pin.setSnippet(snippet);
+
+        map.getOverlays().add(pin);
+        this.map.invalidate();
 
     }
 

@@ -24,8 +24,10 @@ public class Manager {
         // test
         Log.w("test server : ", response) ;
         JSONObject JSONtest = JSONWrapper.createJSON(response);
-        //this.drawPolygon(JSONtest);
 
+        Alerte testAlerte = JSONWrapper.parseGEOJson(JSONtest);
+
+        mainActivity.myMap.addAlertPin(testAlerte);
     }
 
     public void drawPolygon(JSONObject polyPoints){
