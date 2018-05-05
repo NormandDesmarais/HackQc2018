@@ -9,13 +9,19 @@
  */
 package org.geotools.tutorial.filter;
 
+import java.util.HashMap;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import com.vividsolutions.jts.geom.Point;
 import java.awt.BorderLayout;
 import java.awt.Dimension;
 import java.awt.event.ActionEvent;
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.Iterator;
 import java.util.Map;
+import javafx.geometry.BoundingBox;
 import javax.swing.ComboBoxModel;
 import javax.swing.DefaultComboBoxModel;
 import javax.swing.JComboBox;
@@ -27,23 +33,33 @@ import javax.swing.JScrollPane;
 import javax.swing.JTable;
 import javax.swing.JTextField;
 import javax.swing.table.DefaultTableModel;
+import static org.geotools.csw.DCT.extent;
 import org.geotools.data.DataStore;
 import org.geotools.data.DataStoreFactorySpi;
 import org.geotools.data.DataStoreFinder;
+import org.geotools.data.FeatureSource;
+import org.geotools.data.FileDataStore;
+import org.geotools.data.FileDataStoreFinder;
 import org.geotools.data.Query;
 import org.geotools.data.postgis.PostgisNGDataStoreFactory;
 import org.geotools.data.shapefile.ShapefileDataStoreFactory;
 import org.geotools.data.simple.SimpleFeatureCollection;
 import org.geotools.data.simple.SimpleFeatureIterator;
 import org.geotools.data.simple.SimpleFeatureSource;
+import org.geotools.factory.CommonFactoryFinder;
+import org.geotools.feature.FeatureIterator;
 import org.geotools.filter.text.cql2.CQL;
+import org.geotools.geometry.jts.ReferencedEnvelope;
+import static org.geotools.legend.Glyph.polygon;
 import org.geotools.swing.action.SafeAction;
 import org.geotools.swing.data.JDataStoreWizard;
 import org.geotools.swing.table.FeatureCollectionTableModel;
 import org.geotools.swing.wizard.JWizard;
 import org.opengis.feature.simple.SimpleFeature;
+import org.opengis.feature.simple.SimpleFeatureType;
 import org.opengis.feature.type.FeatureType;
 import org.opengis.filter.Filter;
+import org.opengis.filter.FilterFactory2;
 
 /**
  * The Query Lab is an excuse to try out Filters and Expressions on your own
@@ -65,7 +81,7 @@ public class QueryLab extends JFrame {
         JFrame frame = new QueryLab();
         frame.setVisible(true);
     }
-
+   
     public QueryLab() {
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         getContentPane().setLayout(new BorderLayout());
@@ -168,7 +184,12 @@ public class QueryLab extends JFrame {
 
         table.setModel(new DefaultTableModel(5, 5));
     }
-
+    
+    /**
+     * Getting feature data using featureSource.getFeatures( filter )
+     * 
+     * @throws Exception 
+     */
     private void filterFeatures() throws Exception {
         String typeName = (String) featureTypeCBox.getSelectedItem();
         SimpleFeatureSource source = dataStore.getFeatureSource(typeName);

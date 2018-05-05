@@ -2,6 +2,8 @@ $primaryColor: #d51c29
 $mediumColor: #b72533
 $darkColor: #9b1e31
 
+$black: #5c5d60
+
 $expanderColor: white
 
 .navbar
@@ -16,12 +18,12 @@ $expanderColor: white
 
 #leftPane
     height: calc(100% - 101px)
-    width: 30%
     position: fixed
     top: 101px
     background-color: $expanderColor
-    max-width: 250px
+    width: 250px
     left: 0
+    padding: 15px 5px 15px 10px
     transition: 0.3s all
     #expander
         background-color: $expanderColor
@@ -32,6 +34,8 @@ $expanderColor: white
         right: 0
         transform: translate(50%, -50%)
         border-radius: 50%
+        &:hover
+            cursor: pointer
         img
             height: 30px
             position: absolute
@@ -42,6 +46,75 @@ $expanderColor: white
     #expander.rotate
         img
             transform: translateY(-50%) rotate(0deg)
+    ul
+        list-style-type: none
+        padding: 0
+        li
+            padding: 0 0 15px 0
+            span
+                padding: 0 0 0 15px
+        img
+            height: 25px
+        .selector
+            height: 24px
+            width: 24px
+            border: 2px solid $black
+            border-radius: 4px
+            display: inline-block
+            transform: translateY(25%)
+        .selector.checked
+            background-color: $black
+            &::after
+                content: ""
+                background-image: url('../images/checkmark.svg')
+                background-size: 18px
+                background-repeat: no-repeat
+                background-position: center
+                display: inline-block
+                width: 24px
+                height: 24px
+                position: absolute
+                top: -2px
+                left: -2px
+        .date
+            display: inline-block
+            float: right
+            padding: 7px
+            &::after
+                content: ""
+                background-image: url('../images/datepicker.svg')
+                background-size: 20px
+                background-repeat: no-repeat
+                background-position: center
+                display: inline-block
+                width: 24px
+                height: 24px
+
 
 #leftPane.close
+    opacity: 1
     left: -250px
+
+form
+    display: inline
+
+#search
+    &:hover
+        cursor: pointer
+
+#searchForm
+    background: none
+    border-top: none
+    border-left: none
+    border-right: none
+    border-bottom: 2px solid white
+    padding: 5px 15px
+    outline: 0
+    color: white
+    width: 0px
+    opacity: 0
+    transition: 0.3s all
+
+#searchForm.visible
+    opacity: 1
+    width: 250px

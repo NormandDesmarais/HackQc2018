@@ -208,6 +208,7 @@ public class MapDisplay {
         pin.setSnippet(snippet);
 
         map.getOverlays().add(pin);
+        Log.w("NEW_PIN", pin.getPosition().toString());
         this.map.invalidate();
     }
 

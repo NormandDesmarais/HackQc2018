@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html ng-app="Acclimate">
 <head>
 <title>Acclimate</title>
 <link rel="icon"
@@ -18,19 +18,30 @@
 <script src="https://cdn.polyfill.io/v2/polyfill.min.js?features=requestAnimationFrame,Element.prototype.classList,URL"></script>
 <script src="https://openlayers.org/en/v4.6.5/build/ol.js"></script>
 
+<!-- AngularJS -->
+<script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+
+<!-- Angular Service & Controller -->
+<script src="js/angular/controller.js"></script>
+<script src="js/angular/services.js"></script>
+<script src="js/angular/main.js"></script>
+
 <!-- style -->
 <link rel="stylesheet" href="style/style.css">
 
 </head>
 
-<body>
+<body ng-controller="mainController">
     <nav class="navbar">
         <a class="navbar-brand" href="">
             <img src="images/logo.svg" height="75">
+            <span ng-bind="title"></span>
         </a>
         <div class="row">
             <div class="col-12 text-right">
-                <a><img src="images/search.svg" height="35"></a>
+                <form><input id="searchForm" type="text" placeholder="search"></form>
+                <a id="search"><img src="images/search.svg" height="35"></a>
+                <script src="js/showInput.js"></script>
             </div>
         </div>
     </nav>
@@ -38,6 +49,9 @@
     <script src="js/openlayerInit.js"></script>
     <div id="leftPane">
         <div id="expander"><img src="images/expand.svg"></div>
+        <ul>
+            <li ng-repeat="risque in risques"><div class="selector" ng-class="(risque.show) ? 'checked':''"></div><span ng-bind="risque.title"></span><img ng-src="images/{{risque.icon}}" /><div class="date"></div></li>
+        </ul>
     </div>
     <script src="js/toggleLeftPane.js"></script>
 </body>
