@@ -56,5 +56,11 @@ public class Alertes {
         return result + "}";
     }
 
+    public String coordinatesJSON(double x, double y) {
+        
+    }
     
+    public String pointJSON(double x, double y) {
+        
+    }
 }
