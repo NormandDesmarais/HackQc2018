@@ -1,7 +1,6 @@
 package com.example.payne.simpletestapp;
 
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
@@ -9,7 +8,6 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Button;
 import android.widget.Toast;
 
 import org.osmdroid.api.IMapController;
@@ -99,25 +97,78 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         findViewById(R.id.wind_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Wind button clicked", Toast.LENGTH_SHORT).show();
+                // Remove temporary Pin
+                map.getOverlays().remove(lastPlacedPin);
+
+                // Hide PopUp
+                MainActivity.mainActivity.findViewById(R.id.pop_up).setVisibility(View.GONE);
+                MapDisplay.currentlyPlacingPin = false;
+
+                // locally register alert
+                Alerte alert = new Alerte(lastPlacedPin.getPosition().getLongitude(),
+                        lastPlacedPin.getPosition().getLatitude(),
+                        "eau");
+                myMap.meteoAlerts.add(alert);
+
+                myMap.addAlertPin(alert, MapDisplay.meteoIcon);
             }
         });
         findViewById(R.id.water_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Water button clicked", Toast.LENGTH_SHORT).show();
+
+                // Remove temporary Pin
+                map.getOverlays().remove(lastPlacedPin);
+
+                // Hide PopUp
+                MainActivity.mainActivity.findViewById(R.id.pop_up).setVisibility(View.GONE);
+                MapDisplay.currentlyPlacingPin = false;
+
+                // locally register alert
+                Alerte alert = new Alerte(lastPlacedPin.getPosition().getLongitude(),
+                        lastPlacedPin.getPosition().getLatitude(),
+                        "eau");
+                myMap.eauAlerts.add(alert);
+
+                myMap.addAlertPin(alert, MapDisplay.eauIcon);
             }
         });
         findViewById(R.id.fire_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Fire button clicked", Toast.LENGTH_SHORT).show();
+                // Remove temporary Pin
+                map.getOverlays().remove(lastPlacedPin);
+
+                // Hide PopUp
+                MainActivity.mainActivity.findViewById(R.id.pop_up).setVisibility(View.GONE);
+                MapDisplay.currentlyPlacingPin = false;
+
+                // locally register alert
+                Alerte alert = new Alerte(lastPlacedPin.getPosition().getLongitude(),
+                        lastPlacedPin.getPosition().getLatitude(),
+                        "eau");
+                myMap.feuAlerts.add(alert);
+
+                myMap.addAlertPin(alert, MapDisplay.feuIcon);
             }
         });
         findViewById(R.id.earth_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Toast.makeText(MainActivity.this, "Earth button clicked", Toast.LENGTH_SHORT).show();
+                // Remove temporary Pin
+                map.getOverlays().remove(lastPlacedPin);
+
+                // Hide PopUp
+                MainActivity.mainActivity.findViewById(R.id.pop_up).setVisibility(View.GONE);
+                MapDisplay.currentlyPlacingPin = false;
+
+                // locally register alert
+                Alerte alert = new Alerte(lastPlacedPin.getPosition().getLongitude(),
+                        lastPlacedPin.getPosition().getLatitude(),
+                        "eau");
+                myMap.terrainAlerts.add(alert);
+
+                myMap.addAlertPin(alert, MapDisplay.terrainIcon);
             }
         });
 
@@ -137,7 +188,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         });
 
 
-        /* TODO : Add "SEARCH", "FILTERS", and "HISTORIQUE"
+        /* TODO : Add "SEARCH" and "HISTORIQUE"
         https://developer.android.com/training/appbar/action-views */
 
 
@@ -150,12 +201,10 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         } catch (Exception e){
             e.printStackTrace();
         }
-
     }
 
     @Override
     public boolean singleTapConfirmedHelper(GeoPoint p) {
-        Toast.makeText(this, "tapped :)", Toast.LENGTH_SHORT).show();
         return false;
     }
 
@@ -177,7 +226,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                // TODO : eventually remove this Toast
+                // TODO : eventually remove this Toast and FIX
                 Toast.makeText(MainActivity.this, query, Toast.LENGTH_SHORT).show();
 
                 BoundingBox boundingBox = JSONWrapper.googleBoundingBox(query);
@@ -206,13 +255,10 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
         //noinspection SimplifiableIfStatement
         switch (id) {
+            /*
             case (R.id.action_settings):
                 Toast.makeText(this, "Who fucking cares...", Toast.LENGTH_SHORT).show();
-                /* TODO: Try a Standard Request here
-                https://hackqc.herokuapp.com/api/greeting?name=bob&annee=345&lastname=lolippop
-                https://developer.android.com/training/volley/request
-                https://stackoverflow.com/questions/3027066/how-to-send-a-json-object-over-request-with-android?utm_medium=organic&utm_source=google_rich_qa&utm_campaign=google_rich_qa
-                 */
+
                 break;
 
             case (R.id.posBtn):
@@ -237,11 +283,14 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                         "Center\n Lat : " + center.getLatitude() +
                                 "\nLong : " + center.getLongitude(),
                         Toast.LENGTH_SHORT).show();
+            */
 
             case (R.id.highlight):
+                // TODO: Gérer SERVER REQUEST FROM BOUNDING BOX HERE !!
                 myMap.highlightCurrent(findViewById(android.R.id.content));
                 break;
 
+            /*
             case (R.id.removeAll):
                 myMap.removeAll(findViewById(android.R.id.content), mapEventsOverlay);
                 break;
@@ -253,29 +302,58 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             case (R.id.circleBtn):
                 myMap.drawCircleAtCenter(1000, 5);
                 break;
+            */
 
             case (R.id.cB_fire):
                 if (item.isChecked()) {
+                    MapDisplay.feuFilter = false;
                     item.setChecked(false);
-                    Toast.makeText(this, "FIRE unchecked", Toast.LENGTH_SHORT).show();
+                    myMap.refreshPins();
                 } else {
+                    MapDisplay.feuFilter = true;
                     item.setChecked(true);
-                    Toast.makeText(this, "FIRE is checked", Toast.LENGTH_SHORT).show();
+                    myMap.refreshPins();
                 }
                 break;
 
             case (R.id.cB_water):
                 if (item.isChecked()) {
+                    MapDisplay.eauFilter = false;
                     item.setChecked(false);
-                    Toast.makeText(this, "WATER unchecked", Toast.LENGTH_SHORT).show();
+                    myMap.refreshPins();
                 } else {
+                    MapDisplay.eauFilter = true;
                     item.setChecked(true);
-                    Toast.makeText(this, "WATER is checked", Toast.LENGTH_SHORT).show();
+                    myMap.refreshPins();
                 }
                 break;
 
-            case (R.id.extraBtn):
-                Toast.makeText(this, "extraBtn clicked", Toast.LENGTH_SHORT).show();
+            case (R.id.cB_terrain):
+                if (item.isChecked()) {
+                    MapDisplay.terrainFilter = false;
+                    item.setChecked(false);
+                    myMap.refreshPins();
+                } else {
+                    MapDisplay.terrainFilter = true;
+                    item.setChecked(true);
+                    myMap.refreshPins();
+                }
+                break;
+
+            case (R.id.cB_meteo):
+                if (item.isChecked()) {
+                    MapDisplay.meteoFilter = false;
+                    item.setChecked(false);
+                    myMap.refreshPins();
+                } else {
+                    MapDisplay.meteoFilter = true;
+                    item.setChecked(true);
+                    myMap.refreshPins();
+                }
+                break;
+
+            case (R.id.profileBtn):
+                Toast.makeText(this, "Profile btn clicked", Toast.LENGTH_SHORT).show();
                 break;
 
             default:

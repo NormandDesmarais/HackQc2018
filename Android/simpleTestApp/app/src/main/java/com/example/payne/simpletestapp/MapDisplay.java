@@ -3,28 +3,18 @@ package com.example.payne.simpletestapp;
 import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.support.v7.widget.PopupMenu;
 import android.util.Log;
-import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
-import org.osmdroid.views.overlay.ItemizedIconOverlay;
-import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.Overlay;
-import org.osmdroid.views.overlay.OverlayItem;
 import org.osmdroid.views.overlay.Polygon;
-import org.osmdroid.views.overlay.infowindow.BasicInfoWindow;
-import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -39,7 +29,7 @@ public class MapDisplay {
 
     public MapView map;
     private double[] lastTouch = {0, 0};
-    private Context ctx;
+    static private Context ctx;
     public static boolean currentlyPlacingPin = false;
     public static final BoundingBox MONTREAL_BOUNDING_BOX = new BoundingBox(63,40,58,84);
 
@@ -48,10 +38,15 @@ public class MapDisplay {
     public ArrayList<Alerte> eauAlerts = new ArrayList<>();
     public ArrayList<Alerte> meteoAlerts = new ArrayList<>();
 
-    public Boolean terrainFilter = false;
-    public Boolean feuFilter = false;
-    public Boolean eauFilter = false;
-    public Boolean meteoFilter = false;
+    public static boolean terrainFilter = true;
+    public static boolean feuFilter = true;
+    public static boolean eauFilter = true;
+    public static boolean meteoFilter = true;
+
+    public static Drawable eauIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_goutte);
+    public static Drawable feuIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_feu);
+    public static Drawable terrainIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_seisme);
+    public static Drawable meteoIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_vent);
 
 
     public MapDisplay(MapView map, Context ctx) {
@@ -155,18 +150,19 @@ public class MapDisplay {
 
             switch (type) {
                 case "eau":
-                    pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_goutte));
+                    pin.setIcon(eauIcon);
                     break;
                 case "seisme":
-                    pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_seisme));
+                    pin.setIcon(terrainIcon);
                     break;
                 case "vent":
-                    pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_vent));
+                    pin.setIcon(meteoIcon);
                     break;
                 case "feu":
-                    pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_feu));
+                    pin.setIcon(feuIcon);
                     break;
-
+                default:
+                    break;
             }
 
             pin.setTitle("TITLE : A pin");
@@ -221,12 +217,13 @@ public class MapDisplay {
 
     public void addAlertPin(Alerte alerte, Drawable icon) {
 
-        GeoPoint pos = new GeoPoint(alerte.getLattitude(), alerte.getLongitude());
+        GeoPoint pos = new GeoPoint(alerte.getLatitude(), alerte.getLongitude());
         Marker pin = new Marker(map);
         pin.setPosition(pos);
         pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
         pin.setTitle(alerte.nom);
+        pin.setIcon(icon);
 
         String description = alerte.description + " " + alerte.type;
         pin.setSubDescription(description);
@@ -244,7 +241,6 @@ public class MapDisplay {
         for (Alerte alerte : alertes) {
             this.addAlertPin(alerte, icon);
         }
-
     }
 
     public GeoPoint getCenter() {
@@ -264,8 +260,6 @@ public class MapDisplay {
      * Pour montrer le PopUp pour confirmer le type d'alerte.
      */
     public void showPopUp() {
-
-        // View layout = MainActivity.mainActivity.findViewById(R.id.pop_up);
         MainActivity.mainActivity.findViewById(R.id.pop_up).setVisibility(View.VISIBLE);
     }
 
@@ -289,8 +283,10 @@ public class MapDisplay {
                     break;
                 case "terrain":
                     this.terrainAlerts.add(new Alerte(alerte));
+                    break;
                 default:
                     this.meteoAlerts.add(new Alerte(alerte));
+                    break;
             }
         }
 
@@ -298,10 +294,10 @@ public class MapDisplay {
 
     public void displayLists() {
 
-        if (feuFilter) this.drawAlertPins(feuAlerts, ctx.getResources().getDrawable(R.drawable.pin_feu));
-        if (eauFilter) this.drawAlertPins(eauAlerts, ctx.getResources().getDrawable(R.drawable.pin_goutte));
-        if (terrainFilter) this.drawAlertPins(terrainAlerts, ctx.getResources().getDrawable(R.drawable.pin_seisme));
-        if (meteoFilter) this.drawAlertPins(meteoAlerts, ctx.getResources().getDrawable(R.drawable.pin_vent));
+        if(feuFilter) this.drawAlertPins(feuAlerts, feuIcon);
+        if(eauFilter) this.drawAlertPins(eauAlerts, eauIcon);
+        if(terrainFilter) this.drawAlertPins(terrainAlerts, terrainIcon);
+        if(meteoFilter) this.drawAlertPins(meteoAlerts, meteoIcon);
 
     }
 
@@ -311,8 +307,6 @@ public class MapDisplay {
                        MainActivity.mapEventsOverlay);
         this.displayLists();
         this.map.invalidate();
-
     }
-
 
 }

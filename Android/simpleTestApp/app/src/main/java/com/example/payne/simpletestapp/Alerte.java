@@ -2,13 +2,12 @@ package com.example.payne.simpletestapp;
 
 import android.util.Log;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Alerte {
 
-    private double lattitude;
+    private double latitude;
     private double longitude;
     public String nom;
     public String source;
@@ -44,8 +43,8 @@ public class Alerte {
             this.description = jsonFile.getString("description");
 
             JSONObject geom = jsonFile.getJSONObject("geometry");
-            this.longitude = (double) geom.getJSONArray("coordinates").get(0);
-            this.longitude = (double) geom.getJSONArray("coordinates").get(0);
+            this.latitude = (double) geom.getJSONArray("coordinates").get(0);
+            this.longitude = (double) geom.getJSONArray("coordinates").get(1);
 
 
         } catch (JSONException j){
@@ -54,10 +53,10 @@ public class Alerte {
 
     }
 
-    public Alerte(double longitude, double lattitude, String type){
+    public Alerte(double longitude, double latitude, String type){
 
         this.longitude = longitude;
-        this.lattitude = lattitude;
+        this.latitude = latitude;
         this.type = type;
 
     }
@@ -72,14 +71,14 @@ public class Alerte {
         String result = "";
 
         result += "nom : " + this.nom + "\n";
-        result += "position : lat = " + this.getLattitude() + " - longitude = " + this.getLongitude();
+        result += "position : lat = " + this.getLatitude() + " - longitude = " + this.getLongitude();
         result += "type : " + this.type;
 
         return result;
     }
 
-    public double getLattitude() {
-        return lattitude;
+    public double getLatitude() {
+        return latitude;
     }
 
     public double getLongitude() {
