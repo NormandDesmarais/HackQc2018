@@ -1,13 +1,16 @@
 package com.example.payne.simpletestapp;
 
+import android.content.Context;
 import android.util.Log;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.osmdroid.util.BoundingBox;
 
 import java.io.BufferedReader;
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 
@@ -166,6 +169,36 @@ public class JSONWrapper {
         }
 
         return bBox;
+    }
+
+    public static void createNotificationFile(MainActivity ctx){
+
+        JSONObject file = new JSONObject();
+
+        JSONArray notifications = new JSONArray();
+        JSONObject box = new JSONObject();
+        //box.put("north");
+        //box.put("south");
+        //box.put("east");
+        //box.put("west");
+        notifications.put("type");
+        notifications.put(box);
+
+
+
+        String fileContents = "Hello world!";
+
+        FileOutputStream outputStream;
+
+        try {
+            outputStream = ctx.openFileOutput(Manager.NOTIFICATION_FILE_PATH, Context.MODE_PRIVATE);
+            outputStream.write(fileContents.getBytes());
+            outputStream.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+
     }
 
 }
