@@ -67,7 +67,7 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
 
     function pinsToMap(title, jsonFile){
         var image = new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
-            anchor: [0.5, 46],
+            anchor: [0.5, 30],
             anchorXUnits: 'fraction',
             anchorYUnits: 'pixels',
             opacity: 0.8,

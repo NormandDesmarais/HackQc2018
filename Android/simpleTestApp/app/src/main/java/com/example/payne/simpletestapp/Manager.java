@@ -74,7 +74,7 @@ public class Manager {
                 JSONWrapper.createAlertFile(mainActivity, result);
             }
         } catch (Exception e){
-            Toast.makeText(mainActivity, "impossible de crÃ©er le fichier d'alerte", Toast.LENGTH_SHORT).show();
+            Toast.makeText(mainActivity, "impossible de créer le fichier d'alerte", Toast.LENGTH_SHORT).show();
         }
 
     }
