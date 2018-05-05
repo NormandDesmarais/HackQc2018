@@ -21,6 +21,7 @@ public class Manager {
 
     public static final String testURL = "https://hackqc.herokuapp.com/api/testPoint";
 
+
     public Manager(MainActivity act) throws Exception {
 
         this.mainActivity = act;
@@ -32,10 +33,10 @@ public class Manager {
         ServerConnection testServer = new ServerConnection(testURL);
 
         String response = testServer.getRequest();
+
         // test
         Log.w("test server : ", response) ;
         JSONObject JSONtest = JSONWrapper.createJSON(response);
-
         Alerte testAlerte = JSONWrapper.parseGEOJson(JSONtest);
 
         Log.w("testAlerte : ", testAlerte.toString());
@@ -65,15 +66,23 @@ public class Manager {
             JSONWrapper.createNotificationFile(mainActivity);
         }
 
-        // check if alert File exist on device and create one if needed
-        File alertes = new File(
-                mainActivity.getApplicationContext().getFilesDir(),
-                Manager.ALERT_FILE_PATH);
-        if(alertes.exists()){
-            Toast.makeText(mainActivity, "Fichier d'alertes détecté", Toast.LENGTH_SHORT).show();
-        }
-        else {
-            JSONWrapper.createNotificationFile(mainActivity);
+        // get alerts from server
+        String result;
+        try {
+            result = mainServer.ping();
+
+            // check if alert File exist on device and create one if needed
+            File alertes = new File(
+                    mainActivity.getApplicationContext().getFilesDir(),
+                    Manager.ALERT_FILE_PATH);
+            if(alertes.exists()){
+                Toast.makeText(mainActivity, "Fichier d'alertes détecté", Toast.LENGTH_SHORT).show();
+            }
+            else {
+                JSONWrapper.createAlertFile(mainActivity, result);
+            }
+        } catch (Exception e){
+            Toast.makeText(mainActivity, "impossible de créer le fichier d'alerte", Toast.LENGTH_SHORT).show();
         }
 
     }
@@ -84,7 +93,25 @@ public class Manager {
 
     }
 
+    public String mergeAlertFile(String newFileFromServer){
 
+        String currentFile;
 
+        // get file from storage
+        try {
+            currentFile = (new JSONWrapper(Manager.ALERT_FILE_PATH)).getStringContent();
+
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        // merge file
+        String result = "";
+
+        JSONObject jsonServer = new JSONObject();
+
+        return result;
+
+    }
 
 }
