@@ -1,7 +1,5 @@
 package hackqc18.Acclimate;
 
-import org.json.simple.JSONObject;
-
 public class Alerte {
 
     private final String nom;
@@ -80,19 +78,18 @@ public class Alerte {
 
     @Override
     public String toString() {
-        JSONObject jsonObject = new JSONObject();
-        
-        jsonObject.put("nom", nom);
-        jsonObject.put("source", source);
-        jsonObject.put("territoire", territoire);
-        jsonObject.put("certitude", certitude);
-        jsonObject.put("severite", severite);
-        jsonObject.put("type", type);
-        jsonObject.put("dateDeMiseAJour", dateDeMiseAJour);
-        jsonObject.put("urgence", urgence);
-        jsonObject.put("description", description);
-        
-        String result = jsonObject.toString();
-        return result.substring(0, result.length()-1) + geom + "}";
+        return "{"
+                + "nom:" + nom
+                + "source:" + source
+                + "territoire:" + territoire
+                + "certitude:" + certitude
+                + "severite:" + severite
+                + "type:" + type
+                + "dateDeMiseAJour:" + dateDeMiseAJour
+                + "urgence:" + urgence
+                + "description:" + description 
+                + "geometry:{" + geom
+                + "}}";
+
     }
 }

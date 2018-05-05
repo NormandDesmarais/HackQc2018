@@ -1,19 +1,13 @@
 package hackqc18.Acclimate;
 
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.GeometryFactory;
-import com.vividsolutions.jts.geom.Point;
-import com.vividsolutions.jts.geom.Polygon;
 import java.util.ArrayList;
-import org.json.simple.JSONObject;
 
 public class Alertes {
 
     private final ArrayList<Alerte> alertes = new ArrayList<>();
 
     public Alertes(double longitude, double latitude) {
-        JSONObject point = new JSONObject();
-        point.put("geometry", new JSONObject().put("type", "Point"))
+        PointJSON point = new PointJSON(longitude + 2, latitude + 3);
         
         
         
@@ -25,7 +19,7 @@ public class Alertes {
 
         alertes.add(new Alerte("innondation", "le gouvernement", "Montréal",
                 "certain", "grave", "innondation", "1978-05-04", "00001", "urgent",
-                "on coule!", point));
+                "on coule!", point.toString()));
 //        alertes.add(new Alerte("innondation", "le gouvernement", "Montréal",
 //                "certain", "grave", "innondation", "1978-05-04", "00001", "urgent",
 //                "on coule!", point2));
@@ -56,11 +50,4 @@ public class Alertes {
         return result + "}";
     }
 
-    public String coordinatesJSON(double x, double y) {
-        
-    }
-    
-    public String pointJSON(double x, double y) {
-        
-    }
 }
