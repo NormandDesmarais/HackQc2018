@@ -6,11 +6,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -128,26 +130,12 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                /*
-                TODO: SEARCH FIELD
-                use either AddressToGps or Acastus, both available on F-Droid, to look up addresses and then
-                open the resulting location in either OsmAnd or Maps.me. AddressToGps uses Google as its back
-                end. Acastus uses a Pelias backend which has open data from OSM and from OpenAddresses.
-                Unfortunately both of those need a data connection to work which I would rather do without.
-                 */
 
-
-                /*
-                TODO: GPS_Coord_Getter.SearchCoord(query);
-
-                static public void SearchCoord (String input) {
-                    Log.w("Search Input", input);
-
-                    String tmp = "https://maps.googleapis.com/maps/api/geocode/json?address=" + input;
-                }
-                 */
-
+                // TODO : eventually remove this Toast
                 Toast.makeText(MainActivity.this, query, Toast.LENGTH_SHORT).show();
+
+                map.zoomToBoundingBox(JSONWrapper.googleBoundingBox(query), false);
+
                 return false;
             }
 
@@ -170,7 +158,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         //noinspection SimplifiableIfStatement
         switch (id) {
             case (R.id.action_settings):
-                Toast.makeText(this, "Who fuckings cares...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Who fucking cares...", Toast.LENGTH_SHORT).show();
                 /* TODO: Try a Standard Request here
                 https://hackqc.herokuapp.com/api/greeting?name=bob&annee=345&lastname=lolippop
                 https://developer.android.com/training/volley/request

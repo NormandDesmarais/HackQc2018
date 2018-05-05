@@ -1,0 +1,11 @@
+{
+  "name": "acclimate",
+  "version": "0.0.0",
+  "description": "Application pour visualiser les risques environnementales au Québec",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "Team 19",
+  "license": "ISC"
+}
