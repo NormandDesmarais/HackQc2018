@@ -36,7 +36,7 @@ public class Manager {
         mainServer = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
         ServerConnection testServer = new ServerConnection(testURL);
 
-        String response = testServer.getRequest();
+        String response = testServer.ping();
         // test
         Log.w("test server : ", response) ;
 

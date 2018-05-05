@@ -184,7 +184,6 @@ public class MapDisplay {
 
             map.getOverlayManager().add(circle);
 
-
         }
 
         map.invalidate();
