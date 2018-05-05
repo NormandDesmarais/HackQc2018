@@ -3,9 +3,6 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.payne.simpletestapp.MainActivity">
 
-    <!-- TODO: (Possibly) AppAlert symbol - Messenger-like red numbers
-    https://stablekernel.com/using-custom-views-as-menu-items/ -->
-
     <item
         android:id="@+id/action_search"
         android:icon="@android:drawable/ic_menu_search"
