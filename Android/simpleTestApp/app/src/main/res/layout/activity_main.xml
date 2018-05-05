@@ -43,4 +43,13 @@
         app:layout_anchor="@+id/include"
         app:layout_anchorGravity="left|top" />
 
+    <Button
+        android:id="@+id/popUpAnchor"
+        android:layout_width="190dp"
+        android:layout_height="wrap_content"
+        android:text="Button"
+        android:visibility="invisible"
+        app:layout_anchor="@+id/include"
+        app:layout_anchorGravity="top|center" />
+
 </android.support.design.widget.CoordinatorLayout>

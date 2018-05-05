@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/vent"
+        android:title="@string/vent"
+        android:drawableLeft="@drawable/pin_vent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Drawable left" />
+
+    <item
+        android:id="@+id/eau"
+        android:title="@string/eau"
+        app:showAsAction="always|withText" />
+
+    <item
+        android:id="@+id/feu"
+        android:title="@string/feu"
+        app:showAsAction="always|withText" />
+
+    <item
+        android:id="@+id/seisme"
+        android:title="@string/seisme"
+        app:showAsAction="always|withText" />
+
+</menu>
