@@ -5,27 +5,40 @@ import com.vividsolutions.jts.geom.GeometryFactory;
 import com.vividsolutions.jts.geom.Point;
 import com.vividsolutions.jts.geom.Polygon;
 import java.util.ArrayList;
+import org.json.simple.JSONObject;
 
 public class Alertes {
 
     private final ArrayList<Alerte> alertes = new ArrayList<>();
 
     public Alertes(double longitude, double latitude) {
-        GeometryFactory geoFact = new GeometryFactory();
-        Point point = geoFact.createPoint(new Coordinate(longitude + 1, 2));
-        Polygon polygon = geoFact.createPolygon(new Coordinate[]{
-            new Coordinate(longitude + 4, latitude + 4),
-            new Coordinate(longitude - 4, latitude + 4),
-            new Coordinate(longitude - 4, latitude - 4),
-            new Coordinate(longitude + 4, latitude - 4)});
+        JSONObject point = new JSONObject();
+        point.put("geometry", new JSONObject().put("type", "Point"))
+        
+        
+        
+//        Polygon polygon = geoFact.createPolygon(new Coordinate[]{
+//            new Coordinate(longitude + 4, latitude + 4),
+//            new Coordinate(longitude - 4, latitude + 4),
+//            new Coordinate(longitude - 4, latitude - 4),
+//            new Coordinate(longitude + 4, latitude - 4)});
 
         alertes.add(new Alerte("innondation", "le gouvernement", "Montréal",
                 "certain", "grave", "innondation", "1978-05-04", "00001", "urgent",
                 "on coule!", point));
+//        alertes.add(new Alerte("innondation", "le gouvernement", "Montréal",
+//                "certain", "grave", "innondation", "1978-05-04", "00001", "urgent",
+//                "on coule!", point2));
+//        alertes.add(new Alerte("innondation", "le gouvernement", "Montréal",
+//                "certain", "grave", "innondation", "1978-05-04", "00001", "urgent",
+//                "on coule!", point3));
+//        alertes.add(new Alerte("innondation", "le gouvernement", "Montréal",
+//                "certain", "grave", "innondation", "1978-05-04", "00001", "urgent",
+//                "on coule!", point4));
         
-        alertes.add(new Alerte("vent", "Monsieur Dupont", "Montréal",
-                "mettons", "hey", "attache ta tuque", "1979-05-04", "00021",
-                "immédiat","on coule!", polygon));
+//        alertes.add(new Alerte("vent", "Monsieur Dupont", "Montréal",
+//                "mettons", "hey", "attache ta tuque", "1979-05-04", "00021",
+//                "immédiat","on coule!", polygon));
 
     }
 
@@ -43,4 +56,5 @@ public class Alertes {
         return result + "}";
     }
 
+    
 }
