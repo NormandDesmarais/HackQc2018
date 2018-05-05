@@ -35,61 +35,20 @@ public class ServerConnection {
      */
     public String ping() throws Exception {
 
-        final Response result = new Response();
+        String uri = serverUri;
 
-        Thread conn = new Thread( new Runnable() {
+        // TODO : add parameter to get request
+        uri = uri + "name=toto";
 
-            @Override
-            public void run() {
-
-                try {
-
-                    // Server URI
-                    String param = "name=toto";
-                    String url = serverUri + param;
-                    Log.w("URLtest : ", test);
-
-                    URL obj = new URL(test);
-                    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
-
-                    // optional default is GET
-                    con.setRequestMethod("GET");
-                    int responseCode = con.getResponseCode();
-                    Log.w("response code : ", responseCode + "");
-
-                    BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
-                    String inputLine;
-                    StringBuffer response = new StringBuffer();
-
-                    while ((inputLine = in.readLine()) != null) {
-                        response.append(inputLine);
-                    }
-
-                    in.close();
-
-                    Log.w("response", response.toString());
-
-                    result.response = response.toString();
-
-                } catch (Exception e){
-                    // TODO: manage pin error
-                    e.printStackTrace();
-                }
-            }
-        });
-
-        conn.start();
-        conn.join();
-
-        return result.response;
+        return this.getRequest(Manager.test);
 
     }
 
-    public String getRequest(String url){
+    public String getRequest(String url) throws Exception {
 
         final Response result = new Response();
 
-        new Thread(new Runnable() {
+        Thread connection = new Thread(new Runnable() {
             @Override
             public void run() {
                 try{
@@ -99,7 +58,7 @@ public class ServerConnection {
                     // optional default is GET
                     con.setRequestMethod("GET");
                     int responseCode = con.getResponseCode();
-                    Log.w("response code : ", responseCode + "");
+                    // Log.w("response code : ", responseCode + "");
 
                     BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
                     String inputLine;
@@ -117,7 +76,11 @@ public class ServerConnection {
                     e.printStackTrace();
                 }
             }
-        }).start();
+        });
+
+        connection.start();
+        connection.join();
+
 
         return result.response;
 

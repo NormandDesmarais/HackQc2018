@@ -16,7 +16,7 @@ public class Manager {
         ServerConnection mainServer = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
 
         try {
-            server.ping();
+            String request = server.ping();
         } catch (Exception e){
             e.printStackTrace();
         }
