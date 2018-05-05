@@ -12,7 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class testJSONController {
     @Autowired
     @RequestMapping(value = "/JSON", produces = "application/json")
-    public @ResponseBody testJSON testJSONController() throws JSONException {
-        return new testJSON();
+    public @ResponseBody String testJSONController() throws JSONException {
+        return new testJSON().getFile();
     }
 }

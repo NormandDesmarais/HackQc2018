@@ -9,11 +9,11 @@ import org.springframework.web.bind.annotation.RestController;
 public class AlertesController {
     private final AtomicLong counter = new AtomicLong();
 
-    @RequestMapping("/alertes")
-    public Alertes alertes(
-            @RequestParam(value="longitude", defaultValue="0.") double longitude,
-            @RequestParam(value="latitude", defaultValue="0.") double latitude) {
-        return new Alertes(longitude, latitude);
+    @RequestMapping(value="/alertes",produces="application/json")
+    public String alertes(
+            @RequestParam(value="lat", defaultValue="0.") double latitude,
+            @RequestParam(value="lng", defaultValue="0.") double longitude) {
+        return new Alertes(latitude, longitude).toString();
     }
 }
 

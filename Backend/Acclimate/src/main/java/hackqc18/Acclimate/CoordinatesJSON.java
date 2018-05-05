@@ -20,7 +20,7 @@ public class CoordinatesJSON {
 
     @Override
     public String toString() {
-        String result = "coordinates:";
+        String result = "\"coordinates\": ";
 
         for (int i = 0; i < data.size() - 1; i++) {
             result += "[" + data.get(i)[0] + "," + data.get(i)[1] + "],";

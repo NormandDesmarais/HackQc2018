@@ -4,27 +4,26 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRawValue;
 import org.json.JSONArray;
 import org.json.JSONException;
-import org.json.JSONObject;
 
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 
-public class testJSON {
+public class getAlert {
 
 
 
-    JSONObject file;
+    JSONArray file;
 
-    public static JSONObject parseJSONFile(String filename) throws JSONException, IOException {
+    public static JSONArray parseJSONFile(String filename) throws JSONException, IOException {
         String content = new String(Files.readAllBytes(Paths.get(filename)));
-        return new JSONObject(content);
+        return new JSONArray(content);
     }
 
-    public testJSON(){
+    public getAlert(){
         try {
-            String filename = "src/main/results.json";
-            this.file = parseJSONFile(filename);
+            String filename = "src/main/recentAlert.json";
+            this. file = parseJSONFile(filename);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
