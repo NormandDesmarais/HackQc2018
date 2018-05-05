@@ -6,11 +6,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
+import org.json.JSONObject;
 import org.osmdroid.api.IMapController;
 import org.osmdroid.events.MapEventsReceiver;
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
@@ -127,26 +129,82 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-                /*
-                TODO: SEARCH FIELD
-                use either AddressToGps or Acastus, both available on F-Droid, to look up addresses and then
-                open the resulting location in either OsmAnd or Maps.me. AddressToGps uses Google as its back
-                end. Acastus uses a Pelias backend which has open data from OSM and from OpenAddresses.
-                Unfortunately both of those need a data connection to work which I would rather do without.
-                 */
-
-
-                /*
-                TODO: GPS_Coord_Getter.SearchCoord(query);
-
-                static public void SearchCoord (String input) {
-                    Log.w("Search Input", input);
-
-                    String tmp = "https://maps.googleapis.com/maps/api/geocode/json?address=" + input;
-                }
-                 */
 
                 Toast.makeText(MainActivity.this, query, Toast.LENGTH_SHORT).show();
+
+                /* GOOGLE API (GeoCoding):
+                https://developers.google.com/maps/documentation/geocoding/intro
+                 */
+
+                String tmp = "https://maps.googleapis.com/maps/api/geocode/json?address=";
+                /* TODO: Add QUEBEC BOUNDARIES:
+                "https://maps.googleapis.com/maps/api/geocode/json?bounds=34.172684,-118.604794|34.236144,-118.500938&address="
+                OR
+                "https://maps.googleapis.com/maps/api/geocode/json?region=qc&address="
+                */
+                ServerConnection connection = new ServerConnection(tmp);
+
+                try {
+                    String tmpJSON = connection.getRequest(query);
+
+                    /*
+                    JSONObject testJSON = JSONWrapper.createJSON(tmpJSON);
+                    JSONObject secJSON = (JSONObject) testJSON.getJSONArray("results").get(0);
+                    Double testJSON2 = secJSON.getJSONObject("geometry").getJSONObject("viewport").getDouble("lat");
+                    */
+
+
+
+                    /*
+                        "viewport" : {
+                           "northeast" : {
+                              "lat" : 45.7058381,    NORTH
+                              "lng" : -73.47426      EAST
+                           },
+                           "southwest" : {
+                              "lat" : 45.410246,     SOUTH
+                              "lng" : -73.986345     WEST
+                           }
+                        }
+                     */
+
+
+                    JSONObject temporaryJSON = (JSONObject) JSONWrapper.createJSON(tmpJSON).getJSONArray("results").get(0);
+                    JSONObject boundaryViewPort = temporaryJSON.getJSONObject("geometry").getJSONObject("viewport");
+                    double[] northEast = {boundaryViewPort.getJSONObject("northeast").getDouble("lat"),
+                            boundaryViewPort.getJSONObject("northeast").getDouble("lng")};
+                    double[] southWest = {boundaryViewPort.getJSONObject("southwest").getDouble("lat"),
+                            boundaryViewPort.getJSONObject("northeast").getDouble("lng")};
+
+                    double north = northEast[0];
+                    double south = southWest[0];
+                    double east = northEast[1];
+                    double west = southWest[1];
+
+                    /* TODO: adjust
+                    // deux fois plus grand vers la gauche
+                    double horizOffset = (west-east)/2;
+                    east = east - horizOffset;
+                    west = west - (horizOffset);
+
+                    // deux fois plus grand vers le bas
+                    double vertOffset = (north-south)/2;
+                    south = south - vertOffset;
+                    */
+
+                    BoundingBox boundingBox = new BoundingBox(north, east, south, west);
+
+                    map.zoomToBoundingBox(boundingBox, true);
+
+                    /*
+                    Log.w("String", tmpJSON);
+                    Log.w("JSON", testJSON.getJSONArray("results").get(0).toString());
+                    Log.w("secJSON", testJSON2.toString());
+                    */
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
                 return false;
             }
 
