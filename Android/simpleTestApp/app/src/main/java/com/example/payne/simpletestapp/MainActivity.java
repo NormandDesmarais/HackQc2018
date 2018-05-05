@@ -137,7 +137,16 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 Unfortunately both of those need a data connection to work which I would rather do without.
                  */
 
-                GPS_Coord_Getter.SearchCoord(query);
+
+                /*
+                TODO: GPS_Coord_Getter.SearchCoord(query);
+
+                static public void SearchCoord (String input) {
+                    Log.w("Search Input", input);
+
+                    String tmp = "https://maps.googleapis.com/maps/api/geocode/json?address=" + input;
+                }
+                 */
 
                 Toast.makeText(MainActivity.this, query, Toast.LENGTH_SHORT).show();
                 return false;

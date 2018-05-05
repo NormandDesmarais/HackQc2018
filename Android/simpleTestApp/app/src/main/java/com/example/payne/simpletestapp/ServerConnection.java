@@ -1,10 +1,26 @@
 package com.example.payne.simpletestapp;
 
+<<<<<<< HEAD
+import android.util.Log;
+
+=======
+>>>>>>> 42af17fe0178f1d6410beb3e7c6029a0c84cdb02
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
 
+<<<<<<< HEAD
+/*
+    static public void SearchCoord (String input) {
+        Log.w("Search Input", input);
+
+        String tmp = "https://maps.googleapis.com/maps/api/geocode/json?address=" + input;
+    }
+
+ */
+=======
+>>>>>>> 42af17fe0178f1d6410beb3e7c6029a0c84cdb02
 
 public class ServerConnection {
 
