@@ -2,12 +2,14 @@ package com.example.payne.simpletestapp;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.graphics.drawable.Drawable;
 import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.BoundingBox;
@@ -38,10 +40,10 @@ public class MapDisplay {
     private double[] lastTouch = {0, 0};
     private Context ctx;
 
-    public ArrayList<GeoPoint> terrainAlerts = new ArrayList<>();
-    public ArrayList<GeoPoint> feuAlerts = new ArrayList<>();
-    public ArrayList<GeoPoint> eauAlerts = new ArrayList<>();
-    public ArrayList<GeoPoint> meteoAlerts = new ArrayList<>();
+    public ArrayList<Alerte> terrainAlerts = new ArrayList<>();
+    public ArrayList<Alerte> feuAlerts = new ArrayList<>();
+    public ArrayList<Alerte> eauAlerts = new ArrayList<>();
+    public ArrayList<Alerte> meteoAlerts = new ArrayList<>();
 
 
     public MapDisplay(MapView map, Context ctx){
@@ -196,7 +198,7 @@ public class MapDisplay {
 
     }
 
-    public void addAlertPin(Alerte alerte){
+    public void addAlertPin(Alerte alerte, Drawable icon){
 
         GeoPoint pos = new GeoPoint(alerte.getLattitude(), alerte.getLongitude());
         Marker pin = new Marker(map);
@@ -205,7 +207,7 @@ public class MapDisplay {
 
         pin.setTitle(alerte.nom);
 
-        String description = alerte.description + " " +alerte.type;
+        String description = alerte.description + " " + alerte.type;
         pin.setSubDescription(description);
 
         String snippet = alerte.dateDeMiseAJour + " " + alerte.urgence;
@@ -253,5 +255,55 @@ public class MapDisplay {
 
         popup.show(); //showing popup menu
     }
+
+    public void updateLists(JSONObject allPins) throws Exception {
+
+        JSONArray alertes = allPins.getJSONArray("alertes");
+
+        for (int i = 0; i < alertes.length(); i++) {
+
+            JSONObject alerte = alertes.getJSONObject(i);
+            // JSONArray coord = alerte.getJSONObject("geometry").getJSONArray("coordinates");
+
+            switch (alerte.getString("type")) {
+                case "feu" :
+                    this.feuAlerts.add(new Alerte(alerte));
+                    break;
+                case "eau" :
+                    this.eauAlerts.add(new Alerte(alerte));
+                    break;
+                case "meteo" :
+                    this.meteoAlerts.add(new Alerte(alerte));
+                    break;
+                case "terrain" :
+                    this.terrainAlerts.add(new Alerte(alerte));
+                default :
+                    this.meteoAlerts.add(new Alerte(alerte));
+            }
+        }
+
+    }
+
+    public void displayLists(){
+
+        for (Alerte alerte : feuAlerts){
+            this.addAlertPin(alerte, ctx.getResources().getDrawable(R.drawable.pin_feu));
+        }
+
+        for (Alerte alerte : eauAlerts){
+            this.addAlertPin(alerte, ctx.getResources().getDrawable(R.drawable.pin_goutte));
+        }
+
+        for (Alerte alerte : terrainAlerts){
+            this.addAlertPin(alerte, ctx.getResources().getDrawable(R.drawable.pin_seisme));
+        }
+
+        for (Alerte alerte : meteoAlerts){
+            this.addAlertPin(alerte, ctx.getResources().getDrawable(R.drawable.pin_vent));
+        }
+
+    }
+
+
 
 }

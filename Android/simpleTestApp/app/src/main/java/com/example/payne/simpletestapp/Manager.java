@@ -21,12 +21,14 @@ public class Manager {
 
     public ServerConnection mainServer;
     public MainActivity mainActivity;
+    public MapDisplay myMap;
 
-    public static final String testURL = "https://hackqc.herokuapp.com/api/testPoint";
+    public static final String testURL = "https://hackqc.herokuapp.com/api/JSON";
 
-    public Manager(MainActivity act) throws Exception {
+    public Manager(MainActivity act, MapDisplay myMap) throws Exception {
 
         this.mainActivity = act;
+        this.myMap = myMap;
 
         this.setupStorage();
 
@@ -37,15 +39,13 @@ public class Manager {
         String response = testServer.getRequest();
         // test
         Log.w("test server : ", response) ;
-        JSONObject JSONtest = JSONWrapper.createJSON(response);
 
-        Alerte testAlerte = JSONWrapper.parseGEOJson(JSONtest);
+        JSONObject allPins = JSONWrapper.createJSON(response);
 
-        Log.w("testAlerte : ", testAlerte.toString());
+        // generate pin lists
+        myMap.updateLists(allPins);
+        myMap.displayLists();
 
-        mainActivity.myMap.addAlertPin(testAlerte);
-        mainActivity.myMap.map.setExpectedCenter(
-                new GeoPoint(testAlerte.getLattitude(), testAlerte.getLongitude()));
     }
 
 
@@ -86,7 +86,6 @@ public class Manager {
 
     }
 
-<<<<<<< HEAD
     public String AlertFile(String newFileFromServer){
 
         String currentFile;
@@ -133,10 +132,6 @@ public class Manager {
 
         return null;
     }
-
-=======
->>>>>>> 3dfa7e67f8d4b4cf865cd9b910f65ef13f5d41bd
-
 
 
 }

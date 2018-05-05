@@ -48,22 +48,6 @@ public class Alerte {
             this.longitude = (double) geom.getJSONArray("coordinates").get(0);
 
 
-            /*
-            JSONObject point = jsonFile.getJSONObject("PointTest");
-            JSONObject geometry =  point.getJSONObject("geometry");
-            JSONObject properties = point.getJSONObject("properties");
-            // get ccord
-            if (geometry.getString("type").equals("Point")){
-                JSONArray coordinates = geometry.getJSONArray("coordinates");
-                this.lattitude = (double) coordinates.get(0);
-                this.longitude = (double) coordinates.get(1);
-            }
-
-            this.type = point.getString("type");
-            this.dateDeMiseAJour = properties.getString("date_observation");
-
-        */
-
         } catch (JSONException j){
             j.printStackTrace();
         }

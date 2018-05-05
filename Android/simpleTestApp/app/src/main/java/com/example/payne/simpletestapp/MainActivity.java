@@ -101,7 +101,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
         // setup app backend
         try{
-            Manager manager = new Manager(this);
+            Manager manager = new Manager(this, myMap);
         } catch (Exception e){
             e.printStackTrace();
         }
