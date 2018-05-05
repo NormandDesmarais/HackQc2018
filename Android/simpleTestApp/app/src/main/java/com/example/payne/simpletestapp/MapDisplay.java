@@ -182,7 +182,6 @@ public class MapDisplay {
 
         map.invalidate();
 
-
     }
 
 
@@ -228,8 +227,6 @@ public class MapDisplay {
      * Pour confirmer le type d'alerte.
      */
     public void showPopUp () {
-
-        Log.w("Pin PopUp","Should have popped up somewhere");
 
         //Creating the instance of PopupMenu
         PopupMenu popup = new PopupMenu(MainActivity.mainActivity, MainActivity.mainActivity.findViewById(R.id.popUpAnchor));
