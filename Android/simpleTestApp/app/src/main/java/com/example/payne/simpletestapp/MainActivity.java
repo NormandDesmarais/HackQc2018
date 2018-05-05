@@ -196,7 +196,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 break;
 
             case (R.id.addPin):
-                myMap.addPin(myMap.getCenter(), "eau");
+                myMap.addPin(myMap.getCenter(), "seisme");
                 break;
 
             case (R.id.circleBtn):
