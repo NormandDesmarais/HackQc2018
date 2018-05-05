@@ -2,7 +2,9 @@ package com.example.payne.simpletestapp;
 
 import android.content.Context;
 import android.graphics.Color;
+import android.support.v7.widget.PopupMenu;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.View;
 import android.widget.Toast;
 
@@ -113,6 +115,8 @@ public class MapDisplay {
         map.getOverlays().add(pin);
         this.map.invalidate();
 
+        showPopUp();
+
     }
 
 
@@ -144,6 +148,8 @@ public class MapDisplay {
 
         map.getOverlays().add(pin);
         this.map.invalidate();
+
+        showPopUp();
 
     }
 
@@ -203,7 +209,6 @@ public class MapDisplay {
 
         map.getOverlays().add(pin);
         this.map.invalidate();
-
     }
 
     public GeoPoint getCenter(){
@@ -216,6 +221,34 @@ public class MapDisplay {
 
     public double[] getLastTouch(){
         return this.lastTouch;
+    }
+
+    /**
+     * Pour confirmer le type d'alerte.
+     */
+    public void showPopUp () {
+
+        Log.w("Pin PopUp","Should have popped up somewhere");
+
+        //Creating the instance of PopupMenu
+        PopupMenu popup = new PopupMenu(MainActivity.mainActivity, MainActivity.mainActivity.findViewById(R.id.popUpAnchor));
+        //Inflating the Popup using xml file
+        popup.getMenuInflater()
+                .inflate(R.menu.menu_pin, popup.getMenu());
+
+        //registering popup with OnMenuItemClickListener
+        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
+            public boolean onMenuItemClick(MenuItem item) {
+                Toast.makeText(
+                        MainActivity.mainActivity,
+                        "You Clicked : " + item.getTitle(),
+                        Toast.LENGTH_SHORT
+                ).show();
+                return true;
+            }
+        });
+
+        popup.show(); //showing popup menu
     }
 
 }

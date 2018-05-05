@@ -4,6 +4,7 @@ import android.util.Log;
 
 import org.json.JSONObject;
 
+
 public class Manager {
 
     public static final String SERVER_ADDR = "10.240.201.81";
@@ -11,6 +12,7 @@ public class Manager {
     public ServerConnection mainServer;
     public static final String testURL = "https://hackqc.herokuapp.com/api/testPoint";
     public MainActivity mainActivity;
+
 
     public Manager(MainActivity act) throws Exception {
 
@@ -30,11 +32,10 @@ public class Manager {
         mainActivity.myMap.addAlertPin(testAlerte);
     }
 
+
     public void drawPolygon(JSONObject polyPoints){
 
         this.mainActivity.myMap.drawPolygon(polyPoints);
-
-
     }
 
 

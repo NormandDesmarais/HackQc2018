@@ -28,10 +28,13 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     MapView map = null;
     public MapDisplay myMap;
     public MapEventsOverlay mapEventsOverlay;
+    public static MainActivity mainActivity;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        this.mainActivity = this;
 
 
         //handle permissions first, before map is created. not depicted here
@@ -132,7 +135,10 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 // TODO : eventually remove this Toast
                 Toast.makeText(MainActivity.this, query, Toast.LENGTH_SHORT).show();
 
-                map.zoomToBoundingBox(JSONWrapper.googleBoundingBox(query), false);
+                BoundingBox boundingBox = JSONWrapper.googleBoundingBox(query);
+
+                if (boundingBox != null)
+                    map.zoomToBoundingBox(boundingBox, false);
 
                 return false;
             }
