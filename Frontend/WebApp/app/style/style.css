@@ -10,11 +10,10 @@
 
 #leftPane {
   height: calc(100% - 101px);
-  width: 30%;
   position: fixed;
   top: 101px;
   background-color: white;
-  max-width: 250px;
+  width: 250px;
   left: 0;
   transition: 0.3s all; }
   #leftPane #expander {
@@ -26,6 +25,8 @@
     right: 0;
     transform: translate(50%, -50%);
     border-radius: 50%; }
+    #leftPane #expander:hover {
+      cursor: pointer; }
     #leftPane #expander img {
       height: 30px;
       position: absolute;
@@ -37,6 +38,30 @@
     transform: translateY(-50%) rotate(0deg); }
 
 #leftPane.close {
+  opacity: 1;
   left: -250px; }
+
+form {
+  display: inline; }
+
+#search:hover {
+  cursor: pointer; }
+
+#searchForm {
+  background: none;
+  border-top: none;
+  border-left: none;
+  border-right: none;
+  border-bottom: 2px solid white;
+  padding: 5px 15px;
+  outline: 0;
+  color: white;
+  width: 0px;
+  opacity: 0;
+  transition: 0.3s all; }
+
+#searchForm.visible {
+  opacity: 1;
+  width: 250px; }
 
 /*# sourceMappingURL=style.css.map */
