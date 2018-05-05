@@ -41,6 +41,7 @@ public class MapDisplay {
     private double[] lastTouch = {0, 0};
     private Context ctx;
     public static boolean currentlyPlacingPin = false;
+    public static final BoundingBox MONTREAL_BOUNDING_BOX = new BoundingBox(63,40,58,84);
 
     public ArrayList<Alerte> terrainAlerts = new ArrayList<>();
     public ArrayList<Alerte> feuAlerts = new ArrayList<>();

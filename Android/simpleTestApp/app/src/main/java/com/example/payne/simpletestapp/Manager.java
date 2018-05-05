@@ -67,17 +67,18 @@ public class Manager {
             JSONWrapper.createNotificationFile(mainActivity);
         }
 
-        // get alerts from server
+        // get all alerts from server
         String result;
         try {
-            result = mainServer.ping();
+
+            result = mainServer.ping("/latest", MapDisplay.MONTREAL_BOUNDING_BOX);
 
             // check if alert File exist on device and create one if needed
             File alertes = new File(
                     mainActivity.getApplicationContext().getFilesDir(),
                     Manager.ALERT_FILE_PATH);
             if(alertes.exists()){
-                Toast.makeText(mainActivity, "Fichier d'alertes dÃ©tectÃ©", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mainActivity, "Fichier d'alertes détecté", Toast.LENGTH_SHORT).show();
             }
             else {
                 JSONWrapper.createAlertFile(mainActivity, result);
