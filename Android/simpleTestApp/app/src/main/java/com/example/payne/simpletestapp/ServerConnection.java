@@ -38,7 +38,7 @@ public class ServerConnection {
         // TODO : add parameter to get request
         uri = uri + "name=toto";
 
-        return this.getRequest(this.serverAddress);
+        return this.getRequest(uri);
 
     }
 
