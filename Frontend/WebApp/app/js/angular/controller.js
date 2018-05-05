@@ -32,11 +32,13 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
     }
 
     function pinsToMap(title, jsonFile){
-        var image = new ol.style.Circle({
-            radius: 5,
-            fill: null,
-            stroke: new ol.style.Stroke({color: 'red', width: 1})
-        });
+        var image = new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
+            anchor: [0.5, 46],
+            anchorXUnits: 'fraction',
+            anchorYUnits: 'pixels',
+            opacity: 0.8,
+            src: '../images/pin_goutte.png'
+          }))
 
         var styles = {
             'Point': new ol.style.Style({
@@ -64,6 +66,18 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
         map.addLayer(vectorLayer);
     }
 
-    function removeLayer
+    function removeLayer(type){
+        var layersToRemove = [];
+        map.getLayers().forEach(function (layer) {
+            if (layer.get('title') != undefined && layer.get('title') === type) {
+                layersToRemove.push(layer);
+            }
+        });
+
+        var len = layersToRemove.length;
+        for(var i = 0; i < len; i++) {
+            map.removeLayer(layersToRemove[i]);
+        }
+    }
 
 }]);
