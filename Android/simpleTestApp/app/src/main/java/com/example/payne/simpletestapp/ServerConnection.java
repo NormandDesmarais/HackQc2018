@@ -1,5 +1,7 @@
 package com.example.payne.simpletestapp;
 
+import org.osmdroid.util.BoundingBox;
+
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
@@ -25,35 +27,42 @@ public class ServerConnection {
     }
 
     /**
-     * Envoie une requête au serveur de façon périodique
+     * Envoie une requête au serveur de façon périodique.
+     * <p></p>
+     * Reçoit toutes les alertes sur le territoire
      *
      * @return
      */
-    public String ping() throws Exception {
+    public String ping(String path, BoundingBox boundingBox) throws Exception {
 
-        String uri = this.serverAddress;
+        String param =
+            "?north=" + boundingBox.getLatNorth() +
+            "&south=" + boundingBox.getLatSouth() +
+            "&east=" + boundingBox.getLonEast() +
+            "&west=" + boundingBox.getLonWest();
 
-        // TODO : add parameter to get request
-        uri = uri + "name=toto";
-
-        return this.getRequest(this.serverAddress);
+        String uri = this.serverAddress + path + param;
+        return this.getRequest(uri);
 
     }
 
+
     /**
      *
-     * Une requête pour mettre èa jour l'affichage des zones dangereuse
+     * Une requête pour mettre à jour l'affichage des zones dangereuse
      *
      * @return
      * @throws Exception
      */
-    public String request() throws Exception {
+    public String request(String path, BoundingBox boundingBox) throws Exception {
 
-        String uri = this.serverAddress;
+        String param =
+                "?north=" + boundingBox.getLatNorth() +
+                "&south=" + boundingBox.getLatSouth() +
+                "&east=" + boundingBox.getLonEast() +
+                "&west=" + boundingBox.getLonWest();
 
-        // TODO : add parameter to get request
-        uri = uri + "name=toto";
-
+        String uri = this.serverAddress + path + param;
         return this.getRequest(uri);
 
     }
@@ -168,6 +177,12 @@ public class ServerConnection {
 
 
         return result.response;
+
+    }
+
+    public Boolean postAlert(){
+
+        return false;
 
     }
 

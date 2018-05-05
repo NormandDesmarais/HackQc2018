@@ -26,6 +26,10 @@ public class JSONWrapper {
         Log.w("jsonFile : ", jsonFile.toString());
     }
 
+    public String getStringContent(){
+        return jsonFile.toString();
+    }
+
 
     public static JSONObject createJSON(String s) throws Exception{
         return new JSONObject(s);
@@ -239,7 +243,7 @@ public class JSONWrapper {
 
             // update content
             String fileContents = notificationsFile.toString();
-            Log.w("fileContent : ", notificationsFile.toString());
+            Log.w("NotifFileCont : ", notificationsFile.toString());
 
             // write to File
             FileOutputStream outputStream;
@@ -254,9 +258,22 @@ public class JSONWrapper {
     }
 
 
-    public static void createAlertFile(){
+    public static void createAlertFile(Context ctx, String content){
+
+        Log.w("AlertFileContent : ", content);
+
+        try {
+
+            // write to File
+            FileOutputStream outputStream;
+            outputStream = ctx.openFileOutput(Manager.ALERT_FILE_PATH, Context.MODE_PRIVATE);
+            outputStream.write(content.getBytes());
+            outputStream.close();
 
 
+        } catch (Exception e){
+            Toast.makeText(ctx, "Impossible de créer le fichier d'alerte", Toast.LENGTH_SHORT).show();
+        }
 
     }
 
