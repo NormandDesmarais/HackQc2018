@@ -33,9 +33,11 @@ public class ServerConnection {
      *
      * @return
      */
-    public void ping() throws Exception {
+    public String ping() throws Exception {
 
-        new Thread( new Runnable() {
+        final Response result = new Response();
+
+        Thread conn = new Thread( new Runnable() {
 
             @Override
             public void run() {
@@ -67,14 +69,57 @@ public class ServerConnection {
 
                     Log.w("response", response.toString());
 
-                   // TODO :
+                    result.response = response.toString();
 
                 } catch (Exception e){
                     // TODO: manage pin error
                     e.printStackTrace();
                 }
             }
+        });
+
+        conn.start();
+        conn.join();
+
+        return result.response;
+
+    }
+
+    public String getRequest(String url){
+
+        final Response result = new Response();
+
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try{
+                    URL obj = new URL(test);
+                    HttpURLConnection con = (HttpURLConnection) obj.openConnection();
+
+                    // optional default is GET
+                    con.setRequestMethod("GET");
+                    int responseCode = con.getResponseCode();
+                    Log.w("response code : ", responseCode + "");
+
+                    BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
+                    String inputLine;
+                    StringBuffer response = new StringBuffer();
+
+                    while ((inputLine = in.readLine()) != null) {
+                        response.append(inputLine);
+                    }
+
+                    in.close();
+
+                    result.response = response.toString();
+
+                } catch (Exception e){
+                    e.printStackTrace();
+                }
+            }
         }).start();
+
+        return result.response;
 
     }
 

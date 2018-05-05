@@ -8,11 +8,12 @@ public class Manager {
     public static final int PORT = 8080;
     public ServerConnection server;
     public static final String test = "https://hackqc.herokuapp.com/api/testPoint";
+    public MainActivity mainActivity;
 
-    public static void setup(){
+    public Manager(MainActivity act){
 
         // test server setup
-        ServerConnection server = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
+        ServerConnection mainServer = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
 
         try {
             server.ping();

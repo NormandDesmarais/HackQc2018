@@ -34,7 +34,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         super.onCreate(savedInstanceState);
 
         // setup app backend
-        Manager.setup();
+        Manager manager = new Manager(this);
 
         //handle permissions first, before map is created. not depicted here
 
