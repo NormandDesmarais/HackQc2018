@@ -39,7 +39,7 @@
         </a>
         <div class="row">
             <div class="col-12 text-right">
-                <form ng-submit="search()"><input id="searchForm" type="text" ng-model="searchForm" placeholder="search"></form>
+                <form ng-submit="search()"><input id="searchForm" type="text" ng-model="searchForm" placeholder="search" autocomplete="off"></form>
                 <a id="search"><img src="images/search.svg" height="35"></a>
                 <script src="js/showInput.js"></script>
             </div>
@@ -50,7 +50,21 @@
     <div id="leftPane">
         <div id="expander"><img src="images/expand.svg"></div>
         <ul>
-            <li ng-repeat="risque in risques"><div class="selector" ng-click="showHideRisque($index)" ng-class="(risque.show) ? 'checked':''"></div><span ng-bind="risque.title"></span><img ng-src="images/{{risque.icon}}" /><div class="date"></div></li>
+            <li ng-repeat="risque in risques">
+                <div class="selector" ng-click="showHideRisque($index)" ng-class="(risque.show) ? 'checked':''"></div>
+                <span ng-bind="risque.title"></span>
+                <img ng-src="images/{{risque.icon}}" />
+                <div class="date"></div>
+                <div class="datePickers">
+                    <div class="text-left">&Eacute;cart de dates</div>
+                    <form>
+                        <div class="prepend">De:</div>
+                        <input type="date"><br>
+                        <div class="prepend">&Agrave; :</div>
+                        <input type="date">
+                    </form>
+                </div>
+            </li>
         </ul>
     </div>
     <script src="js/toggleLeftPane.js"></script>

@@ -2,15 +2,20 @@ var app = angular.module('appController', [])
 
 app.controller('mainController', ['$scope', 'Request', function($scope, Request) {
 
+
     $scope.risques = [
         {
             show: false,
             title: "Inondations",
-            icon: "icon_goutte.png"
+            icon: "icon_goutte.png",
+            date:{
+                debut:"",
+                fin:""
+            }
         },
         {
             show: false,
-            title: "Feu",
+            title: "Users",
             icon: "icon_feu.png"
         },
         {
@@ -28,6 +33,10 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
     $scope.showHideRisque = function(i){
         $scope.risques[i].show = !$scope.risques[i].show;
         if($scope.risques[i].show){
+            if($scope.risques[i].title == "Users"){
+                loadUsersPins();
+                return;
+            }
             loadPins($scope.risques[i].title)
         }
         else{
@@ -37,7 +46,22 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
 
     function loadPins(type){
         Request.get(type).then(function(data){
-            pinsToMap(type, data.data.file);
+            pinsToMap(type, data.data);
+            console.log(data.data)
+        })
+    }
+
+    function loadUsersPins(){
+        Request.get("Users").then(function(data){
+            var newData = {
+                features : data.data,
+                type : "FeatureCollection",
+                name: "Users Pins"
+            }
+
+            console.log(newData);
+            pinsToMap("Users", newData);
+
         })
     }
 
@@ -89,6 +113,8 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
             map.removeLayer(layersToRemove[i]);
         }
     }
+
+
 
     $scope.search = function(){
         Request.googleAPI($scope.searchForm).then(function(data){

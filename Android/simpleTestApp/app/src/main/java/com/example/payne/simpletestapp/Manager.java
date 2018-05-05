@@ -1,17 +1,15 @@
 package com.example.payne.simpletestapp;
 
-import android.util.Log;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.util.BoundingBox;
-import org.osmdroid.util.GeoPoint;
 
 import java.io.File;
 
 public class Manager {
+
+    public static final boolean USE_TEST_SERVER_POST = true;
 
     public static final String SERVER_ADDR = "10.240.201.81";
     public static final int PORT = 8080;
@@ -19,10 +17,11 @@ public class Manager {
     public static final String ALERT_FILE_PATH = "acclimate/alertes";
 
     public ServerConnection mainServer;
+    public ServerConnection testServer;
     public MainActivity mainActivity;
     public MapDisplay myMap;
 
-    public static final String testURL = "https://hackqc.herokuapp.com/api";
+    public static final String testPushURL = "https://hackqc.herokuapp.com/api/putAlert";
 
 
     public Manager(MainActivity act, MapDisplay myMap) throws Exception {
@@ -33,12 +32,8 @@ public class Manager {
         this.setupStorage();
 
         // test server setup
-        mainServer = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
-        ServerConnection testServer = new ServerConnection(testURL);
-
-        String response = testServer.ping("/latest", myMap.map.getBoundingBox());
-
-        myMap.updateLists(new JSONObject(response));
+        this.mainServer = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
+        this.testServer = new ServerConnection(testPushURL);
 
     }
 
@@ -66,7 +61,7 @@ public class Manager {
         String result;
         try {
 
-            result = mainServer.ping("/latest", MapDisplay.MONTREAL_BOUNDING_BOX);
+            result = mainServer.ping("/latest", MapDisplay.QUEBEC_BOUNDING_BOX);
 
             // check if alert File exist on device and create one if needed
             File alertes = new File(
@@ -112,6 +107,15 @@ public class Manager {
         }
 
         return result;
+
+    }
+
+    public void postAlert(Alerte alerte){
+
+        // DEBUG
+        if (USE_TEST_SERVER_POST) {
+            testServer.postAlert(alerte);
+        } else mainServer.postAlert(alerte);
 
     }
 
