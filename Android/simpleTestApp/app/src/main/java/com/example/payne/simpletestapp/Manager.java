@@ -20,13 +20,14 @@ public class Manager {
 
         // test
         JSONObject JSONtest = JSONWrapper.createJSON(testServer.getRequest());
-        drawPolygon(JSONtest);
+        this.drawPolygon(JSONtest);
+
 
     }
 
-    public static void drawPolygon(JSONObject polyPoints){
+    public void drawPolygon(JSONObject polyPoints){
 
-
+        this.mainActivity.myMap.drawPolygon(polyPoints);
 
 
     }

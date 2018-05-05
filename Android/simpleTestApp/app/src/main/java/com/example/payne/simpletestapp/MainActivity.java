@@ -33,12 +33,6 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // setup app backend
-        try{
-            Manager manager = new Manager(this);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
 
         //handle permissions first, before map is created. not depicted here
 
@@ -102,6 +96,14 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
         mapEventsOverlay = new MapEventsOverlay(this, this);
         map.getOverlays().add(0, mapEventsOverlay);
+
+        // setup app backend
+        try{
+            Manager manager = new Manager(this);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     @Override

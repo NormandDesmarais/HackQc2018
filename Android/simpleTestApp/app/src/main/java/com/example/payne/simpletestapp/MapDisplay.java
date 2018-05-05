@@ -4,6 +4,7 @@ import android.graphics.Color;
 import android.view.View;
 import android.widget.Toast;
 
+import org.json.JSONObject;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
@@ -134,6 +135,13 @@ public class MapDisplay {
         }
 
         map.invalidate();
+
+
+    }
+
+
+    public void drawPolygon(JSONObject JsonPoints){
+
 
 
     }
