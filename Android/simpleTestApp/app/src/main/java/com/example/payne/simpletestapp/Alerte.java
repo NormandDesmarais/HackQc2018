@@ -5,6 +5,7 @@ import android.util.Log;
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
+import org.osmdroid.util.GeoPoint;
 
 public class Alerte {
 
@@ -58,6 +59,14 @@ public class Alerte {
 
         this.longitude = longitude;
         this.lattitude = lattitude;
+        this.type = type;
+
+    }
+
+    public Alerte(GeoPoint point, String type){
+
+        this.longitude = point.getLongitude();
+        this.lattitude = point.getLatitude();
         this.type = type;
 
     }

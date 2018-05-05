@@ -1,13 +1,9 @@
 package com.example.payne.simpletestapp;
 
-import android.util.Log;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.util.BoundingBox;
-import org.osmdroid.util.GeoPoint;
 
 import java.io.File;
 
@@ -66,7 +62,7 @@ public class Manager {
         String result;
         try {
 
-            result = mainServer.ping("/latest", MapDisplay.MONTREAL_BOUNDING_BOX);
+            result = mainServer.ping("/latest", MapDisplay.QUEBEC_BOUNDING_BOX);
 
             // check if alert File exist on device and create one if needed
             File alertes = new File(

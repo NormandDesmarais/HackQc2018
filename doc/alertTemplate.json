@@ -1,0 +1,43 @@
+{
+    "alertes" : [
+        
+        {
+            "nom" : "pointTemplate",
+            "type":"",
+            "dateDeMiseAJour" : 0,
+            "descripton" : "",
+            "idAlerte" : 0,
+            "source":"",
+            "territoire" :"",
+            "certitude":"",
+            "severite":"",
+            
+            "geometry" : {
+                "type" : "point",
+                "coordinates" : []
+            }
+          
+        },
+        
+        {
+            "nom" : "pointTemplate",
+            "type" : "",
+            "dateDeMiseAJour" : 0,
+            "descripton" : "",
+            "idAlerte" : 0,
+            "source" : "",
+            "territoire" :"",
+            "certitude" : "",
+            "severite" : "",
+            
+            "geometry" : {
+                "type" : "polygone",
+                "coordinates" : [[]]
+            }
+          
+        }
+        
+    ]
+    
+    
+}
