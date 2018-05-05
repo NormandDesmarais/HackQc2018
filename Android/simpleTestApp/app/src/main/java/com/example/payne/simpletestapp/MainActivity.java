@@ -297,7 +297,15 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             */
 
             case (R.id.highlight):
-                // TODO: Gérer SERVER REQUEST FROM BOUNDING BOX HERE !!
+                // TODO: Server Request for the current Bounding Box
+                break;
+
+            case (R.id.maj):
+                // TODO: Server Request for all Monitored Zones
+                break;
+
+            case (R.id.add):
+                // TODO: Add the current Bounding Box to Monitored Zones
                 myMap.highlightCurrent(findViewById(android.R.id.content));
                 break;
 
@@ -314,6 +322,19 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 myMap.drawCircleAtCenter(1000, 5);
                 break;
             */
+
+            case (R.id.cB_zones):
+                // TODO: Toggle "Display Monitored Zones"
+                break;
+
+            case (R.id.cB_histo):
+                // TODO: Toggle "Display Historique" (add filters)
+                break;
+
+            case (R.id.cB_users):
+                // TODO: Toggle "Display user-input Alerts/Historiques"
+                return false;
+                //break;
 
             case (R.id.cB_fire):
                 if (item.isChecked()) {
