@@ -4,11 +4,11 @@ import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.CheckBox;
 import android.widget.Toast;
 
 import org.osmdroid.api.IMapController;
@@ -59,6 +59,12 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         //creating the Toolbar?
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("");
+
+        /*
+        TODO: GPS
+        https://developer.android.com/guide/topics/location/strategies
+         */
 
 
         map = findViewById(R.id.map);
@@ -110,6 +116,33 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+
+        //Setting up Search bar
+        MenuItem ourSearchItem = menu.findItem(R.id.action_search);
+        SearchView sv = (SearchView) ourSearchItem.getActionView();
+        sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
+            @Override
+            public boolean onQueryTextSubmit(String query) {
+                /*
+                TODO: SEARCH FIELD
+                use either AddressToGps or Acastus, both available on F-Droid, to look up addresses and then
+                open the resulting location in either OsmAnd or Maps.me. AddressToGps uses Google as its back
+                end. Acastus uses a Pelias backend which has open data from OSM and from OpenAddresses.
+                Unfortunately both of those need a data connection to work which I would rather do without.
+                 */
+
+                GPS_Coord_Getter.SearchCoord(query);
+
+                Toast.makeText(MainActivity.this, query, Toast.LENGTH_SHORT).show();
+                return false;
+            }
+
+            @Override
+            public boolean onQueryTextChange(String newText) {
+                return false;
+            }
+        });
+
         return true;
     }
 
