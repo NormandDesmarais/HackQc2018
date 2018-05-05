@@ -180,9 +180,23 @@ public class ServerConnection {
 
     }
 
-    public Boolean postAlert(){
+    public Boolean postAlert(Alerte alerte) {
 
-        return false;
+        boolean success = false;
+        alerte.log();
+
+        String param =  "?type=" + alerte.type +
+                        "&lat=" + alerte.getLatitude() +
+                        "&lng" + alerte.getLongitude();
+
+        try {
+            this.getRequest(param);
+            success = true;
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+
+        return success;
 
     }
 

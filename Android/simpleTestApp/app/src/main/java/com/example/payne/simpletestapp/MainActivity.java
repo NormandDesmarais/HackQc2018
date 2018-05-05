@@ -30,6 +30,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     public static MapEventsOverlay mapEventsOverlay;
     public static MainActivity mainActivity;
     public static Marker lastPlacedPin = null;
+    public static Manager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -107,12 +108,14 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 // locally register alert
                 Alerte alert = new Alerte(lastPlacedPin.getPosition().getLongitude(),
                         lastPlacedPin.getPosition().getLatitude(),
-                        "eau");
-                myMap.meteoAlerts.add(alert);
+                        "meteo");
 
+                myMap.meteoAlerts.add(alert);
                 myMap.addAlertPin(alert, MapDisplay.meteoIcon);
+                manager.postAlert(alert);
             }
         });
+
         findViewById(R.id.water_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -128,11 +131,14 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 Alerte alert = new Alerte(lastPlacedPin.getPosition().getLongitude(),
                         lastPlacedPin.getPosition().getLatitude(),
                         "eau");
-                myMap.eauAlerts.add(alert);
 
+                myMap.eauAlerts.add(alert);
                 myMap.addAlertPin(alert, MapDisplay.eauIcon);
+                manager.postAlert(alert);
+
             }
         });
+
         findViewById(R.id.fire_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -146,12 +152,15 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 // locally register alert
                 Alerte alert = new Alerte(lastPlacedPin.getPosition().getLongitude(),
                         lastPlacedPin.getPosition().getLatitude(),
-                        "eau");
-                myMap.feuAlerts.add(alert);
+                        "feu");
 
+                myMap.feuAlerts.add(alert);
                 myMap.addAlertPin(alert, MapDisplay.feuIcon);
+                manager.postAlert(alert);
+
             }
         });
+
         findViewById(R.id.earth_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -165,10 +174,12 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 // locally register alert
                 Alerte alert = new Alerte(lastPlacedPin.getPosition().getLongitude(),
                         lastPlacedPin.getPosition().getLatitude(),
-                        "eau");
-                myMap.terrainAlerts.add(alert);
+                        "terrain");
 
+                myMap.terrainAlerts.add(alert);
                 myMap.addAlertPin(alert, MapDisplay.terrainIcon);
+                manager.postAlert(alert);
+
             }
         });
 
@@ -197,7 +208,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
         // setup app backend
         try{
-            Manager manager = new Manager(this, myMap);
+            manager = new Manager(this, myMap);
         } catch (Exception e){
             e.printStackTrace();
         }

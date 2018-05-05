@@ -9,6 +9,8 @@ import java.io.File;
 
 public class Manager {
 
+    public static final boolean USE_TEST_SERVER_POST = true;
+
     public static final String SERVER_ADDR = "10.240.201.81";
     public static final int PORT = 8080;
     public static final String NOTIFICATION_FILE_PATH = "acclimate/notifications";
@@ -30,12 +32,8 @@ public class Manager {
         this.setupStorage();
 
         // test server setup
-        mainServer = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
+        this.mainServer = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
         this.testServer = new ServerConnection(testPushURL);
-
-        String response = testServer.ping("", myMap.map.getBoundingBox());
-
-        myMap.updateLists(new JSONObject(response));
 
     }
 
@@ -109,6 +107,15 @@ public class Manager {
         }
 
         return result;
+
+    }
+
+    public void postAlert(Alerte alerte){
+
+        // DEBUG
+        if (USE_TEST_SERVER_POST) {
+            testServer.postAlert(alerte);
+        } else mainServer.postAlert(alerte);
 
     }
 

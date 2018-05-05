@@ -65,7 +65,7 @@ public class Alerte {
     public Alerte(GeoPoint point, String type){
 
         this.longitude = point.getLongitude();
-        this.lattitude = point.getLatitude();
+        this.latitude = point.getLatitude();
         this.type = type;
 
     }

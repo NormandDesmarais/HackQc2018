@@ -43,10 +43,10 @@ public class MapDisplay {
     public static boolean eauFilter = true;
     public static boolean meteoFilter = true;
 
-    public static Drawable eauIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_goutte);
-    public static Drawable feuIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_feu);
-    public static Drawable terrainIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_seisme);
-    public static Drawable meteoIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_vent);
+    public static final Drawable eauIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_goutte);
+    public static final Drawable feuIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_feu);
+    public static final Drawable terrainIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_seisme);
+    public static final Drawable meteoIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_vent);
 
 
     public MapDisplay(MapView map, Context ctx) {
