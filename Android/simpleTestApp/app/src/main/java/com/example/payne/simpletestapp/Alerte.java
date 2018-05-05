@@ -30,7 +30,7 @@ public class Alerte {
 
         try {
 
-            JSONObject point = jsonFile.getJSONObject("testPoint");
+            JSONObject point = jsonFile.getJSONObject("PointTest");
             JSONObject geometry =  point.getJSONObject("geometry");
             JSONObject properties = point.getJSONObject("properties");
             // get ccord
@@ -48,8 +48,6 @@ public class Alerte {
         } catch (JSONException j){
             j.printStackTrace();
         }
-        // test
-
 
     }
 

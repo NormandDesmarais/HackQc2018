@@ -1,5 +1,5 @@
 function showSearch(){
-    $("#searchForm").toggleClass("visible");
+    $("#searchForm").toggleClass("visible").focus();
 }
 
 $(document).ready(function(){
