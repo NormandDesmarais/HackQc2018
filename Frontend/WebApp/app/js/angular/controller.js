@@ -2,6 +2,10 @@ var app = angular.module('appController', [])
 
 app.controller('mainController', ['$scope', 'Request', function($scope, Request) {
 
+    Request.get("Inondations").then(function(data){
+        console.log(data);
+    })
+
     $scope.risques = [
         {
             show: false,
@@ -12,6 +16,16 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
             show: false,
             title: "Feu",
             icon: "icon_feu.png"
+        },
+        {
+            show: false,
+            title: "Vent",
+            icon: "icon_vent.png"
+        },
+        {
+            show: false,
+            title: "Séisme",
+            icon: "icon_seisme.png"
         }
     ]
 
@@ -19,6 +33,7 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
         $scope.risques[i].show = !$scope.risques[i].show;
         if($scope.risques[i].show){
             loadPins($scope.risques[i].title)
+            console.log("alo");
         }
         else{
             removeLayer($scope.risques[i].title)
@@ -27,7 +42,8 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
 
     function loadPins(type){
         Request.get(type).then(function(data){
-            pinsToMap(type, data.data.file);
+            pinsToMap(type, data.data);
+            console.log(data);
         })
     }
 
@@ -78,6 +94,14 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
         for(var i = 0; i < len; i++) {
             map.removeLayer(layersToRemove[i]);
         }
+    }
+
+    $scope.search = function(){
+        Request.googleAPI($scope.searchForm).then(function(data){
+            var point = [data.data.results[0].geometry.location.lng, data.data.results[0].geometry.location.lat];
+            var size = /** @type {ol.Size} */ (map.getSize());
+            view.centerOn(ol.proj.transform(point, 'EPSG:4326', 'EPSG:3857'), size, [size[0]/2, size[1]/2]);
+        })
     }
 
 }]);

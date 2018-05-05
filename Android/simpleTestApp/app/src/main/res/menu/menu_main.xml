@@ -4,6 +4,7 @@
     tools:context="com.example.payne.simpletestapp.MainActivity">
 
 
+    <!-- Search Button -->
     <item
         android:id="@+id/action_search"
         android:icon="@android:drawable/ic_menu_search"
@@ -11,25 +12,81 @@
         android:visible="true"
         app:actionViewClass="android.support.v7.widget.SearchView"
         app:showAsAction="always" />
+
+    <!-- debug -->
+    <item
+        android:id="@+id/highlight"
+        android:orderInCategory="102"
+        android:title="@string/highlight"
+        app:showAsAction="never" />
+
+
+    <!-- Filter buttons -->
+    <item
+        android:id="@+id/filtres"
+        android:enabled="false"
+        android:orderInCategory="106"
+        android:title="@string/filtres"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/cB_fire"
+        android:checkable="true"
+        android:checked="true"
+        android:orderInCategory="106"
+        android:title="@string/cB_fire"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/cB_water"
+        android:checkable="true"
+        android:checked="true"
+        android:orderInCategory="106"
+        android:title="@string/cB_water"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/cB_terrain"
+        android:checkable="true"
+        android:checked="true"
+        android:orderInCategory="106"
+        android:title="@string/cB_terrain"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/cB_meteo"
+        android:checkable="true"
+        android:checked="true"
+        android:orderInCategory="106"
+        android:title="@string/cB_meteo"
+        app:showAsAction="never" />
+
+    <!-- User profile button -->
+    <item
+        android:id="@+id/profileBtn"
+        android:icon="@drawable/test"
+        android:orderInCategory="106"
+        android:title="@string/profileBtn"
+        android:visible="true"
+        app:showAsAction="always" />
+
+
+    <!-- Icons: https://material.io/icons/ -->
+    <!-- https://developer.android.com/guide/topics/resources/menu-resource -->
+
+    <!-- "Mark Favorite", should appear as action button if possible -->
+
+    <!-- DEPRECATED !!
     <item
         android:id="@+id/posBtn"
         android:orderInCategory="100"
         android:title="@string/posBtn"
         app:showAsAction="never" />
     <item
-        android:id="@+id/centerBtn"
-        android:orderInCategory="101"
-        android:title="@string/centerBtn"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/highlight"
-        android:orderInCategory="102"
-        android:title="@string/highlight"
-        app:showAsAction="never" />
-    <item
         android:id="@+id/removeAll"
         android:orderInCategory="103"
         android:title="@string/removeAll"
+        app:showAsAction="never" />
+    <item
+        android:id="@+id/centerBtn"
+        android:orderInCategory="101"
+        android:title="@string/centerBtn"
         app:showAsAction="never" />
     <item
         android:id="@+id/addPin"
@@ -46,32 +103,6 @@
         android:orderInCategory="106"
         android:title="@string/action_settings"
         app:showAsAction="never" />
-
-    <item
-        android:id="@+id/cB_fire"
-        android:checkable="true"
-        android:orderInCategory="106"
-        android:title="@string/cB_fire"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/cB_water"
-        android:checkable="true"
-        android:orderInCategory="106"
-        android:title="@string/cB_water"
-        app:showAsAction="never" />
-
-    <item
-        android:id="@+id/extraBtn"
-        android:icon="@drawable/test"
-        android:orderInCategory="106"
-        android:title="@string/extraBtn"
-        android:visible="true"
-        app:showAsAction="always" />
-
-
-    <!-- Icons: https://material.io/icons/ -->
-    <!-- https://developer.android.com/guide/topics/resources/menu-resource -->
-
-    <!-- "Mark Favorite", should appear as action button if possible -->
+        -->
 
 </menu>

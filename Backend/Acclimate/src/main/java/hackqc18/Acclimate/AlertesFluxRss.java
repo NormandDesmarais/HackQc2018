@@ -8,11 +8,11 @@ import java.io.*;
  *
  */
 public class AlertesFluxRss {
-    
-    private String contRss;
     private ArrayList<String> alerte = new ArrayList<String>();
     private ArrayList<String> nom = new ArrayList<String>();
     private ArrayList<String> geom = new ArrayList<String>();
+    private ArrayList<Double> coordX = new ArrayList<Double>();
+    private ArrayList<Double> coordY = new ArrayList<Double>();
     private ArrayList<String> source = new ArrayList<String>();
     private ArrayList<String> type = new ArrayList<String>();
     private ArrayList<String> dateDeMiseAJour = new ArrayList<String>();
@@ -21,11 +21,14 @@ public class AlertesFluxRss {
     private ArrayList<String> territoire = new ArrayList<String>();
     private ArrayList<String> certitude = new ArrayList<String>();
     private ArrayList<String> urgence = new ArrayList<String>();
+    private ArrayList<Integer> indexes;
     
     public AlertesFluxRss() throws Exception{
         this.alerte = alerte;
         this.nom = nom;
         this.geom = geom;
+        this.coordX = coordX;
+        this.coordY = coordY;
         this.source = source;
         this.type = type;
         this.dateDeMiseAJour = dateDeMiseAJour;
@@ -37,116 +40,24 @@ public class AlertesFluxRss {
         
         this.createAlerts();
         this.getAlertInfos();
-    }
-    
-    public String getContRss() {
-        return contRss;
-    }
-
-    public void setContRss(String contRss) {
-        this.contRss = contRss;
-    }
-
-    public ArrayList<String> getAlerte() {
-        return alerte;
-    }
-
-    public void setAlerte(ArrayList<String> alerte) {
-        this.alerte = alerte;
-    }
-
-    public ArrayList<String> getNom() {
-        return nom;
-    }
-
-    public void setNom(ArrayList<String> nom) {
-        this.nom = nom;
-    }
-
-    public ArrayList<String> getGeom() {
-        return geom;
-    }
-
-    public void setGeom(ArrayList<String> geom) {
-        this.geom = geom;
-    }
-
-    public ArrayList<String> getSource() {
-        return source;
-    }
-
-    public void setSource(ArrayList<String> source) {
-        this.source = source;
-    }
-
-    public ArrayList<String> getType() {
-        return type;
-    }
-
-    public void setType(ArrayList<String> type) {
-        this.type = type;
-    }
-
-    public ArrayList<String> getDateDeMiseAJour() {
-        return dateDeMiseAJour;
-    }
-
-    public void setDateDeMiseAJour(ArrayList<String> dateDeMiseAJour) {
-        this.dateDeMiseAJour = dateDeMiseAJour;
-    }
-
-    public ArrayList<String> getDescription() {
-        return description;
-    }
-
-    public void setDescription(ArrayList<String> description) {
-        this.description = description;
-    }
-
-    public ArrayList<String> getSeverite() {
-        return severite;
-    }
-
-    public void setSeverite(ArrayList<String> severite) {
-        this.severite = severite;
-    }
-
-    public ArrayList<String> getTerritoire() {
-        return territoire;
-    }
-
-    public void setTerritoire(ArrayList<String> territoire) {
-        this.territoire = territoire;
-    }
-
-    public ArrayList<String> getCertitude() {
-        return certitude;
-    }
-
-    public void setCertitude(ArrayList<String> certitude) {
-        this.certitude = certitude;
-    }
-
-    public ArrayList<String> getUrgence() {
-        return urgence;
-    }
-
-    public void setUrgence(ArrayList<String> urgence) {
-        this.urgence = urgence;
-    }
-
-    
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String[] args) throws Exception {
-        AlertesFluxRss fluxRss = new AlertesFluxRss();
+        this.getCoords();
+        this.alertsInBox(-70, -60, 40, 58);
+        
     }
     
     
     public void createAlerts() throws Exception {
         String contRss = getRssFeed();
         this.alerte = getInfos("<item>", 5, "</item>", contRss);
+    }
+    
+    
+    public void getCoords() {
+        for(int i = 0; i < geom.size(); i++) {
+            String coordos = geom.get(i) + "<>";
+            this.coordX.add(Double.parseDouble(("-" + getInfosStr("-", 0, ",", coordos))));
+            this.coordY.add(Double.parseDouble((getInfosStr(",", coordX.get(i).toString().length(), "<>", coordos))));
+        }
     }
     
     
@@ -168,7 +79,7 @@ public class AlertesFluxRss {
     }
     
     
-    private static String getRssFeed() throws Exception {
+    public static String getRssFeed() throws Exception {
         String rss = "";
         URL rssSource = new URL("https://geoegl.msp.gouv.qc.ca/avp/rss/");
         URLConnection rssSrc = rssSource.openConnection();
@@ -182,13 +93,13 @@ public class AlertesFluxRss {
             
         in.close();
         
-        String rssCleaned = rss.replaceAll("&lt;", "<").replaceAll("&gt;", ">");
-        
+        String rssCleaned = rss.replaceAll("&lt;", "<").replaceAll("&gt;", ">").substring(564);
+
         return rssCleaned;
     }
     
     
-    private static String getInfosStr(String balise, int offset, String fin, String rss) {
+    public static String getInfosStr(String balise, int offset, String fin, String rss) {
         String liste = "";
         String rssText = rss;
         int ix;
@@ -202,7 +113,7 @@ public class AlertesFluxRss {
     }
     
     
-    private static ArrayList <String> getInfos(String balise, int offset, String fin, String rss) {
+    public static ArrayList <String> getInfos(String balise, int offset, String fin, String rss) {
         ArrayList <String> liste = new ArrayList <String>();
         String rssText = rss;
         int ix;
@@ -210,8 +121,31 @@ public class AlertesFluxRss {
             if (word.contains(balise)) {
                 ix = rssText.indexOf(word) + balise.length();
                 liste.add(rssText.substring(ix + offset, rssText.indexOf(fin, ix + 1)));
+                //System.out.println(rssText.substring(ix + offset, rssText.indexOf(fin, ix + 1)));
             }
         }
         return liste;
+    }
+    
+    public ArrayList<Integer> alertsInBox(double minX, double maxX, double minY, double maxY) {
+        indexes = new ArrayList<Integer>();
+        
+        if (minX <= -84 && maxX >= -58 && minY > 40 && maxY < 63) {
+            // RENVOYER TOUT
+        }
+        
+        for (int i = 0; i < alerte.size(); i++) {
+            System.out.println(coordX.get(i) > minX && coordX.get(i) < maxX);
+            if (coordX.get(i) > minX && coordX.get(i) < maxX) {
+                System.out.println(coordX.get(i) > minX && coordX.get(i) < maxX);
+                if (coordY.get(i) > minY && coordY.get(i) < maxY) {
+                    System.out.println("CoordX" + coordX.get(i));
+                    System.out.println("CoordY" + coordY.get(i));
+                    indexes.add(i);
+                    System.out.println(i);
+                }
+            }
+        }
+        return indexes;
     }
 }

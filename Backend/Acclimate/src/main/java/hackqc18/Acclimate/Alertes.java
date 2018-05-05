@@ -7,33 +7,24 @@ public class Alertes {
     private final ArrayList<Alerte> alertes = new ArrayList<>();
 
     public Alertes(double longitude, double latitude) {
-        PointJSON point = new PointJSON(longitude + 2, latitude + 3);
-        
-        
-        
-//        Polygon polygon = geoFact.createPolygon(new Coordinate[]{
-//            new Coordinate(longitude + 4, latitude + 4),
-//            new Coordinate(longitude - 4, latitude + 4),
-//            new Coordinate(longitude - 4, latitude - 4),
-//            new Coordinate(longitude + 4, latitude - 4)});
+        PointJSON point = new PointJSON(latitude + 2, longitude + 3);
+        PointJSON point2 = new PointJSON(latitude - 2, longitude - 3);
+//        ArrayList<double[]> theArray = new ArrayList<double[]>();
+//        theArray.add(new double[]{latitude + 4,longitude + 4});
+//        theArray.add(new double[]{latitude + 4,longitude - 4});
+//        theArray.add(new double[]{latitude - 4,longitude + 4});
+//        theArray.add(new double[]{latitude - 4,longitude - 4});
+//        PolygonJSON point3 = new PolygonJSON(theArray);
 
         alertes.add(new Alerte("innondation", "le gouvernement", "Montréal",
                 "certain", "grave", "innondation", "1978-05-04", "00001", "urgent",
                 "on coule!", point.toString()));
+        alertes.add(new Alerte("innondation", "le gouvernement", "Montréal",
+                "certain", "grave", "innondation", "1978-05-04", "00001", "urgent",
+                "on coule!", point2.toString()));
 //        alertes.add(new Alerte("innondation", "le gouvernement", "Montréal",
 //                "certain", "grave", "innondation", "1978-05-04", "00001", "urgent",
-//                "on coule!", point2));
-//        alertes.add(new Alerte("innondation", "le gouvernement", "Montréal",
-//                "certain", "grave", "innondation", "1978-05-04", "00001", "urgent",
-//                "on coule!", point3));
-//        alertes.add(new Alerte("innondation", "le gouvernement", "Montréal",
-//                "certain", "grave", "innondation", "1978-05-04", "00001", "urgent",
-//                "on coule!", point4));
-        
-//        alertes.add(new Alerte("vent", "Monsieur Dupont", "Montréal",
-//                "mettons", "hey", "attache ta tuque", "1979-05-04", "00021",
-//                "immédiat","on coule!", polygon));
-
+//                "on coule!", point3.toString()));
     }
 
     public ArrayList<Alerte> getAlertes() {
@@ -42,12 +33,13 @@ public class Alertes {
 
     @Override
     public String toString() {
-        String result = "{";
+        String result = "{\n\"alertes\": [";
 
-        for (Alerte alerte : alertes) {
-            result += alerte.toString();
+        for (int i = 0; i < alertes.size() - 1; i++) {
+            result += alertes.get(i).toString() + ",";
         }
-        return result + "}";
+        result += alertes.get(alertes.size() - 1).toString();
+        return result + "]\n}";
     }
 
 }
