@@ -10,6 +10,8 @@ import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.ItemizedIconOverlay;
+import org.osmdroid.views.overlay.ItemizedOverlay;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Overlay;
@@ -32,9 +34,13 @@ public class MapDisplay {
     public MapView map;
     private double[] lastTouch = {0, 0};
 
+
     public MapDisplay(MapView map){
+
         this.map = map;
-    }
+
+        }
+
 
     /**
      * North, south, east, west
@@ -102,6 +108,28 @@ public class MapDisplay {
         pin.setTitle("TITLE : A pin");
         pin.setSubDescription("A subdescripton");
         pin.setSnippet("A snippet");
+
+        map.getOverlays().add(pin);
+        this.map.invalidate();
+
+    }
+
+
+    public void addPin(GeoPoint pos, String type){
+
+        Marker pin = new Marker(map);
+        pin.setPosition(pos);
+        pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+
+        pin.setTitle("TITLE : A pin");
+        pin.setSubDescription("A subdescripton");
+        pin.setSnippet("A snippet");
+
+        switch (type) {
+            case "water" :
+                
+                break;
+        }
 
         map.getOverlays().add(pin);
         this.map.invalidate();

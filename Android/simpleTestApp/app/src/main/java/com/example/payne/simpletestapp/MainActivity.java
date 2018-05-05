@@ -64,7 +64,6 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         https://developer.android.com/guide/topics/location/strategies
          */
 
-
         map = findViewById(R.id.map);
         myMap = new MapDisplay(map);
         map.setTileSource(TileSourceFactory.MAPNIK);
