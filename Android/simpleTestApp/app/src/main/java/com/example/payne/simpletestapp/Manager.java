@@ -21,7 +21,6 @@ public class Manager {
 
     public static final String testURL = "https://hackqc.herokuapp.com/api/testPoint";
 
-
     public Manager(MainActivity act) throws Exception {
 
         this.mainActivity = act;
@@ -57,8 +56,8 @@ public class Manager {
 
         // check if notification File exist on device and create one if needed
         File notif = new File(
-                        mainActivity.getApplicationContext().getFilesDir(),
-                        Manager.NOTIFICATION_FILE_PATH);
+                mainActivity.getApplicationContext().getFilesDir(),
+                Manager.NOTIFICATION_FILE_PATH);
         if(notif.exists()){
             Toast.makeText(mainActivity, "Fichier de notification détecté", Toast.LENGTH_SHORT).show();
         }
@@ -113,5 +112,8 @@ public class Manager {
         return result;
 
     }
+
+
+
 
 }

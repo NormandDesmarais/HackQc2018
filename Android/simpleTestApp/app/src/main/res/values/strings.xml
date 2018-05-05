@@ -16,4 +16,10 @@
 
     <string name="extraBtn">extraBtn</string>
     <string name="action_search">Search</string>
+
+    <string name="feu">Feu</string>
+    <string name="eau">Eau</string>
+    <string name="vent">Vent</string>
+    <string name="seisme">Seisme</string>
+
 </resources>

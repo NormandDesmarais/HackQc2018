@@ -135,16 +135,18 @@ public class JSONWrapper {
             /*
                 "viewport" : {
                    "northeast" : {
-                      "lat" : 45.7058381,    NORTH
-                      "lng" : -73.47426      EAST
+                      "lat" : 45.7058381,   = NORTH
+                      "lng" : -73.47426     = EAST
                    },
                    "southwest" : {
-                      "lat" : 45.410246,     SOUTH
-                      "lng" : -73.986345     WEST
+                      "lat" : 45.410246,    = SOUTH
+                      "lng" : -73.986345    = WEST
                    }
                 }
              */
 
+            // TODO: eventually remove this Log
+            Log.w("JSON test",JSONWrapper.createJSON(tmpJSON).getJSONArray("results").toString());
 
             JSONObject temporaryJSON = (JSONObject) JSONWrapper.createJSON(tmpJSON).getJSONArray("results").get(0);
             JSONObject boundaryViewPort = temporaryJSON.getJSONObject("geometry").getJSONObject("viewport");

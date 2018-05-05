@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     tools:context="com.example.payne.simpletestapp.MainActivity">
 
+
     <item
         android:id="@+id/action_search"
         android:icon="@android:drawable/ic_menu_search"
@@ -48,24 +49,24 @@
 
     <item
         android:id="@+id/cB_fire"
+        android:checkable="true"
         android:orderInCategory="106"
         android:title="@string/cB_fire"
-        app:showAsAction="never"
-        android:checkable="true" />
+        app:showAsAction="never" />
     <item
         android:id="@+id/cB_water"
+        android:checkable="true"
         android:orderInCategory="106"
         android:title="@string/cB_water"
-        app:showAsAction="never"
-        android:checkable="true" />
+        app:showAsAction="never" />
 
     <item
         android:id="@+id/extraBtn"
+        android:icon="@drawable/test"
         android:orderInCategory="106"
         android:title="@string/extraBtn"
         android:visible="true"
-        app:showAsAction="always"
-        android:icon="@drawable/test" />
+        app:showAsAction="always" />
 
 
     <!-- Icons: https://material.io/icons/ -->
