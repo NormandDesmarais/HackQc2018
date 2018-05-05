@@ -14,14 +14,17 @@ public class Manager {
 
     public Manager(MainActivity act) throws Exception {
 
+        this.mainActivity = act;
+
         // test server setup
         mainServer = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
         ServerConnection testServer = new ServerConnection(testURL);
 
+        String response = testServer.getRequest();
         // test
-        JSONObject JSONtest = JSONWrapper.createJSON(testServer.getRequest());
-        this.drawPolygon(JSONtest);
-
+        Log.w("test server : ", response) ;
+        JSONObject JSONtest = JSONWrapper.createJSON(response);
+        //this.drawPolygon(JSONtest);
 
     }
 

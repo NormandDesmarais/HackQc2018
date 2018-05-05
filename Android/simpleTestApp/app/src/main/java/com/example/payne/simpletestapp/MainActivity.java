@@ -26,7 +26,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     public static final double[] MONTREAL_COORD = {45.5161, -73.6568};
 
     MapView map = null;
-    public MapDisplay myMap = null;
+    public MapDisplay myMap;
     public MapEventsOverlay mapEventsOverlay;
 
     @Override

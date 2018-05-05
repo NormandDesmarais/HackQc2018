@@ -1,6 +1,7 @@
 package com.example.payne.simpletestapp;
 
 import android.graphics.Color;
+import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
@@ -141,6 +142,12 @@ public class MapDisplay {
 
 
     public void drawPolygon(JSONObject JsonPoints){
+
+        Log.w("method :", "drawPolygon");
+
+    }
+
+    public void addAlertPin(Alerte alerte){
 
 
 
