@@ -3,6 +3,8 @@ package com.example.payne.simpletestapp;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
@@ -92,25 +94,51 @@ public class Manager {
 
     }
 
-    public String mergeAlertFile(String newFileFromServer){
+    public String AlertFile(String newFileFromServer){
 
         String currentFile;
+        String result = "";
 
         // get file from storage
         try {
             currentFile = (new JSONWrapper(Manager.ALERT_FILE_PATH)).getStringContent();
 
+
+
+        // merge file
+
+        JSONObject jsonServer = new JSONObject(newFileFromServer);
+
+        return result;
+
         } catch (Exception e){
             e.printStackTrace();
         }
 
-        // merge file
-        String result = "";
-
-        JSONObject jsonServer = new JSONObject();
-
         return result;
 
+    }
+
+    /**
+     * INCOMPLETE
+     *
+     * @param file1
+     * @param file2
+     * @return
+     */
+    public JSONObject mergeJSONFile(JSONObject file1, JSONObject file2){
+
+        try {
+
+            JSONArray alertes1 = file1.getJSONArray("alertes");
+            JSONArray alertes2 = file2.getJSONArray("alertes");
+
+
+        } catch (JSONException j){
+            j.printStackTrace();
+        }
+
+        return null;
     }
 
 

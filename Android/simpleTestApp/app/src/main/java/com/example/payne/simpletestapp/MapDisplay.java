@@ -38,6 +38,11 @@ public class MapDisplay {
     private double[] lastTouch = {0, 0};
     private Context ctx;
 
+    public ArrayList<GeoPoint> terrainAlerts = new ArrayList<>();
+    public ArrayList<GeoPoint> feuAlerts = new ArrayList<>();
+    public ArrayList<GeoPoint> eauAlerts = new ArrayList<>();
+    public ArrayList<GeoPoint> meteoAlerts = new ArrayList<>();
+
 
     public MapDisplay(MapView map, Context ctx){
         this.map = map;
@@ -134,10 +139,10 @@ public class MapDisplay {
             case "eau" :
                 pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_goutte));
                 break;
-            case "seisme" :
+            case "terrain" :
                 pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_seisme));
                 break;
-            case "vent" :
+            case "meteo" :
                 pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_vent));
                 break;
             case "feu" :

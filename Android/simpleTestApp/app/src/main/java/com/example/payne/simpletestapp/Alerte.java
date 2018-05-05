@@ -30,6 +30,25 @@ public class Alerte {
 
         try {
 
+            // TODO : redo this from template
+
+            this.nom = jsonFile.getString("nom");
+            this.source = jsonFile.getString("source");
+            this.territoire = jsonFile.getString("territoire");
+            this.certitude = jsonFile.getString("certitude");
+            this.severite = jsonFile.getString("severite");
+            this.type = jsonFile.getString("type");
+            this.dateDeMiseAJour = jsonFile.getString("dateDeMiseAJour");
+            this.idAlerte = jsonFile.getString("idAlerte");
+            this.urgence = jsonFile.getString("urgence");
+            this.description = jsonFile.getString("description");
+
+            JSONObject geom = jsonFile.getJSONObject("geometry");
+            this.longitude = (double) geom.getJSONArray("coordinates").get(0);
+            this.longitude = (double) geom.getJSONArray("coordinates").get(0);
+
+
+            /*
             JSONObject point = jsonFile.getJSONObject("PointTest");
             JSONObject geometry =  point.getJSONObject("geometry");
             JSONObject properties = point.getJSONObject("properties");
@@ -43,7 +62,7 @@ public class Alerte {
             this.type = point.getString("type");
             this.dateDeMiseAJour = properties.getString("date_observation");
 
-
+        */
 
         } catch (JSONException j){
             j.printStackTrace();
