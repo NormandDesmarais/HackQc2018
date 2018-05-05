@@ -21,5 +21,6 @@
     <string name="eau">Eau</string>
     <string name="vent">Vent</string>
     <string name="seisme">Seisme</string>
+    <string name="cancel">Cancel</string>
 
 </resources>

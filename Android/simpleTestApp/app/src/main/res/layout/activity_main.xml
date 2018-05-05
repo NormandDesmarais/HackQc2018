@@ -43,20 +43,14 @@
         app:layout_anchor="@+id/include"
         app:layout_anchorGravity="left|top" />
 
-    <Button
-        android:id="@+id/popUpAnchor"
-        android:layout_width="190dp"
-        android:layout_height="wrap_content"
-        android:text="Button"
-        android:visibility="invisible"
-        app:layout_anchor="@+id/include"
-        app:layout_anchorGravity="top|center" />
-
+    <!-- Pour le Pop Up - quand on déclare une nouvelle Alerte (addPin) -->
+    <!-- TODO: remove "menu_pin" and related code -->
     <include
         android:id="@+id/pop_up"
         layout="@layout/pop_main"
-        android:layout_width="fill_parent"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:visibility="invisible" />
+        android:layout_gravity="center_vertical|center"
+        android:visibility="gone" />
 
 </android.support.design.widget.CoordinatorLayout>

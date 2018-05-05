@@ -6,6 +6,7 @@ import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -37,12 +38,13 @@ public class MapDisplay {
     public MapView map;
     private double[] lastTouch = {0, 0};
     private Context ctx;
+    public static boolean currentlyPlacingPin = false;
 
 
-    public MapDisplay(MapView map, Context ctx){
+    public MapDisplay (MapView map, Context ctx) {
         this.map = map;
         this.ctx = ctx;
-        }
+    }
 
 
     /**
@@ -104,52 +106,61 @@ public class MapDisplay {
 
     public void addPin(GeoPoint pos){
 
-        Marker pin = new Marker(map);
-        pin.setPosition(pos);
-        pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        if (!currentlyPlacingPin) {
+            currentlyPlacingPin = !currentlyPlacingPin;
 
-        pin.setTitle("TITLE : A pin");
-        pin.setSubDescription("A subdescripton");
-        pin.setSnippet("A snippet");
+            Marker pin = new Marker(map);
+            pin.setPosition(pos);
+            pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
-        map.getOverlays().add(pin);
-        this.map.invalidate();
+            pin.setTitle("TITLE : A pin");
+            pin.setSubDescription("A subdescripton");
+            pin.setSnippet("A snippet");
 
-        showPopUp();
+            map.getOverlays().add(pin);
+            this.map.invalidate();
 
+            MainActivity.lastPlacedPin = pin;
+            showPopUp();
+        }
     }
 
 
     public void addPin(GeoPoint pos, String type){
 
-        Marker pin = new Marker(map);
-        pin.setPosition(pos);
-        pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        if (!currentlyPlacingPin) {
+            currentlyPlacingPin = !currentlyPlacingPin;
 
-        pin.setTitle("TITLE : A pin");
-        pin.setSubDescription("A subdescripton");
-        pin.setSnippet("A snippet");
+            Marker pin = new Marker(map);
+            pin.setPosition(pos);
+            pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
-        switch (type) {
-            case "eau" :
-                pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_goutte));
-                break;
-            case "seisme" :
-                pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_seisme));
-                break;
-            case "vent" :
-                pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_vent));
-                break;
-            case "feu" :
-                pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_feu));
-                break;
+            pin.setTitle("TITLE : A pin");
+            pin.setSubDescription("A subdescripton");
+            pin.setSnippet("A snippet");
 
+            switch (type) {
+                case "eau":
+                    pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_goutte));
+                    break;
+                case "seisme":
+                    pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_seisme));
+                    break;
+                case "vent":
+                    pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_vent));
+                    break;
+                case "feu":
+                    pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_feu));
+                    break;
+
+            }
+
+            map.getOverlays().add(pin);
+            this.map.invalidate();
+
+            MainActivity.lastPlacedPin = pin;
+            showPopUp();
         }
-
-        map.getOverlays().add(pin);
-        this.map.invalidate();
-
-        showPopUp();
 
     }
 
@@ -224,29 +235,12 @@ public class MapDisplay {
     }
 
     /**
-     * Pour confirmer le type d'alerte.
+     * Pour montrer le PopUp pour confirmer le type d'alerte.
      */
     public void showPopUp () {
 
-        //Creating the instance of PopupMenu
-        PopupMenu popup = new PopupMenu(MainActivity.mainActivity, MainActivity.mainActivity.findViewById(R.id.popUpAnchor));
-        //Inflating the Popup using xml file
-        popup.getMenuInflater()
-                .inflate(R.menu.menu_pin, popup.getMenu());
-
-        //registering popup with OnMenuItemClickListener
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            public boolean onMenuItemClick(MenuItem item) {
-                Toast.makeText(
-                        MainActivity.mainActivity,
-                        "You Clicked : " + item.getTitle(),
-                        Toast.LENGTH_SHORT
-                ).show();
-                return true;
-            }
-        });
-
-        popup.show(); //showing popup menu
+        // View layout = MainActivity.mainActivity.findViewById(R.id.pop_up);
+        MainActivity.mainActivity.findViewById(R.id.pop_up).setVisibility(View.VISIBLE);
     }
 
 }
