@@ -78,18 +78,18 @@ public class Alerte {
 
     @Override
     public String toString() {
-        return "{"
-                + "nom:" + nom
-                + "source:" + source
-                + "territoire:" + territoire
-                + "certitude:" + certitude
-                + "severite:" + severite
-                + "type:" + type
-                + "dateDeMiseAJour:" + dateDeMiseAJour
-                + "urgence:" + urgence
-                + "description:" + description 
-                + "geometry:{" + geom
-                + "}}";
+        return "{\"alerte\" : {\n"
+                + "\"nom\": \"" + nom + "\",\n"
+                + "\"source\": \"" + source + "\",\n"
+                + "\"territoire\": \"" + territoire + "\",\n"
+                + "\"certitude\": \"" + certitude + "\",\n"
+                + "\"severite\": \"" + severite + "\",\n"
+                + "\"type\": \"" + type + "\",\n"
+                + "\"dateDeMiseAJour\": \"" + dateDeMiseAJour + "\",\n"
+                + "\"urgence\": \"" + urgence + "\",\n"
+                + "\"description\": \"" + description + "\",\n"
+                + "\"geometry\": " + geom
+                + "\n}\n}";
 
     }
 }
