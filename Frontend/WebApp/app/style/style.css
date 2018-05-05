@@ -53,6 +53,8 @@
       border-radius: 4px;
       display: inline-block;
       transform: translateY(25%); }
+      #leftPane ul .selector:hover {
+        cursor: pointer; }
     #leftPane ul .selector.checked {
       background-color: #5c5d60; }
       #leftPane ul .selector.checked::after {
