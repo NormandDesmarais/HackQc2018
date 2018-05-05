@@ -262,7 +262,6 @@ public class MapDisplay {
         for (int i = 0; i < alertes.length(); i++) {
 
             JSONObject alerte = alertes.getJSONObject(i);
-            // JSONArray coord = alerte.getJSONObject("geometry").getJSONArray("coordinates");
 
             switch (alerte.getString("type")) {
                 case "feu" :

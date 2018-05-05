@@ -23,7 +23,7 @@ public class Manager {
     public MainActivity mainActivity;
     public MapDisplay myMap;
 
-    public static final String testURL = "https://hackqc.herokuapp.com/api/JSON";
+    public static final String testURL = "https://hackqc.herokuapp.com/api";
 
     public Manager(MainActivity act, MapDisplay myMap) throws Exception {
 
@@ -36,7 +36,7 @@ public class Manager {
         mainServer = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
         ServerConnection testServer = new ServerConnection(testURL);
 
-        String response = testServer.ping();
+        String response = testServer.ping("/latest", myMap.map.getBoundingBox());
         // test
         Log.w("test server : ", response) ;
 
@@ -109,28 +109,6 @@ public class Manager {
 
         return result;
 
-    }
-
-    /**
-     * INCOMPLETE
-     *
-     * @param file1
-     * @param file2
-     * @return
-     */
-    public JSONObject mergeJSONFile(JSONObject file1, JSONObject file2){
-
-        try {
-
-            JSONArray alertes1 = file1.getJSONArray("alertes");
-            JSONArray alertes2 = file2.getJSONArray("alertes");
-
-
-        } catch (JSONException j){
-            j.printStackTrace();
-        }
-
-        return null;
     }
 
 

@@ -54,10 +54,11 @@ public class Alerte {
 
     }
 
-    public Alerte(double longitude, double lattitude){
+    public Alerte(double longitude, double lattitude, String type){
 
         this.longitude = longitude;
         this.lattitude = lattitude;
+        this.type = type;
 
     }
 
