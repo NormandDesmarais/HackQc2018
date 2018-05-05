@@ -5,4 +5,38 @@
   left: auto !important;
   right: 0.5em; }
 
+#map {
+  height: calc(100vh - 101px); }
+
+#leftPane {
+  height: calc(100% - 101px);
+  width: 30%;
+  position: fixed;
+  top: 101px;
+  background-color: white;
+  max-width: 250px;
+  left: 0;
+  transition: 0.3s all; }
+  #leftPane #expander {
+    background-color: white;
+    height: 50px;
+    width: 50px;
+    position: absolute;
+    top: 50%;
+    right: 0;
+    transform: translate(50%, -50%);
+    border-radius: 50%; }
+    #leftPane #expander img {
+      height: 30px;
+      position: absolute;
+      top: 50%;
+      transform: translateY(-50%) rotate(180deg);
+      right: 3px;
+      transition: 0.3s all; }
+  #leftPane #expander.rotate img {
+    transform: translateY(-50%) rotate(0deg); }
+
+#leftPane.close {
+  left: -250px; }
+
 /*# sourceMappingURL=style.css.map */
