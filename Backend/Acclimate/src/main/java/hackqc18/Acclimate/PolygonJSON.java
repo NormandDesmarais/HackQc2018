@@ -15,7 +15,7 @@ public class PolygonJSON {
         
     @Override
     public String toString() {
-        return "geometry: {type: Polygon," 
+        return "{\n\"type\": \"Polygon\",\n" 
                 + coordinates.toString() + "}";
     }
 

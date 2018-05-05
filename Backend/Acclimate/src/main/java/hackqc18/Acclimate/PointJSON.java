@@ -10,7 +10,7 @@ public class PointJSON {
     
     @Override
     public String toString() {
-        return "type: Point," 
-                + coordinates.toString();
+        return "{\n\"type\": \"Point\",\n" 
+                + coordinates.toString() + "}";
     }
 }
