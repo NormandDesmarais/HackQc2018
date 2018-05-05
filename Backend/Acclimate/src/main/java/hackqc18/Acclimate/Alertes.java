@@ -4,11 +4,14 @@ import java.util.ArrayList;
 
 public class Alertes {
 
-    private final ArrayList<Alerte> alertes = new ArrayList<>();
+    private ArrayList<Alerte> alertes;
 
-    public Alertes(double longitude, double latitude) {
-        PointJSON point = new PointJSON(latitude + 2, longitude + 3);
-        PointJSON point2 = new PointJSON(latitude - 2, longitude - 3);
+    public Alertes(double nord, double sud, double est, double ouest) {
+        
+        alertes = AlertesFluxRss.theInstance().alertsInBox(nord, sud, est, ouest);
+        
+//        PointJSON point = new PointJSON(latitude + 2, longitude + 3);
+//        PointJSON point2 = new PointJSON(latitude - 2, longitude - 3);
 //        ArrayList<double[]> theArray = new ArrayList<double[]>();
 //        theArray.add(new double[]{latitude + 4,longitude + 4});
 //        theArray.add(new double[]{latitude + 4,longitude - 4});
@@ -16,12 +19,12 @@ public class Alertes {
 //        theArray.add(new double[]{latitude - 4,longitude - 4});
 //        PolygonJSON point3 = new PolygonJSON(theArray);
 
-        alertes.add(new Alerte("innondation", "le gouvernement", "Montréal",
-                "certain", "grave", "innondation", "1978-05-04", "00001", "urgent",
-                "on coule!", point.toString()));
-        alertes.add(new Alerte("innondation", "le gouvernement", "Montréal",
-                "certain", "grave", "innondation", "1978-05-04", "00001", "urgent",
-                "on coule!", point2.toString()));
+//        alertes.add(new Alerte("innondation", "le gouvernement", "Montréal",
+//                "certain", "grave", "innondation", "1978-05-04", "00001", "urgent",
+//                "on coule!", point.toString()));
+//        alertes.add(new Alerte("innondation", "le gouvernement", "Montréal",
+//                "certain", "grave", "innondation", "1978-05-04", "00001", "urgent",
+//                "on coule!", point2.toString()));
 //        alertes.add(new Alerte("innondation", "le gouvernement", "Montréal",
 //                "certain", "grave", "innondation", "1978-05-04", "00001", "urgent",
 //                "on coule!", point3.toString()));
