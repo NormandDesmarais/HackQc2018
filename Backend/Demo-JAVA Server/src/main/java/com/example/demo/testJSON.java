@@ -2,37 +2,34 @@ package com.example.demo;
 
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRawValue;
-
-
-import java.io.*;
-import java.net.MalformedURLException;
-import java.net.URL;
-import java.nio.charset.Charset;
-import org.apache.commons.io.IOUtils;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 
 public class testJSON {
 
+
+
     JSONObject file;
 
-    public testJSON() throws JSONException {
-        this.file = getContent("https://cplepage.com/hackQC/resultat.json");
-
+    public static JSONObject parseJSONFile(String filename) throws JSONException, IOException {
+        String content = new String(Files.readAllBytes(Paths.get(filename)));
+        return new JSONObject(content);
     }
 
-    public JSONObject getContent(String url) throws JSONException {
+    public testJSON(){
         try {
-            return new JSONObject(IOUtils.toString(new URL(url), Charset.forName("UTF-8")));
-        } catch (MalformedURLException e) {
-            e.printStackTrace();
+            String filename = "src/main/results.json";
+            this.file = parseJSONFile(filename);
         } catch (IOException e) {
             e.printStackTrace();
         } catch (JSONException e) {
             e.printStackTrace();
         }
-        return new JSONObject("failed");
     }
 
     @JsonRawValue
