@@ -1,5 +1,8 @@
 package com.example.payne.simpletestapp;
 
+import android.util.Log;
+import android.widget.Toast;
+
 import org.osmdroid.util.BoundingBox;
 
 import java.io.BufferedReader;
@@ -147,6 +150,7 @@ public class ServerConnection {
 
                 try{
                     URL obj = new URL(serverAddress + param);
+                    Log.w("URLTEST : ", serverAddress + param);
                     HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
                     // optional default is GET
@@ -165,6 +169,7 @@ public class ServerConnection {
                     in.close();
 
                     result.response = response.toString();
+                    Log.w("RESULTAT REQUEST : ", result.response);
 
                 } catch (Exception e){
                     e.printStackTrace();
@@ -187,7 +192,7 @@ public class ServerConnection {
 
         String param =  "?type=" + alerte.type +
                         "&lat=" + alerte.getLatitude() +
-                        "&lng" + alerte.getLongitude();
+                        "&lng=" + alerte.getLongitude();
 
         try {
             this.getRequest(param);
@@ -196,7 +201,10 @@ public class ServerConnection {
             e.printStackTrace();
         }
 
+
+
         return success;
+
 
     }
 
