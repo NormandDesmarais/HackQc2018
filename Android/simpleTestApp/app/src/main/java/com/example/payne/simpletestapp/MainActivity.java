@@ -29,7 +29,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
     MapView map = null;
     public MapDisplay myMap;
-    public MapEventsOverlay mapEventsOverlay;
+    public static MapEventsOverlay mapEventsOverlay;
     public static MainActivity mainActivity;
     public static Marker lastPlacedPin = null;
 

@@ -234,6 +234,15 @@ public class MapDisplay {
         this.map.invalidate();
     }
 
+    public void drawAlertPins(ArrayList<Alerte> alertes, Drawable icon){
+
+        for (Alerte alerte :
+                alertes) {
+            this.addAlertPin(alerte, icon);
+        }
+
+    }
+
     public GeoPoint getCenter() {
         return (GeoPoint) this.map.getMapCenter();
     }
@@ -300,6 +309,17 @@ public class MapDisplay {
         for (Alerte alerte : meteoAlerts) {
             this.addAlertPin(alerte, ctx.getResources().getDrawable(R.drawable.pin_vent));
         }
+
+        this.map.invalidate();
+
+    }
+
+    public void refreshPins(){
+
+        this.removeAll(MainActivity.mainActivity.findViewById(android.R.id.content),
+                       MainActivity.mapEventsOverlay);
+
+        this.displayLists();
 
     }
 
