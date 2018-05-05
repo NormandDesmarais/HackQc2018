@@ -3,11 +3,14 @@ package com.example.payne.simpletestapp;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 
 import java.io.File;
+
 
 public class Manager {
 
@@ -32,10 +35,10 @@ public class Manager {
         ServerConnection testServer = new ServerConnection(testURL);
 
         String response = testServer.getRequest();
-
         // test
         Log.w("test server : ", response) ;
         JSONObject JSONtest = JSONWrapper.createJSON(response);
+
         Alerte testAlerte = JSONWrapper.parseGEOJson(JSONtest);
 
         Log.w("testAlerte : ", testAlerte.toString());
@@ -45,19 +48,18 @@ public class Manager {
                 new GeoPoint(testAlerte.getLattitude(), testAlerte.getLongitude()));
     }
 
+
     public void drawPolygon(JSONObject polyPoints){
 
         this.mainActivity.myMap.drawPolygon(polyPoints);
-
-
     }
 
     private void setupStorage(){
 
         // check if notification File exist on device and create one if needed
         File notif = new File(
-                mainActivity.getApplicationContext().getFilesDir(),
-                Manager.NOTIFICATION_FILE_PATH);
+                        mainActivity.getApplicationContext().getFilesDir(),
+                        Manager.NOTIFICATION_FILE_PATH);
         if(notif.exists()){
             Toast.makeText(mainActivity, "Fichier de notification détecté", Toast.LENGTH_SHORT).show();
         }
@@ -65,23 +67,15 @@ public class Manager {
             JSONWrapper.createNotificationFile(mainActivity);
         }
 
-        // get alerts from server
-        String result;
-        try {
-            result = mainServer.ping();
-
-            // check if alert File exist on device and create one if needed
-            File alertes = new File(
-                    mainActivity.getApplicationContext().getFilesDir(),
-                    Manager.ALERT_FILE_PATH);
-            if(alertes.exists()){
-                Toast.makeText(mainActivity, "Fichier d'alertes détecté", Toast.LENGTH_SHORT).show();
-            }
-            else {
-                JSONWrapper.createAlertFile(mainActivity, result);
-            }
-        } catch (Exception e){
-            Toast.makeText(mainActivity, "impossible de créer le fichier d'alerte", Toast.LENGTH_SHORT).show();
+        // check if alert File exist on device and create one if needed
+        File alertes = new File(
+                mainActivity.getApplicationContext().getFilesDir(),
+                Manager.ALERT_FILE_PATH);
+        if(alertes.exists()){
+            Toast.makeText(mainActivity, "Fichier d'alertes détecté", Toast.LENGTH_SHORT).show();
+        }
+        else {
+            JSONWrapper.createNotificationFile(mainActivity);
         }
 
     }
@@ -92,27 +86,56 @@ public class Manager {
 
     }
 
-    public String mergeAlertFile(String newFileFromServer){
+<<<<<<< HEAD
+    public String AlertFile(String newFileFromServer){
 
         String currentFile;
+        String result = "";
 
         // get file from storage
         try {
             currentFile = (new JSONWrapper(Manager.ALERT_FILE_PATH)).getStringContent();
 
+
+
+        // merge file
+
+        JSONObject jsonServer = new JSONObject(newFileFromServer);
+
+        return result;
+
         } catch (Exception e){
             e.printStackTrace();
         }
-
-        // merge file
-        String result = "";
-
-        JSONObject jsonServer = new JSONObject();
 
         return result;
 
     }
 
+    /**
+     * INCOMPLETE
+     *
+     * @param file1
+     * @param file2
+     * @return
+     */
+    public JSONObject mergeJSONFile(JSONObject file1, JSONObject file2){
+
+        try {
+
+            JSONArray alertes1 = file1.getJSONArray("alertes");
+            JSONArray alertes2 = file2.getJSONArray("alertes");
+
+
+        } catch (JSONException j){
+            j.printStackTrace();
+        }
+
+        return null;
+    }
+
+=======
+>>>>>>> 3dfa7e67f8d4b4cf865cd9b910f65ef13f5d41bd
 
 
 

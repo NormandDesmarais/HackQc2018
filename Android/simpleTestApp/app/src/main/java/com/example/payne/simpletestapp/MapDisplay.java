@@ -38,6 +38,11 @@ public class MapDisplay {
     private double[] lastTouch = {0, 0};
     private Context ctx;
 
+    public ArrayList<GeoPoint> terrainAlerts = new ArrayList<>();
+    public ArrayList<GeoPoint> feuAlerts = new ArrayList<>();
+    public ArrayList<GeoPoint> eauAlerts = new ArrayList<>();
+    public ArrayList<GeoPoint> meteoAlerts = new ArrayList<>();
+
 
     public MapDisplay(MapView map, Context ctx){
         this.map = map;
@@ -134,10 +139,10 @@ public class MapDisplay {
             case "eau" :
                 pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_goutte));
                 break;
-            case "seisme" :
+            case "terrain" :
                 pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_seisme));
                 break;
-            case "vent" :
+            case "meteo" :
                 pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_vent));
                 break;
             case "feu" :
@@ -181,7 +186,6 @@ public class MapDisplay {
         }
 
         map.invalidate();
-
 
     }
 
@@ -228,8 +232,6 @@ public class MapDisplay {
      * Pour confirmer le type d'alerte.
      */
     public void showPopUp () {
-
-        Log.w("Pin PopUp","Should have popped up somewhere");
 
         //Creating the instance of PopupMenu
         PopupMenu popup = new PopupMenu(MainActivity.mainActivity, MainActivity.mainActivity.findViewById(R.id.popUpAnchor));

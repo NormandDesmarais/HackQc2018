@@ -52,4 +52,11 @@
         app:layout_anchor="@+id/include"
         app:layout_anchorGravity="top|center" />
 
+    <include
+        android:id="@+id/pop_up"
+        layout="@layout/pop_main"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:visibility="invisible" />
+
 </android.support.design.widget.CoordinatorLayout>
