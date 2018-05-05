@@ -15,6 +15,7 @@
   background-color: white;
   width: 250px;
   left: 0;
+  padding: 15px 5px 15px 10px;
   transition: 0.3s all; }
   #leftPane #expander {
     background-color: white;
@@ -36,6 +37,49 @@
       transition: 0.3s all; }
   #leftPane #expander.rotate img {
     transform: translateY(-50%) rotate(0deg); }
+  #leftPane ul {
+    list-style-type: none;
+    padding: 0; }
+    #leftPane ul li {
+      padding: 0 0 15px 0; }
+      #leftPane ul li span {
+        padding: 0 0 0 15px; }
+    #leftPane ul img {
+      height: 25px; }
+    #leftPane ul .selector {
+      height: 24px;
+      width: 24px;
+      border: 2px solid #5c5d60;
+      border-radius: 4px;
+      display: inline-block;
+      transform: translateY(25%); }
+    #leftPane ul .selector.checked {
+      background-color: #5c5d60; }
+      #leftPane ul .selector.checked::after {
+        content: "";
+        background-image: url("../images/checkmark.svg");
+        background-size: 18px;
+        background-repeat: no-repeat;
+        background-position: center;
+        display: inline-block;
+        width: 24px;
+        height: 24px;
+        position: absolute;
+        top: -2px;
+        left: -2px; }
+    #leftPane ul .date {
+      display: inline-block;
+      float: right;
+      padding: 7px; }
+      #leftPane ul .date::after {
+        content: "";
+        background-image: url("../images/datepicker.svg");
+        background-size: 20px;
+        background-repeat: no-repeat;
+        background-position: center;
+        display: inline-block;
+        width: 24px;
+        height: 24px; }
 
 #leftPane.close {
   opacity: 1;

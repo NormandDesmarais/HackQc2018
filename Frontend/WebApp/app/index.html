@@ -49,6 +49,9 @@
     <script src="js/openlayerInit.js"></script>
     <div id="leftPane">
         <div id="expander"><img src="images/expand.svg"></div>
+        <ul>
+            <li ng-repeat="risque in risques"><div class="selector" ng-class="(risque.show) ? 'checked':''"></div><span ng-bind="risque.title"></span><img ng-src="images/{{risque.icon}}" /><div class="date"></div></li>
+        </ul>
     </div>
     <script src="js/toggleLeftPane.js"></script>
 </body>
