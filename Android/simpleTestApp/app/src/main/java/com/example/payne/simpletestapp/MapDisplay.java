@@ -31,7 +31,7 @@ public class MapDisplay {
     private double[] lastTouch = {0, 0};
     static private Context ctx;
     public static boolean currentlyPlacingPin = false;
-    public static final BoundingBox QUEBEC_BOUNDING_BOX = new BoundingBox(63,40,-58,-84);
+    public static final BoundingBox QUEBEC_BOUNDING_BOX = new BoundingBox(63,-58,40,-84);
 
     public ArrayList<Alerte> terrainAlerts = new ArrayList<>();
     public ArrayList<Alerte> feuAlerts = new ArrayList<>();
@@ -232,8 +232,18 @@ public class MapDisplay {
         pin.setSnippet(snippet);
 
         map.getOverlays().add(pin);
-        Log.w("NEW_PIN", pin.getPosition().toString());
         this.map.invalidate();
+    }
+
+    public void addAlertPin(Alerte alerte){
+
+        switch (alerte.type){
+            case "feu" : addAlertPin(alerte,feuIcon);
+            case "eau" : addAlertPin(alerte, eauIcon);
+            case "meteo" : addAlertPin(alerte, meteoIcon);
+            case "terrain" : addAlertPin(alerte, terrainIcon);
+        }
+
     }
 
     public void drawAlertPins(ArrayList<Alerte> alertes, Drawable icon){
@@ -269,26 +279,58 @@ public class MapDisplay {
 
         for (int i = 0; i < alertes.length(); i++) {
 
-            JSONObject alerte = alertes.getJSONObject(i);
+            JSONObject alerte = alertes.getJSONObject(i).getJSONObject("alerte");
+            Log.w("ALERTES", alerte.toString());
 
             switch (alerte.getString("type")) {
+
                 case "feu":
                     this.feuAlerts.add(new Alerte(alerte));
                     break;
+
                 case "eau":
                     this.eauAlerts.add(new Alerte(alerte));
                     break;
+
                 case "meteo":
                     this.meteoAlerts.add(new Alerte(alerte));
                     break;
+
                 case "terrain":
                     this.terrainAlerts.add(new Alerte(alerte));
                     break;
+
+                case "Inondation" :
+                    Alerte tmp1 = new Alerte(alerte);
+                    tmp1.type = "eau";
+                    this.eauAlerts.add(tmp1);
+                    break;
+
+                case "Suivi des cours d'eau" :
+                    Alerte tmp2 = new Alerte(alerte);
+                    tmp2.type = "eau";
+                    this.eauAlerts.add(tmp2);
+                    break;
+
+                case "vent" :
+                    Alerte tmp3 = new Alerte(alerte);
+                    tmp3.type = "meteo";
+                    this.meteoAlerts.add(tmp3);
+                    break;
+
+                case "pluie" :
+                    Alerte tmp4 = new Alerte(alerte);
+                    tmp4.type = "meteo";
+                    this.meteoAlerts.add(tmp4);
+                    break;
+
                 default:
                     this.meteoAlerts.add(new Alerte(alerte));
                     break;
             }
         }
+
+        this.map.invalidate();
 
     }
 

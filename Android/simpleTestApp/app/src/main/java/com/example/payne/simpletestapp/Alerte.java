@@ -39,7 +39,7 @@ public class Alerte {
             this.severite = jsonFile.getString("severite");
             this.type = jsonFile.getString("type");
             this.dateDeMiseAJour = jsonFile.getString("dateDeMiseAJour");
-            this.idAlerte = jsonFile.getString("idAlerte");
+            // this.idAlerte = jsonFile.getString("idAlerte");
             this.urgence = jsonFile.getString("urgence");
             this.description = jsonFile.getString("description");
 
@@ -47,6 +47,7 @@ public class Alerte {
             this.latitude = (double) geom.getJSONArray("coordinates").get(0);
             this.longitude = (double) geom.getJSONArray("coordinates").get(1);
 
+            Log.w("ALERTES", this.latitude + " -=-=- " + this.longitude);
 
         } catch (JSONException j){
             j.printStackTrace();
