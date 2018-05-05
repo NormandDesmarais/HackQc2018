@@ -83,6 +83,14 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         GeoPoint startPoint = new GeoPoint(MONTREAL_COORD[0], MONTREAL_COORD[1]);
         mapController.setCenter(startPoint);
 
+        // setup app backend
+        try{
+            manager = new Manager(this, myMap);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+
         // Logo button
         findViewById(R.id.logo).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -206,12 +214,6 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         mapEventsOverlay = new MapEventsOverlay(this, this);
         map.getOverlays().add(0, mapEventsOverlay);
 
-        // setup app backend
-        try{
-            manager = new Manager(this, myMap);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
     }
 
     @Override
