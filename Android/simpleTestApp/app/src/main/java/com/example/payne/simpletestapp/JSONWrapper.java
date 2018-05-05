@@ -2,8 +2,10 @@ package com.example.payne.simpletestapp;
 
 import android.content.Context;
 import android.util.Log;
+import android.widget.Toast;
 
 import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.util.BoundingBox;
 
@@ -171,28 +173,34 @@ public class JSONWrapper {
         return bBox;
     }
 
+    /**
+     * Crée le fichier de notification contenant toutes les notifications ajoutés par l'utilisateur
+     *
+     * @param ctx
+     */
     public static void createNotificationFile(MainActivity ctx){
 
-        JSONObject file = new JSONObject();
+        String fileContent = "";
 
-        JSONArray notifications = new JSONArray();
-        JSONObject box = new JSONObject();
-        //box.put("north");
-        //box.put("south");
-        //box.put("east");
-        //box.put("west");
-        notifications.put("type");
-        notifications.put(box);
+        try {
+
+            JSONObject file = new JSONObject();
+            JSONArray notifications = new JSONArray();
+
+            file.put("notifications", notifications);
+            Log.w("JSON notification : ", file.toString());
+            fileContent = file.toString();
 
 
-
-        String fileContents = "Hello world!";
+        } catch (JSONException j){
+            Toast.makeText(ctx, "Impossible de créer le fichier de notification", Toast.LENGTH_SHORT).show();
+        }
 
         FileOutputStream outputStream;
 
         try {
             outputStream = ctx.openFileOutput(Manager.NOTIFICATION_FILE_PATH, Context.MODE_PRIVATE);
-            outputStream.write(fileContents.getBytes());
+            outputStream.write(fileContent.getBytes());
             outputStream.close();
         } catch (Exception e) {
             e.printStackTrace();
@@ -200,5 +208,55 @@ public class JSONWrapper {
 
 
     }
+
+    /**
+     * Permet d'ajouter au fichier de notification un nouveau abonnement à une notification
+     *
+     * @param boundingBox
+     * @param type
+     * @param ctx
+     */
+    public static void addUserNotificationToFile (BoundingBox boundingBox, String type, Context ctx) {
+
+        try {
+
+            JSONObject notificationsFile = new JSONObject(JSONWrapper.getStringFromFile(Manager.NOTIFICATION_FILE_PATH));
+
+            JSONObject notif = new JSONObject();
+            JSONObject box = new JSONObject();
+            box.put("north", boundingBox.getLatNorth());
+            box.put("south", boundingBox.getLatSouth());
+            box.put("east", boundingBox.getLonEast());
+            box.put("west", boundingBox.getLonWest());
+
+            notif.put("type", type);
+            notif.put("box", box);
+
+            JSONArray notifications = notificationsFile.getJSONArray("notifications");
+            notifications.put(notif);
+
+            // update content
+            String fileContents = notificationsFile.toString();
+            Log.w("fileContent : ", notificationsFile.toString());
+
+            // write to File
+            FileOutputStream outputStream;
+            outputStream = ctx.openFileOutput(Manager.NOTIFICATION_FILE_PATH, Context.MODE_PRIVATE);
+            outputStream.write(fileContents.getBytes());
+            outputStream.close();
+
+        } catch (Exception j){
+            Toast.makeText(ctx, "Désolé : impossible de rajouter une nouvelle notification", Toast.LENGTH_SHORT).show();
+        }
+
+    }
+
+
+    public static void createAlertFile(){
+
+
+
+    }
+
 
 }
