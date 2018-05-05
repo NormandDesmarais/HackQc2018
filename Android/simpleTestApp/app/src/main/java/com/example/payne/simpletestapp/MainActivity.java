@@ -132,80 +132,10 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             @Override
             public boolean onQueryTextSubmit(String query) {
 
+                // TODO : eventually remove this Toast
                 Toast.makeText(MainActivity.this, query, Toast.LENGTH_SHORT).show();
 
-                /* GOOGLE API (GeoCoding):
-                https://developers.google.com/maps/documentation/geocoding/intro
-                 */
-
-                String tmp = "https://maps.googleapis.com/maps/api/geocode/json?address=";
-                /* TODO: Add QUEBEC BOUNDARIES:
-                "https://maps.googleapis.com/maps/api/geocode/json?bounds=34.172684,-118.604794|34.236144,-118.500938&address="
-                OR
-                "https://maps.googleapis.com/maps/api/geocode/json?region=qc&address="
-                */
-                ServerConnection connection = new ServerConnection(tmp);
-
-                try {
-                    String tmpJSON = connection.getRequest(query);
-
-                    /*
-                    JSONObject testJSON = JSONWrapper.createJSON(tmpJSON);
-                    JSONObject secJSON = (JSONObject) testJSON.getJSONArray("results").get(0);
-                    Double testJSON2 = secJSON.getJSONObject("geometry").getJSONObject("viewport").getDouble("lat");
-                    */
-
-
-
-                    /*
-                        "viewport" : {
-                           "northeast" : {
-                              "lat" : 45.7058381,    NORTH
-                              "lng" : -73.47426      EAST
-                           },
-                           "southwest" : {
-                              "lat" : 45.410246,     SOUTH
-                              "lng" : -73.986345     WEST
-                           }
-                        }
-                     */
-
-
-                    JSONObject temporaryJSON = (JSONObject) JSONWrapper.createJSON(tmpJSON).getJSONArray("results").get(0);
-                    JSONObject boundaryViewPort = temporaryJSON.getJSONObject("geometry").getJSONObject("viewport");
-                    double[] northEast = {boundaryViewPort.getJSONObject("northeast").getDouble("lat"),
-                            boundaryViewPort.getJSONObject("northeast").getDouble("lng")};
-                    double[] southWest = {boundaryViewPort.getJSONObject("southwest").getDouble("lat"),
-                            boundaryViewPort.getJSONObject("northeast").getDouble("lng")};
-
-                    double north = northEast[0];
-                    double south = southWest[0];
-                    double east = northEast[1];
-                    double west = southWest[1];
-
-                    /* TODO: adjust
-                    // deux fois plus grand vers la gauche
-                    double horizOffset = (west-east)/2;
-                    east = east - horizOffset;
-                    west = west - (horizOffset);
-
-                    // deux fois plus grand vers le bas
-                    double vertOffset = (north-south)/2;
-                    south = south - vertOffset;
-                    */
-
-                    BoundingBox boundingBox = new BoundingBox(north, east, south, west);
-
-                    map.zoomToBoundingBox(boundingBox, true);
-
-                    /*
-                    Log.w("String", tmpJSON);
-                    Log.w("JSON", testJSON.getJSONArray("results").get(0).toString());
-                    Log.w("secJSON", testJSON2.toString());
-                    */
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
+                map.zoomToBoundingBox(JSONWrapper.googleBoundingBox(query), false);
 
                 return false;
             }
@@ -229,7 +159,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         //noinspection SimplifiableIfStatement
         switch (id) {
             case (R.id.action_settings):
-                Toast.makeText(this, "Who fuckings cares...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Who fucking cares...", Toast.LENGTH_SHORT).show();
                 /* TODO: Try a Standard Request here
                 https://hackqc.herokuapp.com/api/greeting?name=bob&annee=345&lastname=lolippop
                 https://developer.android.com/training/volley/request
