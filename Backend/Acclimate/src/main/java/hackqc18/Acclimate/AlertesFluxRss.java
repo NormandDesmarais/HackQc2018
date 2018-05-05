@@ -22,7 +22,7 @@ public class AlertesFluxRss {
     private ArrayList<String> certitude = new ArrayList<String>();
     private ArrayList<String> urgence = new ArrayList<String>();
     
-    public RssReader() throws Exception{
+    public AlertesFluxRss() throws Exception{
         this.alerte = alerte;
         this.nom = nom;
         this.geom = geom;
@@ -140,7 +140,7 @@ public class AlertesFluxRss {
      * @param args the command line arguments
      */
     public static void main(String[] args) throws Exception {
-        RssReader fluxRss = new RssReader();
+        AlertesFluxRss fluxRss = new AlertesFluxRss();
     }
     
     

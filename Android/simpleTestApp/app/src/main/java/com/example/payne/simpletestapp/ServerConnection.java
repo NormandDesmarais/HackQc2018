@@ -25,7 +25,9 @@ public class ServerConnection {
     }
 
     /**
-     * Envoie une requête au serveur de façon périodique
+     * Envoie une requête au serveur de façon périodique.
+     * <p></p>
+     * Reçoit toutes les alertes sur le territoire
      *
      * @return
      */
