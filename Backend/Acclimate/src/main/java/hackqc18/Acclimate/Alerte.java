@@ -1,9 +1,9 @@
 package hackqc18.Acclimate;
 
-import com.vividsolutions.jts.geom.Geometry;
-import org.geotools.geojson.geom.GeometryJSON;
+import org.json.simple.JSONObject;
 
 public class Alerte {
+
     private final String nom;
     private final String source;
     private final String territoire;
@@ -14,12 +14,12 @@ public class Alerte {
     private final String idAlerte;
     private final String urgence;
     private final String description;
-    private final Geometry geom;
+    private final String geom;
 
     public Alerte(String nom, String source, String territoire,
             String certitude, String severite, String type,
             String dateDeMiseAJour, String idAlerte, String urgence,
-            String description, Geometry geom) {
+            String description, String geom) {
         this.nom = nom;
         this.source = source;
         this.territoire = territoire;
@@ -31,7 +31,7 @@ public class Alerte {
         this.urgence = urgence;
         this.description = description;
         this.geom = geom;
-        
+
     }
 
     public String getNom() {
@@ -74,24 +74,25 @@ public class Alerte {
         return description;
     }
 
-    public Geometry getGeom() {
+    public String getGeom() {
         return geom;
     }
-    
+
     @Override
     public String toString() {
-        GeometryJSON g = new GeometryJSON();
-        return "{" 
-                + "nom:" + nom + ","
-                + "source:" + source + ","
-                + "territoire:" + territoire + ","
-                + "certitude:" + certitude + ","
-                + "severite:" + severite + ","
-                + "type:" + type + ","
-                + "dateDeMiseAJour:" + dateDeMiseAJour + ","
-                + "idAlerte:" + idAlerte + ","
-                + "urgence:" + urgence + ","
-                + "description:" + description + ","
-                + g.toString(geom) + "}";
+        JSONObject jsonObject = new JSONObject();
+        
+        jsonObject.put("nom", nom);
+        jsonObject.put("source", source);
+        jsonObject.put("territoire", territoire);
+        jsonObject.put("certitude", certitude);
+        jsonObject.put("severite", severite);
+        jsonObject.put("type", type);
+        jsonObject.put("dateDeMiseAJour", dateDeMiseAJour);
+        jsonObject.put("urgence", urgence);
+        jsonObject.put("description", description);
+        
+        String result = jsonObject.toString();
+        return result.substring(0, result.length()-1) + geom + "}";
     }
 }
