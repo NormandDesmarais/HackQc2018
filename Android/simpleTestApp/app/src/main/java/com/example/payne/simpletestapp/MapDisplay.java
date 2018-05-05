@@ -7,6 +7,7 @@ import android.support.v7.widget.PopupMenu;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.Button;
 import android.widget.Toast;
 
 import org.json.JSONArray;
@@ -30,7 +31,7 @@ import java.util.List;
 
 /**
  * Wrapper pour le map de OSMdroid
- *
+ * <p>
  * Created by Utilisateur on 2018-05-03.
  */
 
@@ -39,6 +40,7 @@ public class MapDisplay {
     public MapView map;
     private double[] lastTouch = {0, 0};
     private Context ctx;
+    public static boolean currentlyPlacingPin = false;
 
     public ArrayList<Alerte> terrainAlerts = new ArrayList<>();
     public ArrayList<Alerte> feuAlerts = new ArrayList<>();
@@ -46,17 +48,18 @@ public class MapDisplay {
     public ArrayList<Alerte> meteoAlerts = new ArrayList<>();
 
 
-    public MapDisplay(MapView map, Context ctx){
+    public MapDisplay(MapView map, Context ctx) {
         this.map = map;
         this.ctx = ctx;
-        }
+    }
 
 
     /**
      * North, south, east, west
+     *
      * @return
      */
-    public double[] getBoundingBox(){
+    public double[] getBoundingBox() {
         BoundingBox current = map.getBoundingBox();
         double[] result = new double[4];
 
@@ -69,24 +72,24 @@ public class MapDisplay {
 
     }
 
-    public void highlightCurrent(View view){
+    public void highlightCurrent(View view) {
 
         double[] corners = getBoundingBox();
         List<GeoPoint> geoPoints = new ArrayList<>();
 
         //add your points here
-        geoPoints.add(new GeoPoint(corners[0],corners[2])); // North East
-        geoPoints.add(new GeoPoint(corners[0],corners[3])); // North West
-        geoPoints.add(new GeoPoint(corners[1],corners[3])); // South West
-        geoPoints.add(new GeoPoint(corners[1],corners[2])); // South East
+        geoPoints.add(new GeoPoint(corners[0], corners[2])); // North East
+        geoPoints.add(new GeoPoint(corners[0], corners[3])); // North West
+        geoPoints.add(new GeoPoint(corners[1], corners[3])); // South West
+        geoPoints.add(new GeoPoint(corners[1], corners[2])); // South East
 
         Polygon polygon = new Polygon(this.map);    //see note below
-        polygon.setFillColor(Color.argb(75, 255,0,0));
+        polygon.setFillColor(Color.argb(75, 255, 0, 0));
         geoPoints.add(geoPoints.get(0));    //forces the loop to close
         polygon.setPoints(geoPoints);
 
         // style
-        polygon.setStrokeColor(Color.argb(75, 255,0,0));
+        polygon.setStrokeColor(Color.argb(75, 255, 0, 0));
         polygon.setStrokeWidth(0);
 
         // infos
@@ -98,7 +101,7 @@ public class MapDisplay {
         this.map.invalidate();
     }
 
-    public void removeAll(View view, MapEventsOverlay mapEventsOverlay){
+    public void removeAll(View view, MapEventsOverlay mapEventsOverlay) {
 
         Toast.makeText(view.getContext(), this.map.getOverlayManager().overlays().size() - 1 + " items removed", Toast.LENGTH_SHORT).show();
         this.map.getOverlayManager().removeAll(this.map.getOverlays());
@@ -109,67 +112,80 @@ public class MapDisplay {
 
     }
 
-    public void addPin(GeoPoint pos){
+    public void addPin(GeoPoint pos) {
 
-        Marker pin = new Marker(map);
-        pin.setPosition(pos);
-        pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        if (!currentlyPlacingPin) {
+            currentlyPlacingPin = !currentlyPlacingPin;
 
-        pin.setTitle("TITLE : A pin");
-        pin.setSubDescription("A subdescripton");
-        pin.setSnippet("A snippet");
+            Marker pin = new Marker(map);
+            pin.setPosition(pos);
+            pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
-        map.getOverlays().add(pin);
-        this.map.invalidate();
+            pin.setTitle("TITLE : A pin");
+            pin.setSubDescription("A subdescripton");
+            pin.setSnippet("A snippet");
 
-        showPopUp();
+            map.getOverlays().add(pin);
+            this.map.invalidate();
 
+            MainActivity.lastPlacedPin = pin;
+            showPopUp();
+        }
     }
 
 
-    public void addPin(GeoPoint pos, String type){
+    public void addPin(GeoPoint pos, String type) {
 
-        Marker pin = new Marker(map);
-        pin.setPosition(pos);
-        pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+        if (!currentlyPlacingPin) {
+            currentlyPlacingPin = !currentlyPlacingPin;
 
-        pin.setTitle("TITLE : A pin");
-        pin.setSubDescription("A subdescripton");
-        pin.setSnippet("A snippet");
+            Marker pin = new Marker(map);
+            pin.setPosition(pos);
+            pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
-        switch (type) {
-            case "eau" :
-                pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_goutte));
-                break;
-            case "terrain" :
-                pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_seisme));
-                break;
-            case "meteo" :
-                pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_vent));
-                break;
-            case "feu" :
-                pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_feu));
-                break;
+            pin.setTitle("TITLE : A pin");
+            pin.setSubDescription("A subdescripton");
+            pin.setSnippet("A snippet");
 
+            switch (type) {
+                case "eau":
+                    pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_goutte));
+                    break;
+                case "seisme":
+                    pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_seisme));
+                    break;
+                case "vent":
+                    pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_vent));
+                    break;
+                case "feu":
+                    pin.setIcon(ctx.getResources().getDrawable(R.drawable.pin_feu));
+                    break;
+
+            }
+
+            pin.setTitle("TITLE : A pin");
+            pin.setSubDescription("A subdescripton");
+            pin.setSnippet("A snippet");
+
+            map.getOverlays().add(pin);
+            this.map.invalidate();
+
+            MainActivity.lastPlacedPin = pin;
+            showPopUp();
         }
 
-        map.getOverlays().add(pin);
-        this.map.invalidate();
-
-        showPopUp();
-
     }
 
-    public void drawCircleAtCenter(int radius, int shade){
+    public void drawCircleAtCenter(int radius, int shade) {
 
-        for (int i = 1; i <= shade + 1; i++){
+        for (int i = 1; i <= shade + 1; i++) {
 
             ArrayList<GeoPoint> circlePoints = new ArrayList<>();
 
-            for (float f = 0; f < 360; f += 1){
+            for (float f = 0; f < 360; f += 1) {
                 circlePoints.add(new GeoPoint(
                         this.getCenter().getLatitude(), this.getCenter().getLongitude())
-                        .destinationPoint(i * (radius/shade), f));
+                        .destinationPoint(i * (radius / shade), f));
             }
 
             Polygon circle = new Polygon(this.map);    //see note below
@@ -178,8 +194,8 @@ public class MapDisplay {
 
             // define style
             circle.setStrokeWidth(0);
-            circle.setStrokeColor(Color.argb(25, 10,255,10));
-            circle.setFillColor(Color.argb(75, 10,255,10));
+            circle.setStrokeColor(Color.argb(25, 10, 255, 10));
+            circle.setFillColor(Color.argb(75, 10, 255, 10));
 
 
             map.getOverlayManager().add(circle);
@@ -191,13 +207,13 @@ public class MapDisplay {
     }
 
 
-    public void drawPolygon(JSONObject JsonPoints){
+    public void drawPolygon(JSONObject JsonPoints) {
 
         Log.w("method :", "drawPolygon");
 
     }
 
-    public void addAlertPin(Alerte alerte, Drawable icon){
+    public void addAlertPin(Alerte alerte, Drawable icon) {
 
         GeoPoint pos = new GeoPoint(alerte.getLattitude(), alerte.getLongitude());
         Marker pin = new Marker(map);
@@ -217,42 +233,26 @@ public class MapDisplay {
         this.map.invalidate();
     }
 
-    public GeoPoint getCenter(){
+    public GeoPoint getCenter() {
         return (GeoPoint) this.map.getMapCenter();
     }
 
-    public void setLastTouch(double x, double y){
-        this.lastTouch[0] = x; this.lastTouch[1] = y;
+    public void setLastTouch(double x, double y) {
+        this.lastTouch[0] = x;
+        this.lastTouch[1] = y;
     }
 
-    public double[] getLastTouch(){
+    public double[] getLastTouch() {
         return this.lastTouch;
     }
 
     /**
-     * Pour confirmer le type d'alerte.
+     * Pour montrer le PopUp pour confirmer le type d'alerte.
      */
-    public void showPopUp () {
+    public void showPopUp() {
 
-        //Creating the instance of PopupMenu
-        PopupMenu popup = new PopupMenu(MainActivity.mainActivity, MainActivity.mainActivity.findViewById(R.id.popUpAnchor));
-        //Inflating the Popup using xml file
-        popup.getMenuInflater()
-                .inflate(R.menu.menu_pin, popup.getMenu());
-
-        //registering popup with OnMenuItemClickListener
-        popup.setOnMenuItemClickListener(new PopupMenu.OnMenuItemClickListener() {
-            public boolean onMenuItemClick(MenuItem item) {
-                Toast.makeText(
-                        MainActivity.mainActivity,
-                        "You Clicked : " + item.getTitle(),
-                        Toast.LENGTH_SHORT
-                ).show();
-                return true;
-            }
-        });
-
-        popup.show(); //showing popup menu
+        // View layout = MainActivity.mainActivity.findViewById(R.id.pop_up);
+        MainActivity.mainActivity.findViewById(R.id.pop_up).setVisibility(View.VISIBLE);
     }
 
     public void updateLists(JSONObject allPins) throws Exception {
@@ -264,44 +264,43 @@ public class MapDisplay {
             JSONObject alerte = alertes.getJSONObject(i);
 
             switch (alerte.getString("type")) {
-                case "feu" :
+                case "feu":
                     this.feuAlerts.add(new Alerte(alerte));
                     break;
-                case "eau" :
+                case "eau":
                     this.eauAlerts.add(new Alerte(alerte));
                     break;
-                case "meteo" :
+                case "meteo":
                     this.meteoAlerts.add(new Alerte(alerte));
                     break;
-                case "terrain" :
+                case "terrain":
                     this.terrainAlerts.add(new Alerte(alerte));
-                default :
+                default:
                     this.meteoAlerts.add(new Alerte(alerte));
             }
         }
 
     }
 
-    public void displayLists(){
+    public void displayLists() {
 
-        for (Alerte alerte : feuAlerts){
+        for (Alerte alerte : feuAlerts) {
             this.addAlertPin(alerte, ctx.getResources().getDrawable(R.drawable.pin_feu));
         }
 
-        for (Alerte alerte : eauAlerts){
+        for (Alerte alerte : eauAlerts) {
             this.addAlertPin(alerte, ctx.getResources().getDrawable(R.drawable.pin_goutte));
         }
 
-        for (Alerte alerte : terrainAlerts){
+        for (Alerte alerte : terrainAlerts) {
             this.addAlertPin(alerte, ctx.getResources().getDrawable(R.drawable.pin_seisme));
         }
 
-        for (Alerte alerte : meteoAlerts){
+        for (Alerte alerte : meteoAlerts) {
             this.addAlertPin(alerte, ctx.getResources().getDrawable(R.drawable.pin_vent));
         }
 
     }
-
 
 
 }
