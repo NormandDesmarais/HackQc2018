@@ -149,7 +149,21 @@ public class MapDisplay {
 
     public void addAlertPin(Alerte alerte){
 
+        GeoPoint pos = new GeoPoint(alerte.getLattitude(), alerte.getLongitude());
+        Marker pin = new Marker(map);
+        pin.setPosition(pos);
+        pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
+        pin.setTitle(alerte.nom);
+
+        String description = alerte.description + " " +alerte.type;
+        pin.setSubDescription(description);
+
+        String snippet = alerte.dateDeMiseAJour + " " + alerte.urgence;
+        pin.setSnippet(snippet);
+
+        map.getOverlays().add(pin);
+        this.map.invalidate();
 
     }
 
