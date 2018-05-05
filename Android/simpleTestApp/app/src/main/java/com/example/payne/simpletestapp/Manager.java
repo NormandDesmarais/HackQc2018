@@ -14,21 +14,26 @@ public class Manager {
 
     public Manager(MainActivity act) throws Exception {
 
+        this.mainActivity = act;
+
         // test server setup
         mainServer = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
         ServerConnection testServer = new ServerConnection(testURL);
 
+        String response = testServer.getRequest();
         // test
-        JSONObject JSONtest = JSONWrapper.createJSON(testServer.getRequest());
-        drawPolygon(JSONtest);
+        Log.w("test server : ", response) ;
+        JSONObject JSONtest = JSONWrapper.createJSON(response);
+        //this.drawPolygon(JSONtest);
 
     }
 
-    public static void drawPolygon(JSONObject polyPoints){
+    public void drawPolygon(JSONObject polyPoints){
 
-
+        this.mainActivity.myMap.drawPolygon(polyPoints);
 
 
     }
+
 
 }

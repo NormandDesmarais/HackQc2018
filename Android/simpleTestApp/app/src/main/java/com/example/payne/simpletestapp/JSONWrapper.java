@@ -51,5 +51,9 @@ public class JSONWrapper {
         return ret;
     }
 
+    public static Alerte parseGEOJson(JSONObject geoJson){
+        return new Alerte(geoJson);
+    }
+
 
 }

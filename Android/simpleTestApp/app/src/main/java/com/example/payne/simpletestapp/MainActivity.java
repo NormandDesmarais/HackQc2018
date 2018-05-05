@@ -28,19 +28,13 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     public static final double[] MONTREAL_COORD = {45.5161, -73.6568};
 
     MapView map = null;
-    public MapDisplay myMap = null;
+    public MapDisplay myMap;
     public MapEventsOverlay mapEventsOverlay;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        // setup app backend
-        try{
-            Manager manager = new Manager(this);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
 
         //handle permissions first, before map is created. not depicted here
 
@@ -104,6 +98,14 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
         mapEventsOverlay = new MapEventsOverlay(this, this);
         map.getOverlays().add(0, mapEventsOverlay);
+
+        // setup app backend
+        try{
+            Manager manager = new Manager(this);
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
     }
 
     @Override
