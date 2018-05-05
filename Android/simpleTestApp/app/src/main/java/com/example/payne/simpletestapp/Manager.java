@@ -38,12 +38,7 @@ public class Manager {
 
         String response = testServer.ping("/latest", myMap.map.getBoundingBox());
 
-        // test
-        Log.w("test server : ", response) ;
-        JSONObject JSONtest = JSONWrapper.createJSON(response);
-        Alerte testAlerte = JSONWrapper.parseGEOJson(JSONtest);
-
-        Log.w("testAlerte : ", testAlerte.toString());
+        myMap.updateLists(new JSONObject(response));
 
     }
 

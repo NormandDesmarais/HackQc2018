@@ -48,6 +48,11 @@ public class MapDisplay {
     public ArrayList<Alerte> eauAlerts = new ArrayList<>();
     public ArrayList<Alerte> meteoAlerts = new ArrayList<>();
 
+    public Boolean terrainFilter = false;
+    public Boolean feuFilter = false;
+    public Boolean eauFilter = false;
+    public Boolean meteoFilter = false;
+
 
     public MapDisplay(MapView map, Context ctx) {
         this.map = map;
@@ -234,6 +239,14 @@ public class MapDisplay {
         this.map.invalidate();
     }
 
+    public void drawAlertPins(ArrayList<Alerte> alertes, Drawable icon){
+
+        for (Alerte alerte : alertes) {
+            this.addAlertPin(alerte, icon);
+        }
+
+    }
+
     public GeoPoint getCenter() {
         return (GeoPoint) this.map.getMapCenter();
     }
@@ -285,21 +298,19 @@ public class MapDisplay {
 
     public void displayLists() {
 
-        for (Alerte alerte : feuAlerts) {
-            this.addAlertPin(alerte, ctx.getResources().getDrawable(R.drawable.pin_feu));
-        }
+        if (feuFilter) this.drawAlertPins(feuAlerts, ctx.getResources().getDrawable(R.drawable.pin_feu));
+        if (eauFilter) this.drawAlertPins(eauAlerts, ctx.getResources().getDrawable(R.drawable.pin_goutte));
+        if (terrainFilter) this.drawAlertPins(terrainAlerts, ctx.getResources().getDrawable(R.drawable.pin_seisme));
+        if (meteoFilter) this.drawAlertPins(meteoAlerts, ctx.getResources().getDrawable(R.drawable.pin_vent));
 
-        for (Alerte alerte : eauAlerts) {
-            this.addAlertPin(alerte, ctx.getResources().getDrawable(R.drawable.pin_goutte));
-        }
+    }
 
-        for (Alerte alerte : terrainAlerts) {
-            this.addAlertPin(alerte, ctx.getResources().getDrawable(R.drawable.pin_seisme));
-        }
+    public void refreshPins(){
 
-        for (Alerte alerte : meteoAlerts) {
-            this.addAlertPin(alerte, ctx.getResources().getDrawable(R.drawable.pin_vent));
-        }
+        this.removeAll(MainActivity.mainActivity.findViewById(android.R.id.content),
+                       MainActivity.mapEventsOverlay);
+        this.displayLists();
+        this.map.invalidate();
 
     }
 
