@@ -30,12 +30,13 @@
     https://stablekernel.com/using-custom-views-as-menu-items/ -->
 
     <android.support.design.widget.FloatingActionButton
+        android:id="@+id/logo"
         android:layout_width="57dp"
         android:layout_height="57dp"
         android:layout_gravity="top|left"
         android:layout_margin="@dimen/logo_margin"
         android:scaleType="fitCenter"
-        android:src="@drawable/logo_cercle_blanc"
+        android:src="@drawable/logo_couleur"
         app:backgroundTint="#fff"
         app:layout_anchor="@+id/include"
         app:layout_anchorGravity="left|top" />
