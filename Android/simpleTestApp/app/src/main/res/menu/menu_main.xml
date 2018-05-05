@@ -39,63 +39,24 @@
         android:title="@string/action_settings"
         app:showAsAction="never" />
 
-<!--
-    <Button
-        android:id="@+id/centerBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignBaseline="@+id/posBtn"
-        android:layout_alignBottom="@+id/posBtn"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_weight="1"
-        android:text="Show center" />
+    <item
+        android:id="@+id/cB_fire"
+        android:orderInCategory="106"
+        android:title="@string/cB_fire"
+        app:showAsAction="never"
+        android:checkable="true" />
+    <item
+        android:id="@+id/cB_water"
+        android:orderInCategory="106"
+        android:title="@string/cB_water"
+        app:showAsAction="never"
+        android:checkable="true" />
 
-    <Button
-        android:id="@+id/posBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/my_toolbar"
-        android:layout_centerHorizontal="true"
-        android:layout_weight="1"
-        android:text="Show position" />
-
-    <Button
-        android:id="@+id/removeAll"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:layout_alignParentStart="true"
-        android:layout_below="@+id/centerBtn"
-        android:text="removeAll" />
-
-    <Button
-        android:id="@+id/addPin"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/posBtn"
-        android:layout_centerHorizontal="true"
-        android:text="add pin" />
-
-    <Button
-        android:id="@+id/circleBtn"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/highlight"
-        android:text="add circle" />
-    <Button
-        android:id="@+id/highlight"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true"
-        android:layout_alignParentRight="true"
-        android:layout_below="@+id/my_toolbar"
-        android:layout_weight="1"
-        android:orderInCategory="101"
-        android:text="Highlight" />
--->
+    <item
+        android:id="@+id/extraBtn"
+        android:orderInCategory="106"
+        android:title="@string/extraBtn"
+        app:showAsAction="always" />
 
 
     <!-- Icons: https://material.io/icons/ -->
@@ -111,19 +72,5 @@
     -->
 
     <!-- Settings, should always be in the overflow -->
-
-    <!--
-    <group android:id="@+id/deploy_group">
-        <item
-            android:id="@+id/action_deploy1"
-            android:title="title2"
-            app:showAsAction="never" />
-        <item
-            android:id="@+id/action_deploy2"
-            android:title="title3"
-            app:showAsAction="never" />
-    </group>
-    -->
-
 
 </menu>

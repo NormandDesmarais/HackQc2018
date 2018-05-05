@@ -8,6 +8,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.CheckBox;
 import android.widget.Toast;
 
 import org.osmdroid.api.IMapController;
@@ -118,7 +119,6 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-
         switch (id) {
             case (R.id.action_settings):
                 Toast.makeText(this, "Who fuckings cares...", Toast.LENGTH_SHORT).show();
@@ -166,6 +166,30 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
             case (R.id.circleBtn):
                 myMap.drawCircleAtCenter(1000, 5);
+                break;
+
+            case (R.id.cB_fire):
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    Toast.makeText(this, "FIRE unchecked", Toast.LENGTH_SHORT).show();
+                } else {
+                    item.setChecked(true);
+                    Toast.makeText(this, "FIRE is checked", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case (R.id.cB_water):
+                if (item.isChecked()) {
+                    item.setChecked(false);
+                    Toast.makeText(this, "WATER unchecked", Toast.LENGTH_SHORT).show();
+                } else {
+                    item.setChecked(true);
+                    Toast.makeText(this, "WATER is checked", Toast.LENGTH_SHORT).show();
+                }
+                break;
+
+            case (R.id.extraBtn):
+                Toast.makeText(this, "extraBtn clicked", Toast.LENGTH_SHORT).show();
                 break;
 
             default:

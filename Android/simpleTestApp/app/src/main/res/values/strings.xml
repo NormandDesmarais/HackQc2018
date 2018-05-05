@@ -8,4 +8,9 @@
     <string name="removeAll">removeAll</string>
     <string name="addPin">addPin</string>
     <string name="circleBtn">circleBtn</string>
+
+    <string name="cB_fire">ForestFire</string>
+    <string name="cB_water">Inondation</string>
+
+    <string name="extraBtn">extraBtn</string>
 </resources>
