@@ -9,6 +9,7 @@ import android.support.v7.widget.Toolbar;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Button;
 import android.widget.Toast;
 
 import org.osmdroid.api.IMapController;
@@ -19,6 +20,7 @@ import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.BoundingBox;
+import org.osmdroid.views.overlay.Marker;
 
 
 public class MainActivity extends AppCompatActivity implements MapEventsReceiver {
@@ -29,6 +31,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     public MapDisplay myMap;
     public MapEventsOverlay mapEventsOverlay;
     public static MainActivity mainActivity;
+    public static Marker lastPlacedPin = null;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,13 +84,55 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         GeoPoint startPoint = new GeoPoint(MONTREAL_COORD[0], MONTREAL_COORD[1]);
         mapController.setCenter(startPoint);
 
-
-        FloatingActionButton fab = findViewById(R.id.logo);
-        fab.setOnClickListener(new View.OnClickListener() {
+        // Logo button
+        findViewById(R.id.logo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
+            }
+        });
+
+        /*
+        Setting up Events for "New Alert Type" prompt dialog
+         */
+        findViewById(R.id.wind_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "Wind button clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+        findViewById(R.id.water_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "Water button clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+        findViewById(R.id.fire_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "Fire button clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+        findViewById(R.id.earth_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Toast.makeText(MainActivity.this, "Earth button clicked", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        // Cancel button
+        findViewById(R.id.cancel_btn).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+
+                // Remove canceled Pin
+                map.getOverlays().remove(lastPlacedPin);
+                map.invalidate();
+
+                // Hide PopUp
+                MainActivity.mainActivity.findViewById(R.id.pop_up).setVisibility(View.GONE);
+                MapDisplay.currentlyPlacingPin = false;
             }
         });
 
@@ -101,7 +146,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
         // setup app backend
         try{
-            Manager manager = new Manager(this);
+            Manager manager = new Manager(this, myMap);
         } catch (Exception e){
             e.printStackTrace();
         }
