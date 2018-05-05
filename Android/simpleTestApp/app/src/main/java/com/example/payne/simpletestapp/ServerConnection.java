@@ -39,36 +39,16 @@ public class ServerConnection {
     public String ping(String path, BoundingBox boundingBox) throws Exception {
 
         String param =
-            "?north=" + boundingBox.getLatNorth() +
-            "&south=" + boundingBox.getLatSouth() +
-            "&east=" + boundingBox.getLonEast() +
-            "&west=" + boundingBox.getLonWest();
+            "?nord=" + boundingBox.getLatNorth() +
+            "&sud=" + boundingBox.getLatSouth() +
+            "&est=" + boundingBox.getLonEast() +
+            "&ouest=" + boundingBox.getLonWest();
 
         String uri = this.serverAddress + path + param;
         return this.getRequest(uri);
 
     }
 
-
-    /**
-     *
-     * Une requête pour mettre à jour l'affichage des zones dangereuse
-     *
-     * @return
-     * @throws Exception
-     */
-    public String request(String path, BoundingBox boundingBox) throws Exception {
-
-        String param =
-                "?north=" + boundingBox.getLatNorth() +
-                "&south=" + boundingBox.getLatSouth() +
-                "&east=" + boundingBox.getLonEast() +
-                "&west=" + boundingBox.getLonWest();
-
-        String uri = this.serverAddress + path + param;
-        return this.getRequest(uri);
-
-    }
 
     /**
      *
