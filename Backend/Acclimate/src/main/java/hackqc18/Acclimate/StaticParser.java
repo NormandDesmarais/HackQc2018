@@ -1,6 +1,5 @@
 package hackqc18.Acclimate;
 
-import static hackqc18.Acclimate.AlertesFluxRss.getInfosStr;
 import java.io.*;
 import java.util.ArrayList;
 
@@ -11,95 +10,100 @@ public class StaticParser {
     String[] constrAlerte = {};
     String donnee = "";
     
-    private ArrayList<Double> coordX = new ArrayList<>();
-    private ArrayList<Double> coordY = new ArrayList<>();
     private ArrayList<Alerte> alertes = new ArrayList<>();
 
     public StaticParser () {
 
         try {
-            FileReader fr = new FileReader("src" +
+            
+            File fileDir = new File("src" +
                     File.separator + "main" +
                     File.separator + "java" +
                     File.separator + "hackqc18" +
                     File.separator + "Acclimate" +
-                    File.separator + "histo_alert.json");
-            BufferedReader reader = new BufferedReader(fr);
+                    File.separator + "historique_alertes.csv");
+
+            BufferedReader reader = new BufferedReader(
+                new InputStreamReader(
+                    new FileInputStream(fileDir), "UTF8"));
+            
             String s;
             while ((s = reader.readLine()) != null) {
+                if (s.contains("\r"))
+                    s.replace("\r", ",");
+
                 tmp += s;
             }
             reader.close();
         } catch (IOException ex) {
             System.out.println("Erreur à l’ouverture du fichier");
         }
-        
-        tmp.substring(76);
-        //createFile();
         parseFeed();
     }
-
-    public void createFile() {
-        //System.out.println(tmp);
-    }
     
-    public void parseFeed(){
-        String nom, source, territoire, certitude, severite, type;
-        String dateDeMiseAJour, urgence, description, geom;
+    
+    public void parseFeed(){      
+        String [] alertePrg = tmp.split(",");
         
-        ArrayList<String> alertePrg = getInfos("{", 0, "} }", tmp);
+        String [] typesAlertes = {"Avalanche", "Feu de brousse", "Feu de forêt",  
+                "Géomorphologique (ex. érosion)", "Glace", "Inondation", 
+                "Inondation par ruissellement", "Mouvement de terrain", "Onde de tempête", 
+                "Orage violent", "Ouragan", "Pluie", "Pluie verglaçante", 
+                "Tempête hivernale", "Tornade", "Tremblement de terre", 
+                "Vent de tempête"};
         
-        for (int i = 0; i < alertePrg.size(); i++){
-            System.out.println(alertePrg.get(i));
-            nom = "";
-            //String coords = getInfosStr("<b>Urgence</b>", 0, "amp;zoom", alertePrg.get(i));
-            //geom = getInfosStr("center=", 4, "&", coords);
-            //String auteur = getInfosStr("Auteur", 150, "br/>", alertePrg.get(i));
-            source = "Ministère de la Sécurité publique du Québec";
-            //type = getInfosStr("<b>Type</b> :", 1, "<br/>", alertePrg.get(i));
-            //dateDeMiseAJour = getInfosStr("<b>Date de mise à jour</b> :", 1,
-                    //"<br/>", alertePrg.get(i));
-            //description = getInfosStr("<b>Description</b> :", 1, "<br/>", alertePrg.get(i));
-            //severite = getInfosStr("<b>Sévérite</b> :", 1, "<br/>", alertePrg.get(i));
-            //territoire = getInfosStr("<b>Secteur</b> :", 1, "<br/>", alertePrg.get(i));
-            certitude = getInfosStr("\"Inconnue\"", 0, ",", alertePrg.get(i));
-            //System.out.println(certitude);
-            //urgence = getInfosStr("<b>Urgence</b> :", 1, "<br/>", alertePrg.get(i));
-            //String coordos = geom + "<>";
-            //double x = Double.parseDouble(("-" + getInfosStr("-", 0, ",", coordos)));
-            //double y = Double.parseDouble((getInfosStr(",", (x + "").length(),
-                    //"<>", coordos)));
-            //this.coordX.add(x);
-            //this.coordY.add(y);
-        }
-    }
-    
-    
-    public static String getInfosStr(String balise, int offset, String fin, String rss) {
-        String liste = "";
-        String rssText = rss;
-        int ix;
-        for (String word : rssText.split(fin)) {
-            if (word.contains(balise)) {
-                ix = rssText.indexOf(word) + balise.length();
-                liste += (rssText.substring(ix + offset, rssText.indexOf(fin, ix + 1)));
+        String nom = "", territoire = "", certitude = "", severite = "", type = "";
+        String dateDeMiseAJour = "", urgence = "", description = "", geom = "", IdAlert = "";
+        String source = "Ministère de la Sécurité publique du Québec";
+        double x = 0.0, y = 0.0;
+        
+        for (int i = 10; i < alertePrg.length; i++){
+            int j = i % 10;
+            
+            switch(j){
+                case 0: 
+                    String [] temp = alertePrg[i].split("[a-z]+");
+                    if (temp.length > 1){
+                        dateDeMiseAJour = temp[1];
+                    }
+                    break;
+                case 1:
+                    break;
+                case 2:
+                    territoire = alertePrg[i];
+                    break;
+                case 3:
+                    x = Double.parseDouble(alertePrg[i]);
+                    break;
+                case 4:
+                    y = Double.parseDouble(alertePrg[i]);
+                    break;
+                case 5:
+                    urgence = alertePrg[i];
+                    break;
+                case 6:
+                    certitude = alertePrg[i];
+                    break;
+                case 7:
+                    type = alertePrg[i];
+                    break;
+                case 8:
+                    severite = alertePrg[i];
+                    break;
+                case 9:
+                    for (int k = 0; k < typesAlertes.length; k++) {
+                        if (type.equals(typesAlertes[k])) {
+                            //System.out.println("type " + type);
+                            Alerte tmp = new Alerte(nom, source, territoire, certitude,
+                                    severite, type, dateDeMiseAJour, IdAlert, urgence, 
+                                    description, geom, new CoordinatesJSON(x, y));
+                            alertes.add(tmp);
+                        }
+                    }
+                    break;
+                default:
+                    break;
             }
         }
-        return liste;
-    }
-    
-    
-    public static ArrayList<String> getInfos(String balise, int offset, String fin, String rss) {
-        ArrayList<String> liste = new ArrayList<>();
-        String rssText = rss;
-        int ix;
-        for (String word : rssText.split(fin)) {
-            if (word.contains(balise)) {
-                ix = rssText.indexOf(word) + balise.length();
-                liste.add(rssText.substring(ix + offset, rssText.indexOf(fin, ix + 1)));
-                //System.out.println(rssText.substring(ix + offset, rssText.indexOf(fin, ix + 1)));
-            }
-        }
-        return liste;
     }
 }
