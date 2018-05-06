@@ -24,6 +24,8 @@ import java.io.Writer;
 public class JSONWrapper {
 
     public JSONObject jsonFile;
+    public static String PATH_TO_FILE = MainActivity.mainActivity.getApplicationContext().getFilesDir()
+            + Manager.NOTIFICATION_FILE_PATH;
 
     public JSONWrapper(String fileUrl) throws Exception {
 
@@ -211,9 +213,7 @@ public class JSONWrapper {
 
         try {
 
-            Log.w("TEST FILE PATH",
-                    MainActivity.mainActivity.getApplicationContext().getFilesDir()
-                            + Manager.NOTIFICATION_FILE_PATH);
+            Log.w("TEST FILE PATH", PATH_TO_FILE);
             outputStream = ctx.openFileOutput(Manager.NOTIFICATION_FILE_PATH, Context.MODE_PRIVATE);
             outputStream.write(fileContent.getBytes());
             outputStream.close();
@@ -235,7 +235,7 @@ public class JSONWrapper {
 
         try {
 
-            String basicFile = getStringFromFile(Manager.NOTIFICATION_FILE_PATH);
+            String basicFile = getStringFromFile(PATH_TO_FILE);
 
             JSONObject notificationsFile = new JSONObject(basicFile);
             JSONObject notif = new JSONObject();
@@ -256,7 +256,7 @@ public class JSONWrapper {
 
             // write to File
             FileOutputStream outputStream;
-            outputStream = ctx.openFileOutput(Manager.NOTIFICATION_FILE_PATH, Context.MODE_PRIVATE);
+            outputStream = ctx.openFileOutput(PATH_TO_FILE, Context.MODE_PRIVATE);
             outputStream.write(fileContents.getBytes());
             outputStream.close();
 

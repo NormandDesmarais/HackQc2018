@@ -15,11 +15,10 @@ public class Manager {
 
     public static final String SERVER_ADDR = "https://hackqc.herokuapp.com/api/alertes";
     public static final int PORT = 8080;
-    public static final String NOTIFICATION_FILE_PATH = "notifications.json";
+    public static final String NOTIFICATION_FILE_PATH = "/notifications.json";
     public static final String ALERT_FILE_PATH = "alertes";
 
     public ServerConnection mainServer;
-    public ServerConnection testServer;
     public MainActivity mainActivity;
     public MapDisplay myMap;
 
@@ -31,12 +30,10 @@ public class Manager {
         this.mainActivity = act;
         this.myMap = myMap;
 
-
         this.setupStorage();
 
         // test server setup
         this.mainServer = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
-        this.testServer = new ServerConnection(testPushURL);
 
         String quebec;
 
@@ -48,6 +45,8 @@ public class Manager {
         } catch (Exception e){
             Log.w("PING", "failed to ping server" + Manager.SERVER_ADDR);
         }
+
+        myMap.map.invalidate();
 
 
     }
@@ -67,6 +66,9 @@ public class Manager {
                 Manager.NOTIFICATION_FILE_PATH);
         if(notif.exists()){
             Log.w("STORAGE : ", "OK notif file already exist");
+            Log.w(
+            "STORAGE",
+            mainActivity.getApplicationContext().getFilesDir() + Manager.NOTIFICATION_FILE_PATH);
         }
         else {
             Log.w("STORAGE : ", "creating notif file");
