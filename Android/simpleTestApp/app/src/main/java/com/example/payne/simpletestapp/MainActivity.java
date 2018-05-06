@@ -20,6 +20,7 @@ import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
 
 public class MainActivity extends AppCompatActivity implements MapEventsReceiver {
@@ -216,6 +217,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
     @Override
     public boolean singleTapConfirmedHelper(GeoPoint p) {
+        InfoWindow.closeAllInfoWindowsOn(map);
         return false;
     }
 
@@ -299,11 +301,11 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             case (R.id.highlight):
                 // TODO: Server Request for the current Bounding Box
                 break;
-
+            /*
             case (R.id.maj):
                 // TODO: Server Request for all Monitored Zones
                 break;
-
+*/
             case (R.id.add):
                 // TODO: Add the current Bounding Box to Monitored Zones
                 myMap.highlightCurrent(findViewById(android.R.id.content));
@@ -321,7 +323,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             case (R.id.circleBtn):
                 myMap.drawCircleAtCenter(1000, 5);
                 break;
-            */
+
 
             case (R.id.cB_zones):
                 // TODO: Toggle "Display Monitored Zones"
@@ -335,7 +337,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 // TODO: Toggle "Display user-input Alerts/Historiques"
                 return false;
                 //break;
-
+*/
             case (R.id.cB_fire):
                 if (item.isChecked()) {
                     MapDisplay.feuFilter = false;

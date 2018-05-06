@@ -222,13 +222,14 @@ public class MapDisplay {
         pin.setPosition(pos);
         pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
-        pin.setTitle(alerte.nom);
         pin.setIcon(icon);
 
-        String description = alerte.description + " " + alerte.type;
+        pin.setTitle("Type : " + alerte.type + "\n" + "Catégorie : " + alerte.nom);
+
+        String description = alerte.source + "\n" + alerte.dateDeMiseAJour + "\n" + alerte.territoire;
         pin.setSubDescription(description);
 
-        String snippet = alerte.dateDeMiseAJour + " " + alerte.urgence;
+        String snippet = alerte.description;
         pin.setSnippet(snippet);
 
         map.getOverlays().add(pin);

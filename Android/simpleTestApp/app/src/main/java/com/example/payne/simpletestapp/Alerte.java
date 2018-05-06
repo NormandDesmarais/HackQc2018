@@ -44,8 +44,8 @@ public class Alerte {
             this.description = jsonFile.getString("description");
 
             JSONObject geom = jsonFile.getJSONObject("geometry");
-            this.latitude = (double) geom.getJSONArray("coordinates").get(0);
-            this.longitude = (double) geom.getJSONArray("coordinates").get(1);
+            this.latitude = (double) geom.getJSONArray("coordinates").get(1);
+            this.longitude = (double) geom.getJSONArray("coordinates").get(0);
 
             Log.w("ALERTES", this.latitude + " -=-=- " + this.longitude);
 
