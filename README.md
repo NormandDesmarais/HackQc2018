@@ -15,7 +15,7 @@ Auteurs
 ## Le Concept
 
 ```
- * Recevoir des notifications d’alertes près de nous
+ * Recevoir des notifications d’alertes partout au travers du Québec
  * Communiquer un début de changement d’état climatique
  * S’informer sur les différents territoires
  * Rester à l’affût de l’évolution face aux changements climatiques
