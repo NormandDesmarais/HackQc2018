@@ -13,8 +13,6 @@ import java.io.File;
 
 public class Manager {
 
-    public static final boolean USE_TEST_SERVER_POST = true;
-
     public static final String SERVER_ADDR = "https://hackqc.herokuapp.com/api/alertes";
     public static final int PORT = 8080;
     public static final String NOTIFICATION_FILE_PATH = "notifications";
@@ -131,10 +129,7 @@ public class Manager {
 
     public void postAlert(Alerte alerte){
 
-        // DEBUG
-        if (USE_TEST_SERVER_POST) {
-            testServer.postAlert(alerte);
-        } else mainServer.postAlert(alerte);
+        mainServer.postAlert(alerte);
 
     }
 

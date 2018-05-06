@@ -1,6 +1,7 @@
 package com.example.payne.simpletestapp;
 
 import android.content.Context;
+import android.provider.SyncStateContract;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -10,11 +11,15 @@ import org.json.JSONObject;
 import org.osmdroid.util.BoundingBox;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.io.Writer;
 
 public class JSONWrapper {
 
@@ -225,7 +230,9 @@ public class JSONWrapper {
 
         try {
 
-            JSONObject notificationsFile = new JSONObject(JSONWrapper.getStringFromFile(Manager.NOTIFICATION_FILE_PATH));
+            String basicFile = getStringFromFile(Manager.NOTIFICATION_FILE_PATH);
+
+            JSONObject notificationsFile = new JSONObject(basicFile);
 
             JSONObject notif = new JSONObject();
             JSONObject box = new JSONObject();
@@ -251,7 +258,9 @@ public class JSONWrapper {
 
         } catch (Exception j){
             Toast.makeText(ctx, "Désolé : impossible de rajouter une nouvelle notification", Toast.LENGTH_SHORT).show();
+            j.printStackTrace();
         }
+
 
     }
 
@@ -273,6 +282,30 @@ public class JSONWrapper {
 
     }
 
+    /**
+     * Append String to end of File.
+     *
+     * @param appendContents
+     * @param file
+     * @return
+     */
+    public static boolean appendStringToFile(final String appendContents, final File file) {
+        boolean result = false;
+        try {
+
+            if (file != null && file.canWrite()) {
+                file.createNewFile(); // ok if returns false, overwrite
+                Writer out = new BufferedWriter(new FileWriter(file, true), 1024);
+                out.write(appendContents);
+                out.close();
+                result = true;
+            }
+
+        } catch (IOException e) {
+            Log.e("APPEND", "Error appending string data to file " + e.getMessage(), e);
+        }
+        return result;
+    }
 
 
 

@@ -95,7 +95,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Merci d'utiliser Acclimate :) " +
-                        "Nous allons sauver la planête un petit geste à la fois", Snackbar.LENGTH_LONG)
+                        "Nous allons sauver la planête un petit geste à la fois!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });

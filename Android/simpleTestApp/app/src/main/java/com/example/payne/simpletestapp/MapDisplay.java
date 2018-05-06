@@ -100,6 +100,7 @@ public class MapDisplay {
 
         this.map.getOverlayManager().add(polygon);
         this.map.invalidate();
+        MainActivity.manager.addUserNotification(map.getBoundingBox());
     }
 
     public void removeAll(View view, MapEventsOverlay mapEventsOverlay) {
