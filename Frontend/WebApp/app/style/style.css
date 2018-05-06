@@ -4,8 +4,39 @@ body, html {
 h1, h2, h3, h4 {
   font-weight: lighter; }
 
+.navbar, #logo, #search {
+  transition: 0.5s all; }
+
 .navbar {
-  background: linear-gradient(to right, #d51c29, #b72533, #9b1e31); }
+  background: linear-gradient(to right, #d51c29, #b72533, #9b1e31);
+  position: relative;
+  z-index: 999999;
+  height: 101px; }
+
+.navbar.land {
+  height: 100vh; }
+
+#logo {
+  position: absolute;
+  top: 12px;
+  left: 18px; }
+
+#logo.land {
+  height: 30vh;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%); }
+
+.dl {
+  color: white;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  top: 80vh;
+  letter-spacing: 0.3px;
+  font-weight: lighter; }
+  .dl hr {
+    border: 0.5px solid #bf5961; }
 
 .ol-zoom {
   left: auto !important;
@@ -21,11 +52,12 @@ h1, h2, h3, h4 {
   background-color: white;
   width: 280px;
   left: 0;
-  padding: 15px 5px 15px 10px;
+  padding: 0px 5px 0px 10px;
   transition: 0.3s all; }
   #leftPane .inner {
     height: 100%;
-    overflow: scroll; }
+    overflow: scroll;
+    padding: 15px 0; }
   #leftPane #expander {
     background-color: white;
     height: 50px;
@@ -149,8 +181,13 @@ h1, h2, h3, h4 {
 form {
   display: inline; }
 
-#search:hover {
-  cursor: pointer; }
+#search {
+  opacity: 1; }
+  #search:hover {
+    cursor: pointer; }
+
+#search.land {
+  opacity: 0; }
 
 #searchForm {
   background: none;

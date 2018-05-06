@@ -9,13 +9,13 @@ Auteurs
  * [Sophie Savoie](https://www.linkedin.com/in/sophie-savoie-2b4b24128/)
  * [Olivier Lepage-Applin](https://www.linkedin.com/in/lapplin/)
  * [Normand Desmarais](https://www.linkedin.com/in/normand-d-215aa0/)
- * [Jérémi Hitcher Berthiaume](https://www.linkedin.com/in/jérémi-grenier-berthiaume-784ba4158/)
+ * [Jérémi Grenier-Berthiaume](https://www.linkedin.com/in/jérémi-grenier-berthiaume-784ba4158/)
  * [Charles-Philippe Lepage](https://www.linkedin.com/in/charles-philippe-lepage-1139b1136/)
 
 ## Le Concept
 
 ```
- * Recevoir des notifications d’alertes près de nous
+ * Recevoir des notifications d’alertes partout au travers du Québec
  * Communiquer un début de changement d’état climatique
  * S’informer sur les différents territoires
  * Rester à l’affût de l’évolution face aux changements climatiques
