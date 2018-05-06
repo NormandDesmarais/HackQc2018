@@ -15,11 +15,7 @@ public class Manager {
 
     public static final String SERVER_ADDR = "https://hackqc.herokuapp.com/api/alertes";
     public static final int PORT = 8080;
-<<<<<<< HEAD
     public static final String NOTIFICATION_FILE_PATH = "notifications.json";
-=======
-    public static final String NOTIFICATION_FILE_PATH = "/notifications.json";
->>>>>>> 2da39c6f49780f08ccb5631720eb3b61b4750f46
     public static final String ALERT_FILE_PATH = "alertes";
 
     public ServerConnection mainServer;
