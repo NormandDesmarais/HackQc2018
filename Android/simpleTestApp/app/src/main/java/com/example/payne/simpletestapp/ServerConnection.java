@@ -129,7 +129,7 @@ public class ServerConnection {
 
                 try{
                     URL obj = new URL(serverAddress + param);
-                    Log.w("URLTEST : ", serverAddress + param);
+
                     HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
                     // optional default is GET
@@ -148,7 +148,6 @@ public class ServerConnection {
                     in.close();
 
                     result.response = response.toString();
-                    Log.w("RESULTAT REQUEST : ", result.response);
 
                 } catch (Exception e){
                     e.printStackTrace();

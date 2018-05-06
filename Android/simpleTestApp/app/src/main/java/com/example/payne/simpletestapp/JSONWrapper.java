@@ -210,10 +210,15 @@ public class JSONWrapper {
         FileOutputStream outputStream;
 
         try {
+
+            Log.w("TEST FILE PATH",
+                    MainActivity.mainActivity.getApplicationContext().getFilesDir()
+                            + Manager.NOTIFICATION_FILE_PATH);
             outputStream = ctx.openFileOutput(Manager.NOTIFICATION_FILE_PATH, Context.MODE_PRIVATE);
             outputStream.write(fileContent.getBytes());
             outputStream.close();
         } catch (Exception e) {
+            Log.w("FILE_NOTIF", "could not create notification json");
             e.printStackTrace();
         }
 
@@ -233,7 +238,6 @@ public class JSONWrapper {
             String basicFile = getStringFromFile(Manager.NOTIFICATION_FILE_PATH);
 
             JSONObject notificationsFile = new JSONObject(basicFile);
-
             JSONObject notif = new JSONObject();
             JSONObject box = new JSONObject();
             box.put("north", boundingBox.getLatNorth());

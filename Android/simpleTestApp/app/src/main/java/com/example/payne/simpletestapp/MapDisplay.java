@@ -198,7 +198,6 @@ public class MapDisplay {
         for (int i = 0; i < alertes.length(); i++) {
 
             JSONObject alerte = alertes.getJSONObject(i).getJSONObject("alerte");
-            Log.w("ALERTES", alerte.toString());
 
             switch (alerte.getString("type")) {
 
