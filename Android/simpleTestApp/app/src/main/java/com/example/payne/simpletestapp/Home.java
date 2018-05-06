@@ -3,14 +3,11 @@ package com.example.payne.simpletestapp;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
-import android.widget.Button;
 import android.widget.TextView;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 
 public class Home extends AppCompatActivity {
@@ -20,6 +17,18 @@ public class Home extends AppCompatActivity {
         super.onCreate(savedInstanceState);
 
         setContentView(R.layout.home);
+
+        findViewById(R.id.proceed).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
+                startActivity(intent);
+            }
+        });
+    }
+
+    public void onResume() {
+        super.onResume();
 
         ServerConnection tmpServer = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
 
@@ -80,14 +89,5 @@ public class Home extends AppCompatActivity {
         ((TextView) findViewById(R.id.dlb_feuSec)).setText("+" + String.valueOf(feuU)+ " saisies d'USAGERS");
         ((TextView) findViewById(R.id.dlb_meteoSec)).setText("+" + String.valueOf(meteoU)+ " saisies d'USAGERS");
         ((TextView) findViewById(R.id.dlb_terrainSec)).setText("+" + String.valueOf(terrainU)+ " saisies d'USAGERS");
-
-        findViewById(R.id.proceed).setOnClickListener(new View.OnClickListener() {
-
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
-                startActivity(intent);
-            }
-        });
     }
 }
