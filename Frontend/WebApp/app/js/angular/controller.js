@@ -30,11 +30,20 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
         return arr;
     }
 
+    var histoAlertes = [];
+    Request.getHisto().then(function(data){
+        histoAlertes = parseData(data.data.alertes);
+        //loadAllPins(histoAlertes);
+        $scope.histos = loadLeftPaneMenu(histoAlertes, false);
+    }, function(err){
+        console.log(err);
+    })
+
     var userAlertes = [];
     Request.getUserPins().then(function(data){
         userAlertes = parseData(data.data.alertes);
         loadAllPins(userAlertes);
-        $scope.userPins = loadLeftPaneMenu(userAlertes);
+        $scope.userPins = loadLeftPaneMenu(userAlertes, true);
     }, function(err){
         console.log(err);
     })
@@ -43,13 +52,13 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
     Request.getAll().then(function(data){
         alertes = parseData(data.data.alertes);
         loadAllPins(alertes);
-        $scope.risques = loadLeftPaneMenu(alertes);
+        $scope.risques = loadLeftPaneMenu(alertes, true);
     })
 
-    function loadLeftPaneMenu(alertes){
+    function loadLeftPaneMenu(alertes, show){
         var arr = [
             {
-                show: true,
+                show: show,
                 title: "Tout",
                 icon: "icon_acclimate.png",
                 date:{
@@ -90,7 +99,7 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
                     break;
             }
             arr.push({
-                show: true,
+                show: show,
                 title: alertes[i].type,
                 icon: icon,
                 date:{
@@ -172,6 +181,41 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
                     return;
                 }
                 removeLayer($scope.userPins[i].title)
+            }
+        }else if (scope == 'histos'){
+            $scope.histos[i].show = !$scope.histos[i].show;
+            if($scope.histos[i].show){
+                if(i == 0){
+                    for(j in $scope.histos){
+                        if(j == 0) continue;
+                        if(!$scope.histos[j].show){
+                            loadPins(histoAlertes[j-1]);
+                            $scope.histos[j].show = true;
+                        }
+                    }
+                    return;
+                }
+                loadPins(histoAlertes[i-1]);
+                for(var i = 1; i < $scope.histos.length; i++){
+                    if($scope.histos[i].show == false){
+                        return;
+                    }
+                }
+                $scope.histos[0].show = true;
+            }
+            else{
+                $scope.histos[0].show = false;
+                if(i == 0){
+                    for(j in $scope.histos){
+                        if(j == 0) continue;
+                        if($scope.histos[j].show){
+                            removeLayer($scope.histos[j].title)
+                            $scope.histos[j].show = false;
+                        }
+                    }
+                    return;
+                }
+                removeLayer($scope.histos[i].title)
             }
         }
 
@@ -301,8 +345,8 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
             for(i in userAlertes){
                 var found = false;
                 for(j in userAlertes[i].data){
-                    found = true;
                     if(Math.abs(userAlertes[i].data[j].geometry.coordinates[0] - coords[0]) < 0.00005 && Math.abs(userAlertes[i].data[j].geometry.coordinates[1] - coords[1]) < 0.0005){
+                        found = true;
                         overlay.getElement().innerHTML = "<h5>" +
                             userAlertes[i].data[j].risque +
                             "</h5><small>Alerte d'usager</small><div>" +
@@ -316,7 +360,29 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
                     }
                 }
             }
+
         }
+        if(!found){
+            for(i in histoAlertes){
+                var found = false;
+                for(j in histoAlertes[i].data){
+                    found = true;
+                    if(Math.abs(histoAlertes[i].data[j].geometry.coordinates[0] - coords[0]) < 0.00005 && Math.abs(histoAlertes[i].data[j].geometry.coordinates[1] - coords[1]) < 0.0005){
+                        overlay.getElement().innerHTML = "<h5>" +
+                            histoAlertes[i].data[j].risque +
+                            "</h5><small>Alerte d'usager</small><div>" +
+                            histoAlertes[i].data[j].description +
+                            "</div><small>" +
+                            histoAlertes[i].data[j].source +
+                            "</small><br><small>" +
+                            histoAlertes[i].data[j].dateDeMiseAJour +
+                            "</small>";
+                        return;
+                    }
+                }
+            }
+        }
+
     }
 
 

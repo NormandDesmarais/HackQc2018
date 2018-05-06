@@ -10,6 +10,9 @@ app.factory('Request', ['$http', function($http) {
             },
             getUserPins : function(){
                 return $http.get("https://hackqc.herokuapp.com/api/getUserAlerts");
+            },
+            getHisto : function(){
+                return $http.get("https://hackqc.herokuapp.com/api/getHisto");
             }
         }
 }]);
