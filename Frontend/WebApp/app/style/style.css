@@ -22,8 +22,10 @@ h1, h2, h3, h4 {
   width: 280px;
   left: 0;
   padding: 15px 5px 15px 10px;
-  transition: 0.3s all;
-  overflow: scroll; }
+  transition: 0.3s all; }
+  #leftPane .inner {
+    height: 100%;
+    overflow: scroll; }
   #leftPane #expander {
     background-color: white;
     height: 50px;
