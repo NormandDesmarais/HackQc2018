@@ -4,9 +4,9 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRawValue;
 
 
-public class GetAlert {
+public class GetUserAlert {
 
-    public GetAlert(){
+    public GetUserAlert(){
     }
 
     @JsonRawValue

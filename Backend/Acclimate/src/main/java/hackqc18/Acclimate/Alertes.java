@@ -16,6 +16,7 @@ public class Alertes {
             this.alertes =  new ArrayList<>(userAlerts);
         }
 
+        this.alertes =  new ArrayList<>();
         for (Alerte e : userAlerts) {
             ArrayList<double[]> coord = e.getCoord().getData();
             if (coord.get(0)[0] > ouest && coord.get(0)[0] < est

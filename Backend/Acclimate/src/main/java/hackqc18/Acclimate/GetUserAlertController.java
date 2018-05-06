@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api")
-public class GetAlertController {
+public class GetUserAlertController {
 
 //    @Autowired
     @RequestMapping(value = "/getUserAlerts",
@@ -18,6 +18,6 @@ public class GetAlertController {
             @RequestParam(value="est", defaultValue="-58.") double est,
             @RequestParam(value="ouest", defaultValue="-84.") double ouest) {
 
-        return new GetAlert().alerts(nord, sud, est, ouest);
+        return new GetUserAlert().alerts(nord, sud, est, ouest);
     }
 }
