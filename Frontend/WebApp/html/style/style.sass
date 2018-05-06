@@ -56,10 +56,14 @@ h1, h2, h3, h4
 
 #map
     height: calc(100vh - 101px)
+    z-index: -3
+    position: absolute
+    width: 100vw
+    right: 0
 
 #leftPane
     height: calc(100% - 101px)
-    position: fixed
+    position: absolute
     top: 101px
     background-color: $expanderColor
     width: 280px
@@ -68,12 +72,13 @@ h1, h2, h3, h4
     transition: 0.3s all
     .inner
         height: 100%
-        overflow: scroll
+        overflow-y: scroll
         padding: 15px 0
     #expander
         background-color: $expanderColor
         height: 50px
         width: 50px
+        z-index: -2
         position: absolute
         top: 50%
         right: 0

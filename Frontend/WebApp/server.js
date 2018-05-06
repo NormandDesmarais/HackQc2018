@@ -6,7 +6,7 @@ var port = process.env.PORT || 8080; 				// set the port
 
 // configuration ===============================================================
 
-app.use(express.static('./app')); 		// set the static files location /public/img will be /img for users
+app.use(express.static('./html')); 		// set the static files location /public/img will be /img for users
 
 
 // listen (start app with node server.js) ======================================

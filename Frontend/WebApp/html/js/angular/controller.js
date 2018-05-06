@@ -370,7 +370,7 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
                     if(Math.abs(histoAlertes[i].data[j].geometry.coordinates[0] - coords[0]) < 0.00005 && Math.abs(histoAlertes[i].data[j].geometry.coordinates[1] - coords[1]) < 0.0005){
                         overlay.getElement().innerHTML = "<h5>" +
                             histoAlertes[i].data[j].risque +
-                            "</h5><small>Alerte d'usager</small><div>" +
+                            "</h5><small>Alerte Historique</small><div>" +
                             histoAlertes[i].data[j].description +
                             "</div><small>" +
                             histoAlertes[i].data[j].source +
