@@ -1,6 +1,7 @@
 package com.example.payne.simpletestapp;
 
 import android.util.Log;
+import android.view.View;
 import android.widget.Toast;
 
 import org.json.JSONObject;
@@ -56,9 +57,6 @@ public class Manager {
             pin.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker, MapView mapView) {
-                    Toast.makeText(mainActivity, "CONFIRM BUBBLE", Toast.LENGTH_SHORT).show();
-                    myMap.userPins.remove(marker);
-                    myMap.refresh();
                     return true;
                 }
             });
