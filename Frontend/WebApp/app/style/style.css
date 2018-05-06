@@ -23,6 +23,9 @@ h1, h2, h3, h4 {
   left: 0;
   padding: 15px 5px 15px 10px;
   transition: 0.3s all; }
+  #leftPane .inner {
+    height: 100%;
+    overflow: scroll; }
   #leftPane #expander {
     background-color: white;
     height: 50px;
@@ -123,9 +126,9 @@ h1, h2, h3, h4 {
         padding-top: 5px;
         padding-bottom: 3px;
         position: relative;
-        border-top: 2px solid #5c5d60;
-        border-left: 2px solid #5c5d60;
-        border-bottom: 2px solid #5c5d60;
+        border-top: 1px solid #5c5d60;
+        border-left: 1px solid #5c5d60;
+        border-bottom: 1px solid #5c5d60;
         top: 1px; }
       #leftPane ul .datePickers input {
         border-top-right-radius: 4px;
@@ -133,7 +136,7 @@ h1, h2, h3, h4 {
         margin: 5px 0;
         padding-top: 3px;
         padding-bottom: 3px;
-        border: 2px solid #5c5d60;
+        border: 1px solid #5c5d60;
         margin-left: -3px; }
     #leftPane ul .datePickers.active {
       opacity: 1;

@@ -283,6 +283,7 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
             var found = false;
             for(j in alertes[i].data){
                 if(Math.abs(alertes[i].data[j].geometry.coordinates[0] - coords[0]) < 0.00005 && Math.abs(alertes[i].data[j].geometry.coordinates[1] - coords[1]) < 0.0005){
+                    found = true;
                     overlay.getElement().innerHTML = "<h5>" +
                         alertes[i].data[j].risque +
                         "</h5><div>" +
@@ -293,6 +294,26 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
                         alertes[i].data[j].dateDeMiseAJour +
                         "</small>";
                     return;
+                }
+            }
+        }
+        if(!found){
+            for(i in userAlertes){
+                var found = false;
+                for(j in userAlertes[i].data){
+                    found = true;
+                    if(Math.abs(userAlertes[i].data[j].geometry.coordinates[0] - coords[0]) < 0.00005 && Math.abs(userAlertes[i].data[j].geometry.coordinates[1] - coords[1]) < 0.0005){
+                        overlay.getElement().innerHTML = "<h5>" +
+                            userAlertes[i].data[j].risque +
+                            "</h5><small>Alerte d'usager</small><div>" +
+                            userAlertes[i].data[j].certitude +
+                            "</div><small>" +
+                            userAlertes[i].data[j].source +
+                            "</small><br><small>" +
+                            userAlertes[i].data[j].dateDeMiseAJour +
+                            "</small>";
+                        return;
+                    }
                 }
             }
         }
