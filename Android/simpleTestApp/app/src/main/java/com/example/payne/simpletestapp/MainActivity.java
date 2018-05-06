@@ -16,7 +16,6 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
-import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.views.overlay.Marker;
 
@@ -35,6 +34,9 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        //inflate and create the map
+        setContentView(R.layout.activity_main);
 
         this.mainActivity = this;
 
@@ -55,9 +57,6 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         //note, the load method also sets the HTTP User Agent to your application's package name, abusing osm's tile
         //servers will get you banned based on this string
 */
-
-        //inflate and create the map
-        setContentView(R.layout.activity_main);
 
         //creating the Toolbar?
         Toolbar toolbar = findViewById(R.id.toolbar);

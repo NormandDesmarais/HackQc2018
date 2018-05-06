@@ -32,8 +32,8 @@
     <string name="warning">Ajouter une alerte de \nquel type au serveur ?</string>
     <string name="feu">Feu</string>
     <string name="eau">Eau</string>
-    <string name="vent">Vent</string>
-    <string name="seisme">Seisme</string>
-    <string name="cancel">Cancel</string>
+    <string name="vent">Météo</string>
+    <string name="seisme">Terrain</string>
+    <string name="cancel">Annuler</string>
 
 </resources>
