@@ -36,4 +36,8 @@
     <string name="seisme">Terrain</string>
     <string name="cancel">Annuler</string>
 
+    <!-- Home : double label button (alert counters) -->
+    <string name="dlb_eauTxt1">Dummy</string>
+    <string name="dlb_eauTxt2">Dummy</string>
+
 </resources>
