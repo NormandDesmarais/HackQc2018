@@ -69,7 +69,7 @@ public class Manager {
                 mainActivity.getApplicationContext().getFilesDir(),
                 Manager.NOTIFICATION_FILE_PATH);
         if(notif.exists()){
-            Log.w("STORAGE : ", "notif file already exist");
+            Log.w("STORAGE : ", "OK notif file already exist");
         }
         else {
             Log.w("STORAGE : ", "creating notif file");
@@ -93,14 +93,14 @@ public class Manager {
                 JSONWrapper.createAlertFile(mainActivity, result);
             }
         } catch (Exception e){
-            Log.w("STORAGE : ", "could not setup storage");
+            Log.w("STORAGE : ", "could not setup alert file");
         }
 
     }
 
-    public void addUserNotification(BoundingBox boundingBox, String type){
+    public void addUserNotification(BoundingBox boundingBox){
 
-        JSONWrapper.addUserNotificationToFile(boundingBox, type, mainActivity);
+        JSONWrapper.addUserNotificationToFile(boundingBox, mainActivity);
 
     }
 
@@ -143,42 +143,9 @@ public class Manager {
         try {
             myMap.updateLists(obj);
         } catch (Exception e){
-            Log.w("PIN", "could not load new icon");
+            Log.w("PIN", "could not load new icons");
         }
 
- /*
-        try {
-
-            JSONArray alertes = obj.getJSONArray("alertes");
-
-            for (int i = 0; i < alertes.length(); i++){
-
-                JSONObject current = alertes.getJSONObject(i).getJSONObject("alerte");
-                String alertType = current.getString("type");
-
-                String type;
-                switch (alertType) {
-                    case "Inondation" : type = "eau"; break;
-                    case "Suivi des cours d'eau" : type = "eau"; break;
-                    case "vent" : type = "meteo"; break;
-                    case "pluie" : type = "meteo"; break;
-                    default : type = "meteo";
-
-                }
-
-                Alerte alerte = new Alerte(current);
-                alerte.type = type;
-                Log.w("QC ALERTE", alerte.toString());
-
-                // create pin
-                myMap.addAlertPin(alerte);
-            }
-
-
-        } catch (JSONException j){
-            Log.w("JSON","could not parse and generate quebec pins");
-        }
-*/
     }
 
 

@@ -199,7 +199,7 @@ public class JSONWrapper {
 
 
         } catch (JSONException j){
-            Toast.makeText(ctx, "Impossible de créer le fichier de notification", Toast.LENGTH_SHORT).show();
+            Log.w("NOTIFICATION", "Could not setup notification file");
         }
 
         FileOutputStream outputStream;
@@ -219,10 +219,9 @@ public class JSONWrapper {
      * Permet d'ajouter au fichier de notification un nouveau abonnement à une notification
      *
      * @param boundingBox
-     * @param type
      * @param ctx
      */
-    public static void addUserNotificationToFile (BoundingBox boundingBox, String type, Context ctx) {
+    public static void addUserNotificationToFile (BoundingBox boundingBox, Context ctx) {
 
         try {
 
@@ -235,7 +234,6 @@ public class JSONWrapper {
             box.put("east", boundingBox.getLonEast());
             box.put("west", boundingBox.getLonWest());
 
-            notif.put("type", type);
             notif.put("box", box);
 
             JSONArray notifications = notificationsFile.getJSONArray("notifications");
@@ -259,8 +257,6 @@ public class JSONWrapper {
 
 
     public static void createAlertFile(Context ctx, String content){
-
-        Log.w("AlertFileContent : ", content);
 
         try {
 

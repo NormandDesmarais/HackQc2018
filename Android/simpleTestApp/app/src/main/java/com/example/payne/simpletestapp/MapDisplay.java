@@ -135,80 +135,6 @@ public class MapDisplay {
     }
 
 
-    public void addPin(GeoPoint pos, String type) {
-
-        if (!currentlyPlacingPin) {
-            currentlyPlacingPin = !currentlyPlacingPin;
-
-            Marker pin = new Marker(map);
-            pin.setPosition(pos);
-            pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-
-            pin.setTitle("TITLE : A pin");
-            pin.setSubDescription("A subdescripton");
-            pin.setSnippet("A snippet");
-
-            switch (type) {
-                case "eau":
-                    pin.setIcon(eauIcon);
-                    break;
-                case "seisme":
-                    pin.setIcon(terrainIcon);
-                    break;
-                case "vent":
-                    pin.setIcon(meteoIcon);
-                    break;
-                case "feu":
-                    pin.setIcon(feuIcon);
-                    break;
-                default:
-                    break;
-            }
-
-            pin.setTitle("TITLE : A pin");
-            pin.setSubDescription("A subdescripton");
-            pin.setSnippet("A snippet");
-
-            map.getOverlays().add(pin);
-            this.map.invalidate();
-
-            MainActivity.lastPlacedPin = pin;
-            showPopUp();
-        }
-
-    }
-
-    public void drawCircleAtCenter(int radius, int shade) {
-
-        for (int i = 1; i <= shade + 1; i++) {
-
-            ArrayList<GeoPoint> circlePoints = new ArrayList<>();
-
-            for (float f = 0; f < 360; f += 1) {
-                circlePoints.add(new GeoPoint(
-                        this.getCenter().getLatitude(), this.getCenter().getLongitude())
-                        .destinationPoint(i * (radius / shade), f));
-            }
-
-            Polygon circle = new Polygon(this.map);    //see note below
-            circlePoints.add(circlePoints.get(0));    //forces the loop to close
-            circle.setPoints(circlePoints);
-
-            // define style
-            circle.setStrokeWidth(0);
-            circle.setStrokeColor(Color.argb(25, 10, 255, 10));
-            circle.setFillColor(Color.argb(75, 10, 255, 10));
-
-
-            map.getOverlayManager().add(circle);
-
-        }
-
-        map.invalidate();
-
-    }
-
-
     public void drawPolygon(JSONObject JsonPoints) {
 
         Log.w("method :", "drawPolygon");
@@ -236,16 +162,6 @@ public class MapDisplay {
         this.map.invalidate();
     }
 
-    public void addAlertPin(Alerte alerte){
-
-        switch (alerte.type){
-            case "feu" : addAlertPin(alerte,feuIcon);
-            case "eau" : addAlertPin(alerte, eauIcon);
-            case "meteo" : addAlertPin(alerte, meteoIcon);
-            case "terrain" : addAlertPin(alerte, terrainIcon);
-        }
-
-    }
 
     public void drawAlertPins(ArrayList<Alerte> alertes, Drawable icon){
 

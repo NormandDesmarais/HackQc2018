@@ -38,7 +38,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        this.mainActivity = this;
+        mainActivity = this;
 
 
         //handle permissions first, before map is created. not depicted here
@@ -94,7 +94,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         findViewById(R.id.logo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Merci d'utiliser Acclimate :) " +
+                        "Nous allons sauver la planête un petit geste à la fois", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
