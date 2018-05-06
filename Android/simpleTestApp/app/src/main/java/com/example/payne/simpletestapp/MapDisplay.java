@@ -131,6 +131,12 @@ public class MapDisplay {
 
     }
 
+    /**
+     * Create a signle temporary default pin and puts it on the map.
+     * Used for User input on the phone.
+     *
+     * @param   pos     position fr the defaul pin
+     */
     public void addUserPin(GeoPoint pos) {
 
         if (!currentlyPlacingPin) {
@@ -153,13 +159,12 @@ public class MapDisplay {
         }
     }
 
-
-    public void drawPolygon(JSONObject JsonPoints) {
-
-        Log.w("method :", "drawPolygon");
-
-    }
-
+    /**
+     * create a pin
+     *
+     * @param alerte
+     * @param icon
+     */
     public void addUserAlertPin(Alerte alerte, Drawable icon) {
 
         if (!showUserPins){
@@ -177,33 +182,53 @@ public class MapDisplay {
 
         pin.setTitle("Type : " + alerte.type + "\n" + "Catégorie : " + alerte.nom);
 
-        String description = alerte.source + "\n" + alerte.dateDeMiseAJour + "\n" + alerte.territoire;
+        String description = alerte.dateDeMiseAJour + " ";
         pin.setSubDescription(description);
 
-        String snippet = alerte.description;
+        String snippet = alerte.description + " " + alerte.certitude;
         pin.setSnippet(snippet);
 
         this.userPins.add(pin);
         this.refresh();
     }
 
+    /**
+     *
+     *
+     * @param alerte
+     * @param icon
+     * @return
+     */
     public Marker createAlertPin(Alerte alerte, Drawable icon) {
 
         GeoPoint pos = new GeoPoint(alerte.getLatitude(), alerte.getLongitude());
         Marker pin = new Marker(map);
         pin.setPosition(pos);
         pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-
         pin.setIcon(icon);
 
-        pin.setTitle("Type : " + alerte.type + "\n" + "Catégorie : " + alerte.nom);
 
-        String description = alerte.source + "\n" + alerte.dateDeMiseAJour + "\n" + alerte.territoire;
-        pin.setSubDescription(description);
+        if (alerte.description.equals("alerte usager")){
 
-        String snippet = alerte.description;
-        pin.setSnippet(snippet);
+            pin.setTitle("Type : " + alerte.type);
 
+            String snippet = "confiance : " + alerte.certitude;
+            pin.setSnippet(snippet);
+
+            String description =  "mis à jour : " + alerte.dateDeMiseAJour;
+            pin.setSubDescription(description);
+
+        } else {
+
+            pin.setTitle("Type : " + alerte.type + "\nCatégorie : " + alerte.nom);
+
+            String snippet = alerte.description;
+            pin.setSnippet(snippet);
+
+            String description = alerte.source + " " + alerte.dateDeMiseAJour;
+            pin.setSubDescription(description);
+
+        }
         return pin;
     }
 
@@ -236,10 +261,19 @@ public class MapDisplay {
         MainActivity.mainActivity.findViewById(R.id.pop_up).setVisibility(View.VISIBLE);
     }
 
-    public void updateLists(JSONObject serverPins, JSONObject userPins) throws Exception {
+    /**
+     * Met-à jour les listes
+     *
+     * @param serverPins
+     * @param userPins
+     * @param histoPins
+     * @throws Exception
+     */
+    public void updateLists(JSONObject serverPins, JSONObject userPins, JSONObject histoPins) throws Exception {
 
         JSONArray allServerAlerts = serverPins.getJSONArray("alertes");
         JSONArray allUserAlerts = userPins.getJSONArray("alertes");
+        JSONArray allHistoAlerts = histoPins.getJSONArray("alertes");
 
         for (int i = 0; i < allServerAlerts.length(); i++) {
 
@@ -308,6 +342,25 @@ public class MapDisplay {
             }
 
             this.userPins.add(createAlertPin(new Alerte(userAlert), currentIcon));
+
+        }
+
+
+        for (int i = 0; i < allHistoAlerts.length(); i++){
+
+            JSONObject histoAlert = allHistoAlerts.getJSONObject(i).getJSONObject("alerte");
+
+            Drawable currentIcon;
+
+            switch (histoAlert.getString("type")){
+                case "Eau" : currentIcon = eauIcon; break;
+                case "Feu" : currentIcon = feuIcon; break;
+                case "Meteo" : currentIcon = meteoIcon; break;
+                case "Terrain" : currentIcon = terrainIcon; break;
+                default: currentIcon = meteoIcon;
+            }
+
+            this.userPins.add(createAlertPin(new Alerte(histoAlert), currentIcon));
 
         }
 

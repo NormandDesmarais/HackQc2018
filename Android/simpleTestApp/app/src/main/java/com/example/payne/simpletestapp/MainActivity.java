@@ -314,11 +314,11 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 break;
 
 
-
+*/
             case (R.id.cB_histo):
                 // TODO: Toggle "Display Historique" (add filters)
                 break;
-*/
+
             case (R.id.cB_users):
                 if (item.isChecked()) {
                     MapDisplay.showUserPins = false;

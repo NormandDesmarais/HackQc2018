@@ -12,6 +12,8 @@ import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 import java.io.File;
 import java.util.ArrayList;
 
+import static com.example.payne.simpletestapp.MapDisplay.QUEBEC_BOUNDING_BOX;
+
 public class Manager {
 
     public static final String SERVER_ADDR = "https://hackqc.herokuapp.com/api";
@@ -30,7 +32,7 @@ public class Manager {
     public static final String pushURL = "https://hackqc.herokuapp.com/api";
 
 
-    public Manager(MainActivity act, MapDisplay myMap) {
+    public Manager(MainActivity act, final MapDisplay myMap) {
 
         this.mainActivity = act;
         this.myMap = myMap;
@@ -38,52 +40,57 @@ public class Manager {
         this.setupStorage();
         this.getPinsFromServer();
 
+        this.addListenerToPins(myMap.userPins);
+
         myMap.map.invalidate();
         myMap.redrawScreen();
-
-        for (final Marker pin : myMap.userPins){
-            pin.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
-                @Override
-                public boolean onMarkerClick(Marker marker, MapView mapView) {
-                    Toast.makeText(mainActivity, "CONFIRM BUBBLE", Toast.LENGTH_SHORT).show();
-                    marker.showInfoWindow();
-                    mapView.getController().animateTo(marker.getPosition());
-                    return true;
-                }
-            });
-        }
 
 
     }
 
 //MarkerInfoWindow is the default implementation of InfoWindow for a Marker. It handles R.id.bubble_title = OverlayWithIW.getTitle(), R.id.bubble_subdescription = OverlayWithIW.getSubDescription(), R.id.bubble_description = OverlayWithIW.getSnippet(), R.id.bubble_image = Marker.getImage()
 
+    public void addListenerToPins(ArrayList<Marker> pins){
+
+        for (final Marker pin : pins){
+            pin.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker, MapView mapView) {
+                    Toast.makeText(mainActivity, "CONFIRM BUBBLE", Toast.LENGTH_SHORT).show();
+                    myMap.userPins.remove(marker);
+                    myMap.refresh();
+                    return true;
+                }
+            });
+        }
+
+    }
+
+
     public void getPinsFromServer(){
 
         this.mainServer = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
 
-        String quebec, userPins;
+        String quebec, userPins, histo;
 
         try {
 
-            quebec = mainServer.ping(MapDisplay.QUEBEC_BOUNDING_BOX);
+            quebec = mainServer.ping(QUEBEC_BOUNDING_BOX);
             userPins = mainServer.getRequest("/getUserAlerts", "");
+            String paramHisto = "?nord="  + QUEBEC_BOUNDING_BOX.getLatNorth() +
+                                "&sud="   + QUEBEC_BOUNDING_BOX.getLatSouth() +
+                                "&est="   + QUEBEC_BOUNDING_BOX.getLonEast() +
+                                "&ouest=" + QUEBEC_BOUNDING_BOX.getLonWest();
+            histo = mainServer.getRequest("/getHisto", paramHisto);
 
-            this.generatePins(new JSONObject(quebec), new JSONObject(userPins));
-
+            this.generatePins(new JSONObject(quebec), new JSONObject(userPins), new JSONObject(histo));
 
         } catch (Exception e){
             Log.w("PING", "failed to ping server" + Manager.SERVER_ADDR);
         }
 
-
     }
 
-    public void drawPolygon(JSONObject polyPoints){
-
-        this.mainActivity.myMap.drawPolygon(polyPoints);
-
-    }
 
     private void setupStorage(){
 
@@ -106,7 +113,7 @@ public class Manager {
         String result;
         try {
 
-            result = mainServer.ping(MapDisplay.QUEBEC_BOUNDING_BOX);
+            result = mainServer.ping(QUEBEC_BOUNDING_BOX);
 
             // check if alert File exist on device and create one if needed
             File alertes = new File(
@@ -161,10 +168,10 @@ public class Manager {
 
     }
 
-    private void generatePins(JSONObject serverPins, JSONObject userPins){
+    private void generatePins(JSONObject serverPins, JSONObject userPins, JSONObject histoPins){
 
         try {
-            myMap.updateLists(serverPins, userPins);
+            myMap.updateLists(serverPins, userPins, histoPins);
         } catch (Exception e){
             Log.w("PIN", "could not load new icons");
         }
@@ -173,6 +180,7 @@ public class Manager {
 
     public void queryNewPins(){
 
+        // reset all the arrays
         myMap.terrainAlerts = new ArrayList<>();
         myMap.feuAlerts = new ArrayList<>();
         myMap.eauAlerts = new ArrayList<>();
@@ -180,6 +188,7 @@ public class Manager {
         myMap.userPins = new ArrayList<>();
         myMap.historique = new ArrayList<>();
 
+        // request new pins
         this.getPinsFromServer();
         myMap.redrawScreen();
 
