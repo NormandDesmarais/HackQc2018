@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -40,11 +41,13 @@ public class Manager {
         myMap.map.invalidate();
         myMap.redrawScreen();
 
-        for (Marker pin : myMap.userPins){
+        for (final Marker pin : myMap.userPins){
             pin.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker, MapView mapView) {
                     Toast.makeText(mainActivity, "CONFIRM BUBBLE", Toast.LENGTH_SHORT).show();
+                    marker.showInfoWindow();
+                    mapView.getController().animateTo(marker.getPosition());
                     return true;
                 }
             });
@@ -53,6 +56,7 @@ public class Manager {
 
     }
 
+//MarkerInfoWindow is the default implementation of InfoWindow for a Marker. It handles R.id.bubble_title = OverlayWithIW.getTitle(), R.id.bubble_subdescription = OverlayWithIW.getSubDescription(), R.id.bubble_description = OverlayWithIW.getSnippet(), R.id.bubble_image = Marker.getImage()
 
     public void getPinsFromServer(){
 
