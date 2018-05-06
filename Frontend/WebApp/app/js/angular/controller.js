@@ -7,6 +7,7 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
         for(i in data.data.alertes){
             data.data.alertes[i].alerte.risque = data.data.alertes[i].alerte.type;
             data.data.alertes[i].alerte.type = "Feature";
+            delete data.data.alertes[i].alerte.id;
             var exist = false;
             for(j in alertes){
                 if(data.data.alertes[i].alerte.risque != alertes[j].type){
@@ -56,6 +57,9 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
                     icon = "../images/icon_vent.png";
                     break;
                 case "Pluie" :
+                    icon = "../images/icon_pluie.png";
+                    break;
+                case "Neige" :
                     icon = "../images/icon_pluie.png";
                     break;
             }
@@ -109,6 +113,7 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
     }
 
     function loadAllPins(alertes){
+        console.log(alertes);
         for(i in alertes){
             var jsonObject = {
                 type: "FeatureCollection",
@@ -119,6 +124,7 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
     }
 
     function loadPins(alertes){
+
         var jsonObject = {
             type: "FeatureCollection",
             features: alertes.data
@@ -128,6 +134,7 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
 
 
     function pinsToMap(type, jsonFile){
+        console.log(jsonFile);
         var icon = "../images/pin_feu.png";
 
         switch (type){
@@ -135,13 +142,16 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
                 icon = "../images/pin_goutte.png";
                 break;
             case "Suivi des cours d'eau" :
-                icon = "../images/pin_vent.png";
+                icon = "../images/pin_goutte.png";
                 break;
             case "Vent" :
-                icon = "../images/pin_feu.png";
+                icon = "../images/pin_vent.png";
                 break;
             case "Pluie" :
-                icon = "../images/pin_feu.png";
+                icon = "../images/pin_pluie.png";
+                break;
+            case "Neige" :
+                icon = "../images/pin_pluie.png";
                 break;
         }
 
