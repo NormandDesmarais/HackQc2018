@@ -8,6 +8,14 @@ $black: #5c5d60
 
 $expanderColor: white
 
+$font-stack: 'Lato', sans-serif
+
+body, html
+    font-family: $font-stack
+
+h1, h2, h3, h4
+    font-weight: lighter
+
 .navbar
     background: linear-gradient(to right, $primaryColor, $mediumColor , $darkColor)
 
@@ -23,7 +31,7 @@ $expanderColor: white
     position: fixed
     top: 101px
     background-color: $expanderColor
-    width: 250px
+    width: 280px
     left: 0
     padding: 15px 5px 15px 10px
     transition: 0.3s all
@@ -51,8 +59,10 @@ $expanderColor: white
     ul
         list-style-type: none
         padding: 0
+        position: relative
+        z-index: 9999
         li
-            padding: 0 0 15px 0
+            padding: 0 0 6px 0
             span
                 padding: 0 0 0 15px
         img
@@ -129,13 +139,13 @@ $expanderColor: white
                 padding-bottom: 3px
                 border: 2px solid $black
                 margin-left: -4px
-            
+
 
 
 
 #leftPane.close
     opacity: 1
-    left: -250px
+    left: -280px
 
 form
     display: inline
@@ -160,3 +170,32 @@ form
 #searchForm.visible
     opacity: 1
     width: 250px
+
+.arrow_box
+    position: relative
+    background: #efecec
+    padding: 15px
+    border: 2px solid #a7a9ac
+    border-radius: 4px
+    max-width: 400px
+
+.arrow_box:after, .arrow_box:before
+    top: 100%
+    left: 50%
+    border: solid transparent
+    content: " "
+    height: 0
+    width: 0
+    position: absolute
+    pointer-events: none
+
+
+.arrow_box:after
+    border-top-color: #efecec
+    border-width: 15px
+    margin-left: -15px
+
+.arrow_box:before
+    border-top-color: #a7a9ac
+    border-width: 19px
+    margin-left: -19px
