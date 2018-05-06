@@ -28,12 +28,8 @@ public class Manager {
     public MainActivity mainActivity;
     public MapDisplay myMap;
 
-    public String polygone;
 
-    public static final String pushURL = "https://hackqc.herokuapp.com/api";
-
-
-    public Manager(MainActivity act, final MapDisplay myMap) {
+    public Manager(MainActivity act, MapDisplay myMap) {
 
         this.mainActivity = act;
         this.myMap = myMap;
@@ -41,22 +37,17 @@ public class Manager {
         this.setupStorage();
         this.getPinsFromServer();
 
-        this.addListenerToPins(myMap.userPins);
-
         myMap.map.invalidate();
         myMap.redrawScreen();
 
-
-    }
-
-//MarkerInfoWindow is the default implementation of InfoWindow for a Marker. It handles R.id.bubble_title = OverlayWithIW.getTitle(), R.id.bubble_subdescription = OverlayWithIW.getSubDescription(), R.id.bubble_description = OverlayWithIW.getSnippet(), R.id.bubble_image = Marker.getImage()
-
-    public void addListenerToPins(ArrayList<Marker> pins){
-
-        for (final Marker pin : pins){
+        for (final Marker pin : myMap.userPins){
             pin.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker, MapView mapView) {
+                    MainActivity.pin_on_focus = pin;
+                    MainActivity.mainActivity.findViewById(R.id.confirm_dialog).setVisibility(View.VISIBLE);
+                    marker.showInfoWindow();
+                    mapView.getController().animateTo(marker.getPosition());
                     return true;
                 }
             });
@@ -69,23 +60,27 @@ public class Manager {
 
         this.mainServer = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
 
-        String quebec, userPins, histo;
+        String quebec, userPins, histoPins;
 
         try {
 
             quebec = mainServer.ping(QUEBEC_BOUNDING_BOX);
+            Log.w("QUEBEC", quebec);
             userPins = mainServer.getRequest("/getUserAlerts", "");
-            String paramHisto = "?nord="  + QUEBEC_BOUNDING_BOX.getLatNorth() +
-                                "&sud="   + QUEBEC_BOUNDING_BOX.getLatSouth() +
-                                "&est="   + QUEBEC_BOUNDING_BOX.getLonEast() +
+            Log.w("userPIns", userPins);
+            String histoParam = "?nord=" + QUEBEC_BOUNDING_BOX.getLatNorth() +
+                                "&sud=" + QUEBEC_BOUNDING_BOX.getLatSouth() +
+                                "&est=" + QUEBEC_BOUNDING_BOX.getLonEast() +
                                 "&ouest=" + QUEBEC_BOUNDING_BOX.getLonWest();
-            histo = mainServer.getRequest("/getHisto", paramHisto);
+            histoPins = mainServer.getRequest("/getHisto", histoParam);
 
-            this.generatePins(new JSONObject(quebec), new JSONObject(userPins), new JSONObject(histo));
+            this.generatePins(new JSONObject(quebec), new JSONObject(userPins), new JSONObject(histoPins));
+
 
         } catch (Exception e){
             Log.w("PING", "failed to ping server" + Manager.SERVER_ADDR);
         }
+
 
     }
 
@@ -99,8 +94,8 @@ public class Manager {
         if(notif.exists()){
             Log.w("STORAGE : ", "OK notif file already exist");
             Log.w(
-            "STORAGE",
-            mainActivity.getApplicationContext().getFilesDir() + Manager.NOTIFICATION_FILE_PATH);
+                    "STORAGE",
+                    mainActivity.getApplicationContext().getFilesDir() + Manager.NOTIFICATION_FILE_PATH);
         }
         else {
             Log.w("STORAGE : ", "creating notif file");
@@ -118,7 +113,7 @@ public class Manager {
                     mainActivity.getApplicationContext().getFilesDir(),
                     Manager.ALERT_FILE_PATH);
             if(alertes.exists()){
-                Toast.makeText(mainActivity, "Fichier d'alertes détecté", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mainActivity, "Fichier d'alertes dÈtectÈ", Toast.LENGTH_SHORT).show();
             }
             else {
                 JSONWrapper.createAlertFile(mainActivity, result);
@@ -178,7 +173,6 @@ public class Manager {
 
     public void queryNewPins(){
 
-        // reset all the arrays
         myMap.terrainAlerts = new ArrayList<>();
         myMap.feuAlerts = new ArrayList<>();
         myMap.eauAlerts = new ArrayList<>();
@@ -186,7 +180,6 @@ public class Manager {
         myMap.userPins = new ArrayList<>();
         myMap.historique = new ArrayList<>();
 
-        // request new pins
         this.getPinsFromServer();
         myMap.redrawScreen();
 

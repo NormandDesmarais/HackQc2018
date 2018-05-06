@@ -8,6 +8,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -36,6 +37,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     public static Marker lastPlacedPin = null;
     public static Manager manager;
     public static Menu menu;
+    public static Marker pin_on_focus;
 
 
     @Override
@@ -107,19 +109,35 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 // TODO: GÉRER LE "YES" DU DIALOG
                 // Remove temporary Pin
                 map.getOverlays().remove(lastPlacedPin);
+                String type="";
+                if (pin_on_focus.getTitle().contains("Feu")) type = "Feu";
+                if (pin_on_focus.getTitle().contains("Eau")) type = "Eau";
+                if (pin_on_focus.getTitle().contains("Meteo")) type = "Meteo";
+                if (pin_on_focus.getTitle().contains("Terrain")) type = "Terrain";
 
-                // Hide PopUp
-                MainActivity.mainActivity.findViewById(R.id.pop_up).setVisibility(View.GONE);
+                String param =  "?type=" + type.toLowerCase() +
+                        "&lat=" + pin_on_focus.getPosition().getLatitude() +
+                        "&lng=" + pin_on_focus.getPosition().getLongitude();
+                try{
+                    manager.mainServer.getRequest("/putAlert", param);
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+
+                MainActivity.mainActivity.findViewById(R.id.confirm_dialog).setVisibility(View.GONE);
                 MapDisplay.currentlyPlacingPin = false;
 
-                /* locally register alert
-                Alerte alert = new Alerte(lastPlacedPin.getPosition().getLongitude(),
-                        lastPlacedPin.getPosition().getLatitude(),
-                        "Meteo");
+                pin_on_focus.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+                    @Override
+                    public boolean onMarkerClick(Marker marker, MapView mapView) {
+                        marker.showInfoWindow();
+                        mapView.getController().animateTo(marker.getPosition());
+                        return true;
+                    }
+                });
 
-                myMap.addUserAlertPin(alert, MapDisplay.meteoIcon);
-                manager.postAlert(alert);
-                */
+                // Hide PopUp
+
             }
         });
 
