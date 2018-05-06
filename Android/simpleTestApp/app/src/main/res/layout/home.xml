@@ -15,17 +15,17 @@
         android:layout_width="110dp"
         android:layout_height="110dp"
         android:layout_gravity="center"
-        android:layout_marginTop="40dp"
+        android:layout_marginTop="25dp"
         android:clickable="false"
         app:srcCompat="@drawable/logo_blanc" />
 
     <include
-        android:id="@+id/pop_up"
+        android:id="@+id/home_alerts"
         layout="@layout/home_alerts"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:layout_marginBottom="50dp"
+        android:layout_marginBottom="20dp"
         android:layout_marginLeft="50dp"
         android:layout_marginRight="50dp"
         android:layout_marginTop="30dp" />
@@ -35,6 +35,7 @@
         android:layout_width="80dp"
         android:layout_height="80dp"
         android:layout_gravity="center_horizontal"
+        android:fadingEdge="none"
         android:visibility="visible"
         app:srcCompat="@drawable/icon_map" />
 

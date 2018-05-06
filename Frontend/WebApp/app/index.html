@@ -26,6 +26,9 @@
 <script src="js/angular/services.js"></script>
 <script src="js/angular/main.js"></script>
 
+<!-- Lato Font -->
+<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700" rel="stylesheet">
+
 <!-- style -->
 <link rel="stylesheet" href="style/style.css">
 
@@ -46,9 +49,11 @@
         </div>
     </nav>
     <div id="map" class="map"></div>
+    <div class="arrow_box" id="popup-container"></div>
     <script src="js/openlayerInit.js"></script>
     <div id="leftPane">
         <div id="expander"><img src="images/expand.svg"></div>
+        <h3>Flux en direct</h3>
         <ul>
             <li ng-repeat="risque in risques">
                 <div class="selector" ng-click="showHideRisque($index)" ng-class="(risque.show) ? 'checked':''"></div>
@@ -66,6 +71,8 @@
                 </div>
             </li>
         </ul>
+        <h3>Alertes d&apos;usagers</h3>
+        <h3>Historique</h3>
     </div>
     <script src="js/toggleLeftPane.js"></script>
 </body>

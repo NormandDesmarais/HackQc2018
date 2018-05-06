@@ -31,7 +31,7 @@
         android:layout_alignLeft="@+id/test_button_text2" />
 
     <Button
-        android:id="@+id/dlb_eau"
+        android:id="@+id/dlb_meteo"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentLeft="false"

@@ -7,6 +7,7 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
         for(i in data.data.alertes){
             data.data.alertes[i].alerte.risque = data.data.alertes[i].alerte.type;
             data.data.alertes[i].alerte.type = "Feature";
+            delete data.data.alertes[i].alerte.id;
             var exist = false;
             for(j in alertes){
                 if(data.data.alertes[i].alerte.risque != alertes[j].type){
@@ -29,55 +30,90 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
         }
         console.log(alertes);
         loadAllPins(alertes);
+        loadLeftPaneMenu(alertes);
     })
 
-    $scope.risques = [
-        {
-            show: false,
-            title: "Tout",
-            icon: "icon_acclimate.png",
-            date:{
-                debut:"",
-                fin:""
+    function loadLeftPaneMenu(alertes){
+        $scope.risques = [
+            {
+                show: true,
+                title: "Tout",
+                icon: "icon_acclimate.png",
+                date:{
+                    debut:"",
+                    fin:""
+                }
             }
-        },
-        {
-            show: false,
-            title: "Inondations",
-            icon: "icon_goutte.png",
-            date:{
-                debut:"",
-                fin:""
+        ]
+        for(i in alertes){
+            switch (alertes[i].type){
+                case "Inondation" :
+                    icon = "../images/icon_goutte.png";
+                    break;
+                case "Suivi des cours d'eau" :
+                    icon = "../images/icon_goutte.png";
+                    break;
+                case "Vent" :
+                    icon = "../images/icon_vent.png";
+                    break;
+                case "Pluie" :
+                    icon = "../images/icon_pluie.png";
+                    break;
+                case "Neige" :
+                    icon = "../images/icon_pluie.png";
+                    break;
             }
-        },
-        {
-            show: false,
-            title: "Users",
-            icon: "icon_feu.png"
-        },
-        {
-            show: false,
-            title: "Vent",
-            icon: "icon_vent.png"
-        },
-        {
-            show: false,
-            title: "Séisme",
-            icon: "icon_seisme.png"
+            $scope.risques.push({
+                show: true,
+                title: alertes[i].type,
+                icon: icon,
+                date:{
+                    debut: "",
+                    fin: ""
+                }
+            })
         }
-    ]
+    }
 
     $scope.showHideRisque = function(i){
         $scope.risques[i].show = !$scope.risques[i].show;
         if($scope.risques[i].show){
-
+            if(i == 0){
+                for(j in $scope.risques){
+                    if(j == 0) continue;
+                    if(!$scope.risques[j].show){
+                        loadPins(alertes[j-1]);
+                        $scope.risques[j].show = true;
+                    }
+                }
+                return;
+            }
+            loadPins(alertes[i-1]);
+            for(var i = 1; i < $scope.risques.length; i++){
+                if($scope.risques[i].show == false){
+                    return;
+                }
+            }
+            $scope.risques[0].show = true;
         }
         else{
+            $scope.risques[0].show = false;
+            if(i == 0){
+                for(j in $scope.risques){
+                    if(j == 0) continue;
+                    if($scope.risques[j].show){
+                        removeLayer($scope.risques[j].title)
+                        $scope.risques[j].show = false;
+                    }
+                }
+                return;
+            }
             removeLayer($scope.risques[i].title)
         }
     }
 
     function loadAllPins(alertes){
+        console.log(alertes);
         for(i in alertes){
             var jsonObject = {
                 type: "FeatureCollection",
@@ -87,20 +123,35 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
         }
     }
 
-    function loadPins(type){
+    function loadPins(alertes){
 
+        var jsonObject = {
+            type: "FeatureCollection",
+            features: alertes.data
+        }
+        pinsToMap(alertes.type, jsonObject);
     }
 
 
     function pinsToMap(type, jsonFile){
-        var icon;
+        console.log(jsonFile);
+        var icon = "../images/pin_feu.png";
 
         switch (type){
             case "Inondation" :
                 icon = "../images/pin_goutte.png";
                 break;
-            case "Suivis" :
+            case "Suivi des cours d'eau" :
                 icon = "../images/pin_goutte.png";
+                break;
+            case "Vent" :
+                icon = "../images/pin_vent.png";
+                break;
+            case "Pluie" :
+                icon = "../images/pin_pluie.png";
+                break;
+            case "Neige" :
+                icon = "../images/pin_pluie.png";
                 break;
         }
 
@@ -152,6 +203,27 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
         }
     }
 
+    clickedPin = function(coords){
+        console.log(coords);
+        console.log(alertes);
+        for(i in alertes){
+            var found = false;
+            for(j in alertes[i].data){
+                if(Math.abs(alertes[i].data[j].geometry.coordinates[0] - coords[0]) < 0.00005 && Math.abs(alertes[i].data[j].geometry.coordinates[1] - coords[1]) < 0.0005){
+                    overlay.getElement().innerHTML = "<h5>" +
+                        alertes[i].data[j].risque +
+                        "</h5><div>" +
+                        alertes[i].data[j].description +
+                        "</div><small>" +
+                        alertes[i].data[j].source +
+                        "</small><br><small>" +
+                        alertes[i].data[j].dateDeMiseAJour +
+                        "</small>";
+                    return;
+                }
+            }
+        }
+    }
 
 
     $scope.search = function(){
