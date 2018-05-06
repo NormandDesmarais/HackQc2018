@@ -198,7 +198,6 @@ public class MapDisplay {
         for (int i = 0; i < alertes.length(); i++) {
 
             JSONObject alerte = alertes.getJSONObject(i).getJSONObject("alerte");
-            Log.w("ALERTES", alerte.toString());
 
             switch (alerte.getString("type")) {
 
@@ -264,7 +263,7 @@ public class MapDisplay {
     public void refreshPins(){
 
         this.removeAll(MainActivity.mainActivity.findViewById(android.R.id.content),
-                       MainActivity.mapEventsOverlay);
+                MainActivity.mapEventsOverlay);
         this.displayLists();
         this.map.invalidate();
     }

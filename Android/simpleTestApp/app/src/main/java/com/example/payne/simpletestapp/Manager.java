@@ -1,8 +1,11 @@
 package com.example.payne.simpletestapp;
 
+import android.util.JsonReader;
 import android.util.Log;
 import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.util.BoundingBox;
 
@@ -12,8 +15,8 @@ public class Manager {
 
     public static final String SERVER_ADDR = "https://hackqc.herokuapp.com/api/alertes";
     public static final int PORT = 8080;
-    public static final String NOTIFICATION_FILE_PATH = "acclimate/notifications";
-    public static final String ALERT_FILE_PATH = "acclimate/alertes";
+    public static final String NOTIFICATION_FILE_PATH = "/notifications.json";
+    public static final String ALERT_FILE_PATH = "alertes";
 
     public ServerConnection mainServer;
     public ServerConnection testServer;
@@ -23,10 +26,11 @@ public class Manager {
     public static final String testPushURL = "https://hackqc.herokuapp.com/api/putAlert";
 
 
-    public Manager(MainActivity act, MapDisplay myMap) throws Exception {
+    public Manager(MainActivity act, MapDisplay myMap) {
 
         this.mainActivity = act;
         this.myMap = myMap;
+
 
         this.setupStorage();
 
@@ -34,8 +38,17 @@ public class Manager {
         this.mainServer = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
         this.testServer = new ServerConnection(testPushURL);
 
-        String quebec = mainServer.ping("", MapDisplay.QUEBEC_BOUNDING_BOX);
-        Log.w("QUEBEC : ", quebec);
+        String quebec;
+
+        try {
+
+            quebec = mainServer.ping(MapDisplay.QUEBEC_BOUNDING_BOX);
+            this.generatePins(new JSONObject(quebec));
+
+        } catch (Exception e){
+            Log.w("PING", "failed to ping server" + Manager.SERVER_ADDR);
+        }
+
 
     }
 
@@ -53,9 +66,10 @@ public class Manager {
                 mainActivity.getApplicationContext().getFilesDir(),
                 Manager.NOTIFICATION_FILE_PATH);
         if(notif.exists()){
-            Toast.makeText(mainActivity, "Fichier de notification dÃ©tectÃ©", Toast.LENGTH_SHORT).show();
+            Log.w("STORAGE : ", "OK notif file already exist");
         }
         else {
+            Log.w("STORAGE : ", "creating notif file");
             JSONWrapper.createNotificationFile(mainActivity);
         }
 
@@ -63,7 +77,7 @@ public class Manager {
         String result;
         try {
 
-            result = mainServer.ping("/latest", MapDisplay.QUEBEC_BOUNDING_BOX);
+            result = mainServer.ping(MapDisplay.QUEBEC_BOUNDING_BOX);
 
             // check if alert File exist on device and create one if needed
             File alertes = new File(
@@ -76,14 +90,14 @@ public class Manager {
                 JSONWrapper.createAlertFile(mainActivity, result);
             }
         } catch (Exception e){
-            Toast.makeText(mainActivity, "impossible de créer le fichier d'alerte", Toast.LENGTH_SHORT).show();
+            Log.w("STORAGE : ", "could not setup alert file");
         }
 
     }
 
-    public void addUserNotification(BoundingBox boundingBox, String type){
+    public void addUserNotification(BoundingBox boundingBox){
 
-        JSONWrapper.addUserNotificationToFile(boundingBox, type, mainActivity);
+        JSONWrapper.addUserNotificationToFile(boundingBox, mainActivity);
 
     }
 
@@ -113,7 +127,19 @@ public class Manager {
     }
 
     public void postAlert(Alerte alerte){
+
         mainServer.postAlert(alerte);
+
+    }
+
+    private void generatePins(JSONObject obj){
+
+        try {
+            myMap.updateLists(obj);
+        } catch (Exception e){
+            Log.w("PIN", "could not load new icons");
+        }
+
     }
 
 
