@@ -11,10 +11,10 @@ import java.io.IOException;
 @RequestMapping("api")
 public class PutAlertController {
     @RequestMapping(value = "/putAlert")
-    public @ResponseBody boolean putAlertController(
+    public @ResponseBody String putAlertController(
             @RequestParam(value = "type") String type,
-            @RequestParam(value = "lat") double lat,
-            @RequestParam(value = "lng") double lng,
+            @RequestParam(value = "lat") String lat,
+            @RequestParam(value = "lng") String lng,
             @RequestParam(value = "date") String date
     ) throws IOException {
         return new PutAlert(type, lat, lng, date).isStatus();
