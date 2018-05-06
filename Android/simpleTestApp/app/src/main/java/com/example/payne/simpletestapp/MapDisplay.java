@@ -31,7 +31,7 @@ public class MapDisplay {
     private double[] lastTouch = {0, 0};
     static private Context ctx;
     public static boolean currentlyPlacingPin = false;
-    public static final BoundingBox QUEBEC_BOUNDING_BOX = new BoundingBox(63,40,-58,-84);
+    public static final BoundingBox QUEBEC_BOUNDING_BOX = new BoundingBox(63,-58,40,-84);
 
     public ArrayList<Alerte> terrainAlerts = new ArrayList<>();
     public ArrayList<Alerte> feuAlerts = new ArrayList<>();
@@ -100,6 +100,7 @@ public class MapDisplay {
 
         this.map.getOverlayManager().add(polygon);
         this.map.invalidate();
+        MainActivity.manager.addUserNotification(map.getBoundingBox());
     }
 
     public void removeAll(View view, MapEventsOverlay mapEventsOverlay) {
@@ -135,80 +136,6 @@ public class MapDisplay {
     }
 
 
-    public void addPin(GeoPoint pos, String type) {
-
-        if (!currentlyPlacingPin) {
-            currentlyPlacingPin = !currentlyPlacingPin;
-
-            Marker pin = new Marker(map);
-            pin.setPosition(pos);
-            pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
-
-            pin.setTitle("TITLE : A pin");
-            pin.setSubDescription("A subdescripton");
-            pin.setSnippet("A snippet");
-
-            switch (type) {
-                case "eau":
-                    pin.setIcon(eauIcon);
-                    break;
-                case "seisme":
-                    pin.setIcon(terrainIcon);
-                    break;
-                case "vent":
-                    pin.setIcon(meteoIcon);
-                    break;
-                case "feu":
-                    pin.setIcon(feuIcon);
-                    break;
-                default:
-                    break;
-            }
-
-            pin.setTitle("TITLE : A pin");
-            pin.setSubDescription("A subdescripton");
-            pin.setSnippet("A snippet");
-
-            map.getOverlays().add(pin);
-            this.map.invalidate();
-
-            MainActivity.lastPlacedPin = pin;
-            showPopUp();
-        }
-
-    }
-
-    public void drawCircleAtCenter(int radius, int shade) {
-
-        for (int i = 1; i <= shade + 1; i++) {
-
-            ArrayList<GeoPoint> circlePoints = new ArrayList<>();
-
-            for (float f = 0; f < 360; f += 1) {
-                circlePoints.add(new GeoPoint(
-                        this.getCenter().getLatitude(), this.getCenter().getLongitude())
-                        .destinationPoint(i * (radius / shade), f));
-            }
-
-            Polygon circle = new Polygon(this.map);    //see note below
-            circlePoints.add(circlePoints.get(0));    //forces the loop to close
-            circle.setPoints(circlePoints);
-
-            // define style
-            circle.setStrokeWidth(0);
-            circle.setStrokeColor(Color.argb(25, 10, 255, 10));
-            circle.setFillColor(Color.argb(75, 10, 255, 10));
-
-
-            map.getOverlayManager().add(circle);
-
-        }
-
-        map.invalidate();
-
-    }
-
-
     public void drawPolygon(JSONObject JsonPoints) {
 
         Log.w("method :", "drawPolygon");
@@ -222,19 +149,20 @@ public class MapDisplay {
         pin.setPosition(pos);
         pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
 
-        pin.setTitle(alerte.nom);
         pin.setIcon(icon);
 
-        String description = alerte.description + " " + alerte.type;
+        pin.setTitle("Type : " + alerte.type + "\n" + "Catégorie : " + alerte.nom);
+
+        String description = alerte.source + "\n" + alerte.dateDeMiseAJour + "\n" + alerte.territoire;
         pin.setSubDescription(description);
 
-        String snippet = alerte.dateDeMiseAJour + " " + alerte.urgence;
+        String snippet = alerte.description;
         pin.setSnippet(snippet);
 
         map.getOverlays().add(pin);
-        Log.w("NEW_PIN", pin.getPosition().toString());
         this.map.invalidate();
     }
+
 
     public void drawAlertPins(ArrayList<Alerte> alertes, Drawable icon){
 
@@ -269,26 +197,58 @@ public class MapDisplay {
 
         for (int i = 0; i < alertes.length(); i++) {
 
-            JSONObject alerte = alertes.getJSONObject(i);
+            JSONObject alerte = alertes.getJSONObject(i).getJSONObject("alerte");
+            Log.w("ALERTES", alerte.toString());
 
             switch (alerte.getString("type")) {
+
                 case "feu":
                     this.feuAlerts.add(new Alerte(alerte));
                     break;
+
                 case "eau":
                     this.eauAlerts.add(new Alerte(alerte));
                     break;
+
                 case "meteo":
                     this.meteoAlerts.add(new Alerte(alerte));
                     break;
+
                 case "terrain":
                     this.terrainAlerts.add(new Alerte(alerte));
                     break;
+
+                case "Inondation" :
+                    Alerte tmp1 = new Alerte(alerte);
+                    tmp1.type = "eau";
+                    this.eauAlerts.add(tmp1);
+                    break;
+
+                case "Suivi des cours d'eau" :
+                    Alerte tmp2 = new Alerte(alerte);
+                    tmp2.type = "eau";
+                    this.eauAlerts.add(tmp2);
+                    break;
+
+                case "vent" :
+                    Alerte tmp3 = new Alerte(alerte);
+                    tmp3.type = "meteo";
+                    this.meteoAlerts.add(tmp3);
+                    break;
+
+                case "pluie" :
+                    Alerte tmp4 = new Alerte(alerte);
+                    tmp4.type = "meteo";
+                    this.meteoAlerts.add(tmp4);
+                    break;
+
                 default:
                     this.meteoAlerts.add(new Alerte(alerte));
                     break;
             }
         }
+
+        this.map.invalidate();
 
     }
 

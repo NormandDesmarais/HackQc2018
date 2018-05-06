@@ -36,7 +36,7 @@ public class ServerConnection {
      *
      * @return
      */
-    public String ping(String path, BoundingBox boundingBox) throws Exception {
+    public String ping(BoundingBox boundingBox) throws Exception {
 
         String param =
             "?nord=" + boundingBox.getLatNorth() +
@@ -44,8 +44,7 @@ public class ServerConnection {
             "&est=" + boundingBox.getLonEast() +
             "&ouest=" + boundingBox.getLonWest();
 
-        String uri = this.serverAddress + path + param;
-        return this.getRequest(uri);
+        return this.getRequest(param);
 
     }
 
