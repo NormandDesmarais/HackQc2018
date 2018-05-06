@@ -5,6 +5,7 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,8 +17,10 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
+import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
 
 public class MainActivity extends AppCompatActivity implements MapEventsReceiver {
@@ -35,10 +38,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        //inflate and create the map
-        setContentView(R.layout.activity_main);
-
-        this.mainActivity = this;
+        mainActivity = this;
 
 
         //handle permissions first, before map is created. not depicted here
@@ -57,6 +57,9 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         //note, the load method also sets the HTTP User Agent to your application's package name, abusing osm's tile
         //servers will get you banned based on this string
 */
+
+        //inflate and create the map
+        setContentView(R.layout.activity_main);
 
         //creating the Toolbar?
         Toolbar toolbar = findViewById(R.id.toolbar);
@@ -83,18 +86,16 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         mapController.setCenter(startPoint);
 
         // setup app backend
-        try{
-            manager = new Manager(this, myMap);
-        } catch (Exception e){
-            e.printStackTrace();
-        }
+        manager = new Manager(this, myMap);
+
 
 
         // Logo button
         findViewById(R.id.logo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Merci d'utiliser Acclimate :) " +
+                        "Nous allons sauver la planête un petit geste à la fois!", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -217,6 +218,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
     @Override
     public boolean singleTapConfirmedHelper(GeoPoint p) {
+        InfoWindow.closeAllInfoWindowsOn(map);
         return false;
     }
 
@@ -300,11 +302,11 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             case (R.id.highlight):
                 // TODO: Server Request for the current Bounding Box
                 break;
-
+            /*
             case (R.id.maj):
                 // TODO: Server Request for all Monitored Zones
                 break;
-
+*/
             case (R.id.add):
                 // TODO: Add the current Bounding Box to Monitored Zones
                 myMap.highlightCurrent(findViewById(android.R.id.content));
@@ -322,7 +324,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             case (R.id.circleBtn):
                 myMap.drawCircleAtCenter(1000, 5);
                 break;
-            */
+
 
             case (R.id.cB_zones):
                 // TODO: Toggle "Display Monitored Zones"
@@ -336,7 +338,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 // TODO: Toggle "Display user-input Alerts/Historiques"
                 return false;
                 //break;
-
+*/
             case (R.id.cB_fire):
                 if (item.isChecked()) {
                     MapDisplay.feuFilter = false;
