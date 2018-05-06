@@ -108,9 +108,9 @@
         android:title="@string/centerBtn"
         app:showAsAction="never" />
     <item
-        android:id="@+id/addPin"
+        android:id="@+id/addUserPin"
         android:orderInCategory="104"
-        android:title="@string/addPin"
+        android:title="@string/addUserPin"
         app:showAsAction="never" />
     <item
         android:id="@+id/circleBtn"

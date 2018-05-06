@@ -1,13 +1,13 @@
 package com.example.payne.simpletestapp;
 
 import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -20,7 +20,6 @@ import org.osmdroid.tileprovider.tilesource.TileSourceFactory;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
-import org.osmdroid.api.IGeoPoint;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
@@ -36,6 +35,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     public static MainActivity mainActivity;
     public static Marker lastPlacedPin = null;
     public static Manager manager;
+    public static Menu menu;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -121,10 +122,9 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 // locally register alert
                 Alerte alert = new Alerte(lastPlacedPin.getPosition().getLongitude(),
                         lastPlacedPin.getPosition().getLatitude(),
-                        "meteo");
+                        "Meteo");
 
-                myMap.meteoAlerts.add(alert);
-                myMap.addAlertPin(alert, MapDisplay.meteoIcon);
+                myMap.addUserAlertPin(alert, MapDisplay.meteoIcon);
                 manager.postAlert(alert);
             }
         });
@@ -143,10 +143,9 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 // locally register alert
                 Alerte alert = new Alerte(lastPlacedPin.getPosition().getLongitude(),
                         lastPlacedPin.getPosition().getLatitude(),
-                        "eau");
+                        "Eau");
 
-                myMap.eauAlerts.add(alert);
-                myMap.addAlertPin(alert, MapDisplay.eauIcon);
+                myMap.addUserAlertPin(alert, MapDisplay.eauIcon);
                 manager.postAlert(alert);
 
             }
@@ -165,10 +164,9 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 // locally register alert
                 Alerte alert = new Alerte(lastPlacedPin.getPosition().getLongitude(),
                         lastPlacedPin.getPosition().getLatitude(),
-                        "feu");
+                        "Feu");
 
-                myMap.feuAlerts.add(alert);
-                myMap.addAlertPin(alert, MapDisplay.feuIcon);
+                myMap.addUserAlertPin(alert, MapDisplay.feuIcon);
                 manager.postAlert(alert);
 
             }
@@ -187,14 +185,14 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 // locally register alert
                 Alerte alert = new Alerte(lastPlacedPin.getPosition().getLongitude(),
                         lastPlacedPin.getPosition().getLatitude(),
-                        "terrain");
+                        "Terrain");
 
-                myMap.terrainAlerts.add(alert);
-                myMap.addAlertPin(alert, MapDisplay.terrainIcon);
+                myMap.addUserAlertPin(alert, MapDisplay.terrainIcon);
                 manager.postAlert(alert);
 
             }
         });
+
 
         // Cancel button
         findViewById(R.id.cancel_btn).setOnClickListener(new View.OnClickListener() {
@@ -229,7 +227,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
     @Override
     public boolean longPressHelper(GeoPoint p) {
-        myMap.addPin(p);
+        myMap.addUserPin(p);
         return false;
     }
 
@@ -237,6 +235,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     public boolean onCreateOptionsMenu(Menu menu) {
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.menu_main, menu);
+        MainActivity.menu = menu;
 
         //Setting up Search bar
         MenuItem ourSearchItem = menu.findItem(R.id.action_search);
@@ -313,8 +312,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 break;
 */
             case (R.id.add):
-                // TODO: Add the current Bounding Box to Monitored Zones
                 myMap.highlightCurrent(findViewById(android.R.id.content));
+                myMap.refresh();
                 break;
 
             /*
@@ -322,8 +321,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 myMap.removeAll(findViewById(android.R.id.content), mapEventsOverlay);
                 break;
 
-            case (R.id.addPin):
-                myMap.addPin(myMap.getCenter(), "seisme");
+            case (R.id.addUserPin):
+                myMap.addUserPin(myMap.getCenter(), "seisme");
                 break;
 
             case (R.id.circleBtn):
@@ -331,28 +330,44 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 break;
 
 
-            case (R.id.cB_zones):
-                // TODO: Toggle "Display Monitored Zones"
-                break;
 
             case (R.id.cB_histo):
                 // TODO: Toggle "Display Historique" (add filters)
                 break;
-
-            case (R.id.cB_users):
-                // TODO: Toggle "Display user-input Alerts/Historiques"
-                return false;
-                //break;
 */
+            case (R.id.cB_users):
+                if (item.isChecked()) {
+                    MapDisplay.showUserPins = false;
+                    item.setChecked(false);
+                    myMap.refresh();
+                } else {
+                    MapDisplay.showUserPins = true;
+                    item.setChecked(true);
+                    myMap.refresh();
+                }
+                break;
+
+            case (R.id.cB_zones):
+                if (item.isChecked()) {
+                    MapDisplay.isHighlight = false;
+                    item.setChecked(false);
+                    myMap.refresh();
+                } else {
+                    MapDisplay.isHighlight = true;
+                    item.setChecked(true);
+                    myMap.refresh();
+                }
+                break;
+
             case (R.id.cB_fire):
                 if (item.isChecked()) {
                     MapDisplay.feuFilter = false;
                     item.setChecked(false);
-                    myMap.refreshPins();
+                    myMap.refresh();
                 } else {
                     MapDisplay.feuFilter = true;
                     item.setChecked(true);
-                    myMap.refreshPins();
+                    myMap.refresh();
                 }
                 break;
 
@@ -360,11 +375,11 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 if (item.isChecked()) {
                     MapDisplay.eauFilter = false;
                     item.setChecked(false);
-                    myMap.refreshPins();
+                    myMap.refresh();
                 } else {
                     MapDisplay.eauFilter = true;
                     item.setChecked(true);
-                    myMap.refreshPins();
+                    myMap.refresh();
                 }
                 break;
 
@@ -372,11 +387,11 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 if (item.isChecked()) {
                     MapDisplay.terrainFilter = false;
                     item.setChecked(false);
-                    myMap.refreshPins();
+                    myMap.refresh();
                 } else {
                     MapDisplay.terrainFilter = true;
                     item.setChecked(true);
-                    myMap.refreshPins();
+                    myMap.refresh();
                 }
                 break;
 
@@ -384,11 +399,11 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 if (item.isChecked()) {
                     MapDisplay.meteoFilter = false;
                     item.setChecked(false);
-                    myMap.refreshPins();
+                    myMap.refresh();
                 } else {
                     MapDisplay.meteoFilter = true;
                     item.setChecked(true);
-                    myMap.refreshPins();
+                    myMap.refresh();
                 }
                 break;
 
@@ -407,8 +422,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         super.onResume();
         //this will refresh the osmdroid configuration on resuming.
         //if you make changes to the configuration, use
-        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
+        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
         map.onResume(); //needed for compass, my location overlays, v6.0.0 and up
     }
 

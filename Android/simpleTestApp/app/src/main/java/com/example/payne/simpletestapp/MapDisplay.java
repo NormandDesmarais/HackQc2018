@@ -31,13 +31,21 @@ public class MapDisplay {
     private double[] lastTouch = {0, 0};
     static private Context ctx;
     public static boolean currentlyPlacingPin = false;
+    public static String last_type_put_down;
     public static final BoundingBox QUEBEC_BOUNDING_BOX = new BoundingBox(63,-58,40,-84);
 
-    public ArrayList<Alerte> terrainAlerts = new ArrayList<>();
-    public ArrayList<Alerte> feuAlerts = new ArrayList<>();
-    public ArrayList<Alerte> eauAlerts = new ArrayList<>();
-    public ArrayList<Alerte> meteoAlerts = new ArrayList<>();
+    public ArrayList<Marker> terrainAlerts = new ArrayList<>();
+    public ArrayList<Marker> feuAlerts = new ArrayList<>();
+    public ArrayList<Marker> eauAlerts = new ArrayList<>();
+    public ArrayList<Marker> meteoAlerts = new ArrayList<>();
 
+    public ArrayList<Marker> userPins = new ArrayList<>();
+    public ArrayList<Polygon> polygones = new ArrayList<>();
+    public ArrayList<Polygon> highlights = new ArrayList<>();
+
+
+    public static boolean isHighlight = false;
+    public static boolean showUserPins = true;
     public static boolean terrainFilter = true;
     public static boolean feuFilter = true;
     public static boolean eauFilter = true;
@@ -98,8 +106,7 @@ public class MapDisplay {
         polygon.setSnippet("A Snippet");
         polygon.setSubDescription("A Subdescription");
 
-        this.map.getOverlayManager().add(polygon);
-        this.map.invalidate();
+        this.highlights.add(polygon);
         MainActivity.manager.addUserNotification(map.getBoundingBox());
     }
 
@@ -114,7 +121,7 @@ public class MapDisplay {
 
     }
 
-    public void addPin(GeoPoint pos) {
+    public void addUserPin(GeoPoint pos) {
 
         if (!currentlyPlacingPin) {
             currentlyPlacingPin = !currentlyPlacingPin;
@@ -132,6 +139,7 @@ public class MapDisplay {
 
             MainActivity.lastPlacedPin = pin;
             showPopUp();
+
         }
     }
 
@@ -142,7 +150,13 @@ public class MapDisplay {
 
     }
 
-    public void addAlertPin(Alerte alerte, Drawable icon) {
+    public void addUserAlertPin(Alerte alerte, Drawable icon) {
+
+        if (!showUserPins){
+            showUserPins = !showUserPins;
+
+            MainActivity.mainActivity.menu.findItem(R.id.cB_users).setChecked(true);
+        }
 
         GeoPoint pos = new GeoPoint(alerte.getLatitude(), alerte.getLongitude());
         Marker pin = new Marker(map);
@@ -159,15 +173,36 @@ public class MapDisplay {
         String snippet = alerte.description;
         pin.setSnippet(snippet);
 
-        map.getOverlays().add(pin);
-        this.map.invalidate();
+        this.userPins.add(pin);
+        this.refresh();
+    }
+
+    public Marker createAlertPin(Alerte alerte, Drawable icon) {
+
+        GeoPoint pos = new GeoPoint(alerte.getLatitude(), alerte.getLongitude());
+        Marker pin = new Marker(map);
+        pin.setPosition(pos);
+        pin.setAnchor(Marker.ANCHOR_CENTER, Marker.ANCHOR_BOTTOM);
+
+        pin.setIcon(icon);
+
+        pin.setTitle("Type : " + alerte.type + "\n" + "Catégorie : " + alerte.nom);
+
+        String description = alerte.source + "\n" + alerte.dateDeMiseAJour + "\n" + alerte.territoire;
+        pin.setSubDescription(description);
+
+        String snippet = alerte.description;
+        pin.setSnippet(snippet);
+
+        return pin;
     }
 
 
-    public void drawAlertPins(ArrayList<Alerte> alertes, Drawable icon){
+    public void drawAlertPins(ArrayList<Marker> markers, Drawable icon){
 
-        for (Alerte alerte : alertes) {
-            this.addAlertPin(alerte, icon);
+        for (Marker m : markers) {
+            map.getOverlayManager().add(m);
+
         }
     }
 
@@ -201,48 +236,48 @@ public class MapDisplay {
 
             switch (alerte.getString("type")) {
 
-                case "feu":
-                    this.feuAlerts.add(new Alerte(alerte));
+                case "Feu":
+                    this.feuAlerts.add(createAlertPin(new Alerte(alerte), feuIcon));
                     break;
 
-                case "eau":
-                    this.eauAlerts.add(new Alerte(alerte));
+                case "Eau":
+                    this.eauAlerts.add(createAlertPin(new Alerte(alerte), eauIcon));
                     break;
 
-                case "meteo":
-                    this.meteoAlerts.add(new Alerte(alerte));
+                case "Meteo":
+                    this.meteoAlerts.add(createAlertPin(new Alerte(alerte), meteoIcon));
                     break;
 
-                case "terrain":
-                    this.terrainAlerts.add(new Alerte(alerte));
+                case "Terrain":
+                    this.terrainAlerts.add(createAlertPin(new Alerte(alerte), terrainIcon));
                     break;
 
                 case "Inondation" :
                     Alerte tmp1 = new Alerte(alerte);
-                    tmp1.type = "eau";
-                    this.eauAlerts.add(tmp1);
+                    tmp1.type = "Eau";
+                    this.eauAlerts.add(createAlertPin(tmp1, eauIcon));
                     break;
 
                 case "Suivi des cours d'eau" :
                     Alerte tmp2 = new Alerte(alerte);
-                    tmp2.type = "eau";
-                    this.eauAlerts.add(tmp2);
+                    tmp2.type = "Eau";
+                    this.eauAlerts.add(createAlertPin(tmp2, eauIcon));
                     break;
 
                 case "vent" :
                     Alerte tmp3 = new Alerte(alerte);
-                    tmp3.type = "meteo";
-                    this.meteoAlerts.add(tmp3);
+                    tmp3.type = "Meteo";
+                    this.meteoAlerts.add(createAlertPin(tmp3, meteoIcon));
                     break;
 
                 case "pluie" :
                     Alerte tmp4 = new Alerte(alerte);
-                    tmp4.type = "meteo";
-                    this.meteoAlerts.add(tmp4);
+                    tmp4.type = "Meteo";
+                    this.meteoAlerts.add(createAlertPin(tmp4, meteoIcon));
                     break;
 
                 default:
-                    this.meteoAlerts.add(new Alerte(alerte));
+                    this.meteoAlerts.add(createAlertPin(new Alerte(alerte), meteoIcon));
                     break;
             }
         }
@@ -251,21 +286,39 @@ public class MapDisplay {
 
     }
 
-    public void displayLists() {
+    public void redrawScreen() {
 
         if(feuFilter) this.drawAlertPins(feuAlerts, feuIcon);
         if(eauFilter) this.drawAlertPins(eauAlerts, eauIcon);
         if(terrainFilter) this.drawAlertPins(terrainAlerts, terrainIcon);
         if(meteoFilter) this.drawAlertPins(meteoAlerts, meteoIcon);
 
+        for (Polygon p : polygones){
+            this.map.getOverlayManager().add(p);
+        }
+
+        if (isHighlight){
+            for (Polygon p : highlights){
+                this.map.getOverlayManager().add(p);
+            }
+        }
+
+        if (showUserPins) {
+            for (Marker m : userPins) {
+                map.getOverlayManager().add(m);
+            }
+        }
+
+        this.map.invalidate();
+
     }
 
-    public void refreshPins(){
+    public void refresh(){
 
         this.removeAll(MainActivity.mainActivity.findViewById(android.R.id.content),
                 MainActivity.mapEventsOverlay);
-        this.displayLists();
-        this.map.invalidate();
+        this.redrawScreen();
+
     }
 
 }
