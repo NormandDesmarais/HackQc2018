@@ -261,7 +261,6 @@ public class JSONWrapper {
             outputStream.close();
 
         } catch (Exception j){
-            Toast.makeText(ctx, "Désolé : impossible de rajouter une nouvelle notification", Toast.LENGTH_SHORT).show();
             j.printStackTrace();
         }
 
@@ -281,7 +280,7 @@ public class JSONWrapper {
 
 
         } catch (Exception e){
-            Toast.makeText(ctx, "Impossible de créer le fichier d'alerte", Toast.LENGTH_SHORT).show();
+            e.printStackTrace();
         }
 
     }

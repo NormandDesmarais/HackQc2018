@@ -1,9 +1,11 @@
 package com.example.payne.simpletestapp;
 
+import android.graphics.drawable.Drawable;
 import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import org.json.JSONArray;
 import org.json.JSONObject;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.views.MapView;
@@ -14,6 +16,10 @@ import java.io.File;
 import java.util.ArrayList;
 
 import static com.example.payne.simpletestapp.MapDisplay.QUEBEC_BOUNDING_BOX;
+import static com.example.payne.simpletestapp.MapDisplay.eauIcon;
+import static com.example.payne.simpletestapp.MapDisplay.feuIcon;
+import static com.example.payne.simpletestapp.MapDisplay.meteoIcon;
+import static com.example.payne.simpletestapp.MapDisplay.terrainIcon;
 
 public class Manager {
 
@@ -37,8 +43,9 @@ public class Manager {
         this.setupStorage();
         this.getPinsFromServer();
 
-        myMap.map.invalidate();
         myMap.redrawScreen();
+        myMap.map.invalidate();
+
 
         for (final Marker pin : myMap.userPins){
             pin.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
@@ -68,13 +75,8 @@ public class Manager {
             Log.w("QUEBEC", quebec);
             userPins = mainServer.getRequest("/getUserAlerts", "");
             Log.w("userPIns", userPins);
-            String histoParam = "?nord=" + QUEBEC_BOUNDING_BOX.getLatNorth() +
-                                "&sud=" + QUEBEC_BOUNDING_BOX.getLatSouth() +
-                                "&est=" + QUEBEC_BOUNDING_BOX.getLonEast() +
-                                "&ouest=" + QUEBEC_BOUNDING_BOX.getLonWest();
-            histoPins = mainServer.getRequest("/getHisto", histoParam);
 
-            this.generatePins(new JSONObject(quebec), new JSONObject(userPins), new JSONObject(histoPins));
+            this.generatePins(new JSONObject(quebec), new JSONObject(userPins));
 
 
         } catch (Exception e){
@@ -139,8 +141,6 @@ public class Manager {
         try {
             currentFile = (new JSONWrapper(Manager.ALERT_FILE_PATH)).getStringContent();
 
-
-
             // merge file
 
             JSONObject jsonServer = new JSONObject(newFileFromServer);
@@ -161,10 +161,10 @@ public class Manager {
 
     }
 
-    private void generatePins(JSONObject serverPins, JSONObject userPins, JSONObject histoPins){
+    private void generatePins(JSONObject serverPins, JSONObject userPins){
 
         try {
-            myMap.updateLists(serverPins, userPins, histoPins);
+            myMap.updateLists(serverPins, userPins);
         } catch (Exception e){
             Log.w("PIN", "could not load new icons");
         }
@@ -182,6 +182,53 @@ public class Manager {
 
         this.getPinsFromServer();
         myMap.redrawScreen();
+
+    }
+
+    public void getHistorique () {
+
+        String histoParam = "?nord=" + QUEBEC_BOUNDING_BOX.getLatNorth() +
+                "&sud=" + QUEBEC_BOUNDING_BOX.getLatSouth() +
+                "&est=" + QUEBEC_BOUNDING_BOX.getLonEast() +
+                "&ouest=" + QUEBEC_BOUNDING_BOX.getLonWest();
+
+        try {
+
+            String histoPins = mainServer.getRequest("/getHisto", histoParam);
+            JSONArray allHistoAlerts = new JSONObject(histoPins).getJSONArray("alertes");
+
+            for (int i = 0; i < allHistoAlerts.length(); i++) {
+
+                JSONObject histoAlert = allHistoAlerts.getJSONObject(i).getJSONObject("alerte");
+
+                Drawable currentIcon;
+
+                switch (histoAlert.getString("type")) {
+                    case "Eau":
+                        currentIcon = eauIcon;
+                        break;
+                    case "Feu":
+                        currentIcon = feuIcon;
+                        break;
+                    case "Meteo":
+                        currentIcon = meteoIcon;
+                        break;
+                    case "Terrain":
+                        currentIcon = terrainIcon;
+                        break;
+                    default:
+                        currentIcon = meteoIcon;
+                }
+
+                myMap.historique.add(myMap.createAlertPin(new Alerte(histoAlert), currentIcon));
+
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+
+
 
     }
 
