@@ -8,6 +8,6 @@ public class AcclimateApplication {
 
 	public static void main(String[] args) {
 		StaticParser staticParser = new StaticParser();
-		SpringApplication.run(AcclimateApplication.class, args);
+		//SpringApplication.run(AcclimateApplication.class, args);
 	}
 }
