@@ -263,7 +263,7 @@ public class MapDisplay {
     public void refreshPins(){
 
         this.removeAll(MainActivity.mainActivity.findViewById(android.R.id.content),
-                       MainActivity.mapEventsOverlay);
+                MainActivity.mapEventsOverlay);
         this.displayLists();
         this.map.invalidate();
     }
