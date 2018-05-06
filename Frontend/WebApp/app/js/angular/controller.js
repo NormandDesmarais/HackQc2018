@@ -2,39 +2,52 @@ var app = angular.module('appController', [])
 
 app.controller('mainController', ['$scope', 'Request', function($scope, Request) {
 
-    var alertes = [];
-    Request.getAll().then(function(data){
-        for(i in data.data.alertes){
-            data.data.alertes[i].alerte.risque = data.data.alertes[i].alerte.type;
-            data.data.alertes[i].alerte.type = "Feature";
-            delete data.data.alertes[i].alerte.id;
+    function parseData(data){
+        var arr = [];
+        for(i in data){
+            data[i].alerte.risque = data[i].alerte.type;
+            data[i].alerte.type = "Feature";
+            delete data[i].alerte.id;
             var exist = false;
-            for(j in alertes){
-                if(data.data.alertes[i].alerte.risque != alertes[j].type){
+            for(j in arr){
+                if(data[i].alerte.risque != arr[j].type){
                     continue;
                 }
                 else{
                     exist = true;
-                    alertes[j].data.push(data.data.alertes[i].alerte);
+                    arr[j].data.push(data[i].alerte);
                     break;
                 }
             }
             if(!exist){
-                alertes.push({
-                    type: data.data.alertes[i].alerte.risque,
+                arr.push({
+                    type: data[i].alerte.risque,
                     data: []
                 });
-                alertes[alertes.length - 1].data.push(data.data.alertes[i].alerte);
+                arr[arr.length - 1].data.push(data[i].alerte);
             }
-
         }
-        console.log(alertes);
+        return arr;
+    }
+
+    var userAlertes = [];
+    Request.getUserPins().then(function(data){
+        userAlertes = parseData(data.data.alertes);
+        loadAllPins(userAlertes);
+        $scope.userPins = loadLeftPaneMenu(userAlertes);
+    }, function(err){
+        console.log(err);
+    })
+
+    var alertes = [];
+    Request.getAll().then(function(data){
+        alertes = parseData(data.data.alertes);
         loadAllPins(alertes);
-        loadLeftPaneMenu(alertes);
+        $scope.risques = loadLeftPaneMenu(alertes);
     })
 
     function loadLeftPaneMenu(alertes){
-        $scope.risques = [
+        var arr = [
             {
                 show: true,
                 title: "Tout",
@@ -46,6 +59,7 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
             }
         ]
         for(i in alertes){
+            var icon = "../images/icon_pluie.png";
             switch (alertes[i].type){
                 case "Inondation" :
                     icon = "../images/icon_goutte.png";
@@ -62,8 +76,20 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
                 case "Neige" :
                     icon = "../images/icon_pluie.png";
                     break;
+                case "Meteo" :
+                    icon = "../images/icon_vent.png";
+                    break;
+                case "Feu" :
+                    icon = "../images/icon_feu.png";
+                    break;
+                case "Terrain" :
+                    icon = "../images/icon_seisme.png";
+                    break;
+                case "Eau" :
+                    icon = "../images/icon_goutte.png";
+                    break;
             }
-            $scope.risques.push({
+            arr.push({
                 show: true,
                 title: alertes[i].type,
                 icon: icon,
@@ -73,47 +99,85 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
                 }
             })
         }
+        return arr;
     }
 
-    $scope.showHideRisque = function(i){
-        $scope.risques[i].show = !$scope.risques[i].show;
-        if($scope.risques[i].show){
-            if(i == 0){
-                for(j in $scope.risques){
-                    if(j == 0) continue;
-                    if(!$scope.risques[j].show){
-                        loadPins(alertes[j-1]);
-                        $scope.risques[j].show = true;
+    $scope.showHideRisque = function(i, scope){
+        if(scope == 'risques'){
+            $scope.risques[i].show = !$scope.risques[i].show;
+            if($scope.risques[i].show){
+                if(i == 0){
+                    for(j in $scope.risques){
+                        if(j == 0) continue;
+                        if(!$scope.risques[j].show){
+                            loadPins(alertes[j-1]);
+                            $scope.risques[j].show = true;
+                        }
                     }
-                }
-                return;
-            }
-            loadPins(alertes[i-1]);
-            for(var i = 1; i < $scope.risques.length; i++){
-                if($scope.risques[i].show == false){
                     return;
                 }
-            }
-            $scope.risques[0].show = true;
-        }
-        else{
-            $scope.risques[0].show = false;
-            if(i == 0){
-                for(j in $scope.risques){
-                    if(j == 0) continue;
-                    if($scope.risques[j].show){
-                        removeLayer($scope.risques[j].title)
-                        $scope.risques[j].show = false;
+                loadPins(alertes[i-1]);
+                for(var i = 1; i < $scope.risques.length; i++){
+                    if($scope.risques[i].show == false){
+                        return;
                     }
                 }
-                return;
+                $scope.risques[0].show = true;
             }
-            removeLayer($scope.risques[i].title)
+            else{
+                $scope.risques[0].show = false;
+                if(i == 0){
+                    for(j in $scope.risques){
+                        if(j == 0) continue;
+                        if($scope.risques[j].show){
+                            removeLayer($scope.risques[j].title)
+                            $scope.risques[j].show = false;
+                        }
+                    }
+                    return;
+                }
+                removeLayer($scope.risques[i].title)
+            }
+        }else if (scope == 'userPins'){
+            $scope.userPins[i].show = !$scope.userPins[i].show;
+            if($scope.userPins[i].show){
+                if(i == 0){
+                    for(j in $scope.userPins){
+                        if(j == 0) continue;
+                        if(!$scope.userPins[j].show){
+                            loadPins(userAlertes[j-1]);
+                            $scope.userPins[j].show = true;
+                        }
+                    }
+                    return;
+                }
+                loadPins(userAlertes[i-1]);
+                for(var i = 1; i < $scope.userPins.length; i++){
+                    if($scope.userPins[i].show == false){
+                        return;
+                    }
+                }
+                $scope.userPins[0].show = true;
+            }
+            else{
+                $scope.userPins[0].show = false;
+                if(i == 0){
+                    for(j in $scope.userPins){
+                        if(j == 0) continue;
+                        if($scope.userPins[j].show){
+                            removeLayer($scope.userPins[j].title)
+                            $scope.userPins[j].show = false;
+                        }
+                    }
+                    return;
+                }
+                removeLayer($scope.userPins[i].title)
+            }
         }
+
     }
 
     function loadAllPins(alertes){
-        console.log(alertes);
         for(i in alertes){
             var jsonObject = {
                 type: "FeatureCollection",
@@ -134,7 +198,6 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
 
 
     function pinsToMap(type, jsonFile){
-        console.log(jsonFile);
         var icon = "../images/pin_feu.png";
 
         switch (type){
@@ -152,6 +215,18 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
                 break;
             case "Neige" :
                 icon = "../images/pin_pluie.png";
+                break;
+            case "Meteo" :
+                icon = "../images/pin_vent.png";
+                break;
+            case "Feu" :
+                icon = "../images/pin_feu.png";
+                break;
+            case "Terrain" :
+                icon = "../images/pin_seisme.png";
+                break;
+            case "Eau" :
+                icon = "../images/pin_goutte.png";
                 break;
         }
 
@@ -204,8 +279,6 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
     }
 
     clickedPin = function(coords){
-        console.log(coords);
-        console.log(alertes);
         for(i in alertes){
             var found = false;
             for(j in alertes[i].data){
