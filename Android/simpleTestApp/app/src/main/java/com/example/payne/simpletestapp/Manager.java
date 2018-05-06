@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 import org.osmdroid.util.BoundingBox;
+import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
 
 import java.io.File;
@@ -17,7 +18,7 @@ public class Manager {
     public static final String NOTIFICATION_FILE_PATH = "/notifications.json";
     public static final String ALERT_FILE_PATH = "alertes";
 
-    public ArrayList<BoundingBox> alertesAbonnées = new ArrayList<>();
+    public ArrayList<BoundingBox> alertesAbonnees = new ArrayList<>();
 
     public ServerConnection mainServer;
     public MainActivity mainActivity;
@@ -38,6 +39,16 @@ public class Manager {
 
         myMap.map.invalidate();
         myMap.redrawScreen();
+
+        for (Marker pin : myMap.userPins){
+            pin.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker, MapView mapView) {
+                    Toast.makeText(mainActivity, "CONFIRM BUBBLE", Toast.LENGTH_SHORT).show();
+                    return true;
+                }
+            });
+        }
 
 
     }
@@ -158,28 +169,12 @@ public class Manager {
 
     public void queryNewPins(){
 
-        /*
-        for (int i = 0; i < myMap.terrainAlerts.size(); i++){
-            myMap.terrainAlerts.remove(i);
-        }
-        for (int i = 0; i < myMap.feuAlerts.size(); i++){
-            myMap.feuAlerts.remove(i);
-        }
-        for (int i = 0; i < myMap.eauAlerts.size(); i++){
-            myMap.eauAlerts.remove(i);
-        }
-        for (int i = 0; i < myMap.meteoAlerts.size(); i++){
-            myMap.meteoAlerts.remove(i);
-        }
-        for (int i = 0; i < myMap.userPins.size(); i++){
-            myMap.userPins.remove(i);
-        }
-*/
         myMap.terrainAlerts = new ArrayList<>();
         myMap.feuAlerts = new ArrayList<>();
         myMap.eauAlerts = new ArrayList<>();
         myMap.meteoAlerts = new ArrayList<>();
         myMap.userPins = new ArrayList<>();
+        myMap.historique = new ArrayList<>();
 
         this.getPinsFromServer();
         myMap.redrawScreen();

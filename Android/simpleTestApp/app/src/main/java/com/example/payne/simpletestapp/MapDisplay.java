@@ -40,7 +40,8 @@ public class MapDisplay {
     public ArrayList<Marker> meteoAlerts = new ArrayList<>();
 
     public ArrayList<Marker> userPins = new ArrayList<>();
-    public ArrayList<Polygon> polygones = new ArrayList<>();
+    public ArrayList<Marker> historique = new ArrayList<>();
+
     public ArrayList<Polygon> highlights = new ArrayList<>();
 
 
@@ -50,6 +51,7 @@ public class MapDisplay {
     public static boolean feuFilter = true;
     public static boolean eauFilter = true;
     public static boolean meteoFilter = true;
+    public static boolean historiqueFilter = false;
 
     public static Drawable eauIcon;// = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_goutte);
     public static Drawable feuIcon;// = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_feu);
@@ -60,6 +62,7 @@ public class MapDisplay {
     public MapDisplay(MapView map, Context ctx) {
         this.map = map;
         this.ctx = ctx;
+
 
         eauIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_goutte);
         feuIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_feu);
@@ -319,9 +322,6 @@ public class MapDisplay {
         if(terrainFilter) this.drawAlertPins(terrainAlerts, terrainIcon);
         if(meteoFilter) this.drawAlertPins(meteoAlerts, meteoIcon);
 
-        for (Polygon p : polygones){
-            this.map.getOverlayManager().add(p);
-        }
 
         if (isHighlight){
             for (Polygon p : highlights){
@@ -332,6 +332,12 @@ public class MapDisplay {
         if (showUserPins) {
             for (Marker m : userPins) {
                 map.getOverlayManager().add(m);
+            }
+        }
+
+        if (historiqueFilter) {
+            for (Marker h : userPins) {
+                map.getOverlayManager().add(h);
             }
         }
 
