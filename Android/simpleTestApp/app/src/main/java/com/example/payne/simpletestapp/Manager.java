@@ -5,6 +5,7 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 import org.osmdroid.util.BoundingBox;
+import org.osmdroid.views.overlay.Marker;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -33,23 +34,32 @@ public class Manager {
         this.myMap = myMap;
 
         this.setupStorage();
+        this.getPinsFromServer();
 
-        // test server setup
+        myMap.map.invalidate();
+        myMap.redrawScreen();
+
+
+    }
+
+
+    public void getPinsFromServer(){
+
         this.mainServer = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
 
-        String quebec;
+        String quebec, userPins;
 
         try {
 
             quebec = mainServer.ping(MapDisplay.QUEBEC_BOUNDING_BOX);
-            this.generatePins(new JSONObject(quebec));
+            userPins = mainServer.getRequest("/getUserAlerts", "");
+
+            this.generatePins(new JSONObject(quebec), new JSONObject(userPins));
+
 
         } catch (Exception e){
             Log.w("PING", "failed to ping server" + Manager.SERVER_ADDR);
         }
-
-        myMap.map.invalidate();
-        myMap.redrawScreen();
 
 
     }
@@ -136,17 +146,44 @@ public class Manager {
 
     }
 
-    private void generatePins(JSONObject obj){
+    private void generatePins(JSONObject serverPins, JSONObject userPins){
 
         try {
-            myMap.updateLists(obj);
+            myMap.updateLists(serverPins, userPins);
         } catch (Exception e){
             Log.w("PIN", "could not load new icons");
         }
 
     }
 
+    public void queryNewPins(){
 
+        /*
+        for (int i = 0; i < myMap.terrainAlerts.size(); i++){
+            myMap.terrainAlerts.remove(i);
+        }
+        for (int i = 0; i < myMap.feuAlerts.size(); i++){
+            myMap.feuAlerts.remove(i);
+        }
+        for (int i = 0; i < myMap.eauAlerts.size(); i++){
+            myMap.eauAlerts.remove(i);
+        }
+        for (int i = 0; i < myMap.meteoAlerts.size(); i++){
+            myMap.meteoAlerts.remove(i);
+        }
+        for (int i = 0; i < myMap.userPins.size(); i++){
+            myMap.userPins.remove(i);
+        }
+*/
+        myMap.terrainAlerts = new ArrayList<>();
+        myMap.feuAlerts = new ArrayList<>();
+        myMap.eauAlerts = new ArrayList<>();
+        myMap.meteoAlerts = new ArrayList<>();
+        myMap.userPins = new ArrayList<>();
 
+        this.getPinsFromServer();
+        myMap.redrawScreen();
+
+    }
 
 }

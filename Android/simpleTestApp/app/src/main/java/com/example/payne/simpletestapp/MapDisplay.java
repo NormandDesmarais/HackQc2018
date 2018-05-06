@@ -51,15 +51,21 @@ public class MapDisplay {
     public static boolean eauFilter = true;
     public static boolean meteoFilter = true;
 
-    public static final Drawable eauIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_goutte);
-    public static final Drawable feuIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_feu);
-    public static final Drawable terrainIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_seisme);
-    public static final Drawable meteoIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_vent);
+    public static Drawable eauIcon;// = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_goutte);
+    public static Drawable feuIcon;// = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_feu);
+    public static Drawable terrainIcon;// = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_seisme);
+    public static Drawable meteoIcon;// = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_vent);
 
 
     public MapDisplay(MapView map, Context ctx) {
         this.map = map;
         this.ctx = ctx;
+
+        eauIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_goutte);
+        feuIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_feu);
+        terrainIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_seisme);
+        meteoIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_vent);
+
     }
 
 
@@ -98,13 +104,14 @@ public class MapDisplay {
         polygon.setPoints(geoPoints);
 
         // style
-        polygon.setStrokeColor(Color.argb(75, 255, 0, 0));
+        polygon.setStrokeColor(Color.argb(75, 255, 100, 0));
         polygon.setStrokeWidth(0);
 
         // infos
-        polygon.setTitle("TITLE : A sample polygon");
-        polygon.setSnippet("A Snippet");
-        polygon.setSubDescription("A Subdescription");
+        polygon.setTitle("Zone d'alerte");
+        polygon.setSnippet("Vous recevrez desnotifications lorsqu'une nouvelle alerte " +
+                "sera détecté à l'intérieur de cette zone");
+        polygon.setSubDescription("pour vous désabonner èa cette alerte, aller des votre compte client");
 
         this.highlights.add(polygon);
         MainActivity.manager.addUserNotification(map.getBoundingBox());
@@ -226,60 +233,79 @@ public class MapDisplay {
         MainActivity.mainActivity.findViewById(R.id.pop_up).setVisibility(View.VISIBLE);
     }
 
-    public void updateLists(JSONObject allPins) throws Exception {
+    public void updateLists(JSONObject serverPins, JSONObject userPins) throws Exception {
 
-        JSONArray alertes = allPins.getJSONArray("alertes");
+        JSONArray allServerAlerts = serverPins.getJSONArray("alertes");
+        JSONArray allUserAlerts = userPins.getJSONArray("alertes");
 
-        for (int i = 0; i < alertes.length(); i++) {
+        for (int i = 0; i < allServerAlerts.length(); i++) {
 
-            JSONObject alerte = alertes.getJSONObject(i).getJSONObject("alerte");
+            JSONObject serverAlert = allServerAlerts.getJSONObject(i).getJSONObject("alerte");
 
-            switch (alerte.getString("type")) {
+            switch (serverAlert.getString("type")) {
 
                 case "Feu":
-                    this.feuAlerts.add(createAlertPin(new Alerte(alerte), feuIcon));
+                    this.feuAlerts.add(createAlertPin(new Alerte(serverAlert), feuIcon));
                     break;
 
                 case "Eau":
-                    this.eauAlerts.add(createAlertPin(new Alerte(alerte), eauIcon));
+                    this.eauAlerts.add(createAlertPin(new Alerte(serverAlert), eauIcon));
                     break;
 
                 case "Meteo":
-                    this.meteoAlerts.add(createAlertPin(new Alerte(alerte), meteoIcon));
+                    this.meteoAlerts.add(createAlertPin(new Alerte(serverAlert), meteoIcon));
                     break;
 
                 case "Terrain":
-                    this.terrainAlerts.add(createAlertPin(new Alerte(alerte), terrainIcon));
+                    this.terrainAlerts.add(createAlertPin(new Alerte(serverAlert), terrainIcon));
                     break;
 
                 case "Inondation" :
-                    Alerte tmp1 = new Alerte(alerte);
+                    Alerte tmp1 = new Alerte(serverAlert);
                     tmp1.type = "Eau";
                     this.eauAlerts.add(createAlertPin(tmp1, eauIcon));
                     break;
 
                 case "Suivi des cours d'eau" :
-                    Alerte tmp2 = new Alerte(alerte);
+                    Alerte tmp2 = new Alerte(serverAlert);
                     tmp2.type = "Eau";
                     this.eauAlerts.add(createAlertPin(tmp2, eauIcon));
                     break;
 
                 case "vent" :
-                    Alerte tmp3 = new Alerte(alerte);
+                    Alerte tmp3 = new Alerte(serverAlert);
                     tmp3.type = "Meteo";
                     this.meteoAlerts.add(createAlertPin(tmp3, meteoIcon));
                     break;
 
                 case "pluie" :
-                    Alerte tmp4 = new Alerte(alerte);
+                    Alerte tmp4 = new Alerte(serverAlert);
                     tmp4.type = "Meteo";
                     this.meteoAlerts.add(createAlertPin(tmp4, meteoIcon));
                     break;
 
                 default:
-                    this.meteoAlerts.add(createAlertPin(new Alerte(alerte), meteoIcon));
+                    this.meteoAlerts.add(createAlertPin(new Alerte(serverAlert), meteoIcon));
                     break;
             }
+        }
+
+        for (int i = 0; i < allUserAlerts.length(); i++){
+
+            JSONObject userAlert = allUserAlerts.getJSONObject(i).getJSONObject("alerte");
+
+            Drawable currentIcon;
+
+            switch (userAlert.getString("type")){
+                case "Eau" : currentIcon = eauIcon; break;
+                case "Feu" : currentIcon = feuIcon; break;
+                case "Meteo" : currentIcon = meteoIcon; break;
+                case "Terrain" : currentIcon = terrainIcon; break;
+                default: currentIcon = meteoIcon;
+            }
+
+            this.userPins.add(createAlertPin(new Alerte(userAlert), currentIcon));
+
         }
 
         this.map.invalidate();

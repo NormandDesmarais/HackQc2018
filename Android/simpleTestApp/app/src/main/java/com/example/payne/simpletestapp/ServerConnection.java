@@ -64,15 +64,11 @@ public class ServerConnection {
 
                 try{
                     URL obj = new URL(serverAddress + path + param);
-
-                    Log.w("POS URL", obj.toString());
-
                     HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
                     // optional default is GET
                     con.setRequestMethod("GET");
-                    int responseCode = con.getResponseCode();
-                    // Log.w("response code : ", responseCode + "");
+                    // int responseCode = con.getResponseCode();
 
                     BufferedReader in = new BufferedReader(new InputStreamReader(con.getInputStream()));
                     String inputLine;
