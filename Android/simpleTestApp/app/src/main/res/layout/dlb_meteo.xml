@@ -15,7 +15,7 @@
         android:src="@drawable/icon_vent" />
 
     <TextView
-        android:id="@+id/test_button_text2"
+        android:id="@+id/dlb_meteoMain"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:textSize="20sp"
@@ -23,12 +23,12 @@
         android:layout_toRightOf="@+id/test_button_image"
         android:text="Relative layout" />
     <TextView
-        android:id="@+id/test_button_text1"
+        android:id="@+id/dlb_meteoSec"
         android:layout_width="wrap_content"
         android:text="Compound button"
         android:layout_height="wrap_content"
-        android:layout_below="@+id/test_button_text2"
-        android:layout_alignLeft="@+id/test_button_text2" />
+        android:layout_below="@+id/dlb_meteoMain"
+        android:layout_alignLeft="@+id/dlb_meteoMain" />
 
     <Button
         android:id="@+id/dlb_meteo"

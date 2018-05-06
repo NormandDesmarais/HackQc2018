@@ -31,7 +31,6 @@ public class Home extends AppCompatActivity {
         int meteo = 0;
         int terrain = 0;
 
-
         try {
             quebec = tmpServer.ping(MapDisplay.QUEBEC_BOUNDING_BOX);
             userPins = tmpServer.getRequest("/getUserAlerts", "");
@@ -62,11 +61,19 @@ public class Home extends AppCompatActivity {
                     default: meteo++; break;
                 }
             }
-
-
         } catch (Exception e){
             e.printStackTrace();
         }
+
+        ((TextView) findViewById(R.id.dlb_eauMain)).setText(String.valueOf(eau) + " alertes actives");
+        ((TextView) findViewById(R.id.dlb_feuMain)).setText(String.valueOf(feu)+ " alertes actives");
+        ((TextView) findViewById(R.id.dlb_meteoMain)).setText(String.valueOf(meteo)+ " alertes actives");
+        ((TextView) findViewById(R.id.dlb_terrainMain)).setText(String.valueOf(terrain)+ " alertes actives");
+
+        ((TextView) findViewById(R.id.dlb_eauSec)).setText("+" + String.valueOf(eau) + " saisies d'USAGERS");
+        ((TextView) findViewById(R.id.dlb_feuSec)).setText("+" + String.valueOf(feu)+ " saisies d'USAGERS");
+        ((TextView) findViewById(R.id.dlb_meteoSec)).setText("+" + String.valueOf(meteo)+ " saisies d'USAGERS");
+        ((TextView) findViewById(R.id.dlb_terrainSec)).setText("+" + String.valueOf(terrain)+ " saisies d'USAGERS");
 
         Log.w("VALUES",feu + " " + eau + " " + terrain + " " + meteo);
 
