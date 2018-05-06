@@ -43,7 +43,7 @@
     <TextView
         android:id="@+id/textView"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="match_parent"
         android:gravity="center"
         android:text="Entrer"
         android:textColor="@color/number_features_tile_text_color"

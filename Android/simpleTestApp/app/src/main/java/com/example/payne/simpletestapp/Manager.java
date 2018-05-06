@@ -13,6 +13,8 @@ import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 import java.io.File;
 import java.util.ArrayList;
 
+import static com.example.payne.simpletestapp.MapDisplay.QUEBEC_BOUNDING_BOX;
+
 public class Manager {
 
     public static final String SERVER_ADDR = "https://hackqc.herokuapp.com/api";
@@ -25,10 +27,6 @@ public class Manager {
     public ServerConnection mainServer;
     public MainActivity mainActivity;
     public MapDisplay myMap;
-
-    public String polygone;
-
-    public static final String pushURL = "https://hackqc.herokuapp.com/api";
 
 
     public Manager(MainActivity act, MapDisplay myMap) {
@@ -46,8 +44,8 @@ public class Manager {
             pin.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
                 @Override
                 public boolean onMarkerClick(Marker marker, MapView mapView) {
+                    MainActivity.pin_on_focus = pin;
                     MainActivity.mainActivity.findViewById(R.id.confirm_dialog).setVisibility(View.VISIBLE);
-
                     marker.showInfoWindow();
                     mapView.getController().animateTo(marker.getPosition());
                     return true;
@@ -55,23 +53,28 @@ public class Manager {
             });
         }
 
-
     }
 
-//MarkerInfoWindow is the default implementation of InfoWindow for a Marker. It handles R.id.bubble_title = OverlayWithIW.getTitle(), R.id.bubble_subdescription = OverlayWithIW.getSubDescription(), R.id.bubble_description = OverlayWithIW.getSnippet(), R.id.bubble_image = Marker.getImage()
 
     public void getPinsFromServer(){
 
         this.mainServer = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
 
-        String quebec, userPins;
+        String quebec, userPins, histoPins;
 
         try {
 
-            quebec = mainServer.ping(MapDisplay.QUEBEC_BOUNDING_BOX);
+            quebec = mainServer.ping(QUEBEC_BOUNDING_BOX);
+            Log.w("QUEBEC", quebec);
             userPins = mainServer.getRequest("/getUserAlerts", "");
+            Log.w("userPIns", userPins);
+            String histoParam = "?nord=" + QUEBEC_BOUNDING_BOX.getLatNorth() +
+                                "&sud=" + QUEBEC_BOUNDING_BOX.getLatSouth() +
+                                "&est=" + QUEBEC_BOUNDING_BOX.getLonEast() +
+                                "&ouest=" + QUEBEC_BOUNDING_BOX.getLonWest();
+            histoPins = mainServer.getRequest("/getHisto", histoParam);
 
-            this.generatePins(new JSONObject(quebec), new JSONObject(userPins));
+            this.generatePins(new JSONObject(quebec), new JSONObject(userPins), new JSONObject(histoPins));
 
 
         } catch (Exception e){
@@ -81,11 +84,6 @@ public class Manager {
 
     }
 
-    public void drawPolygon(JSONObject polyPoints){
-
-        this.mainActivity.myMap.drawPolygon(polyPoints);
-
-    }
 
     private void setupStorage(){
 
@@ -96,8 +94,8 @@ public class Manager {
         if(notif.exists()){
             Log.w("STORAGE : ", "OK notif file already exist");
             Log.w(
-            "STORAGE",
-            mainActivity.getApplicationContext().getFilesDir() + Manager.NOTIFICATION_FILE_PATH);
+                    "STORAGE",
+                    mainActivity.getApplicationContext().getFilesDir() + Manager.NOTIFICATION_FILE_PATH);
         }
         else {
             Log.w("STORAGE : ", "creating notif file");
@@ -108,14 +106,14 @@ public class Manager {
         String result;
         try {
 
-            result = mainServer.ping(MapDisplay.QUEBEC_BOUNDING_BOX);
+            result = mainServer.ping(QUEBEC_BOUNDING_BOX);
 
             // check if alert File exist on device and create one if needed
             File alertes = new File(
                     mainActivity.getApplicationContext().getFilesDir(),
                     Manager.ALERT_FILE_PATH);
             if(alertes.exists()){
-                Toast.makeText(mainActivity, "Fichier d'alertes détecté", Toast.LENGTH_SHORT).show();
+                Toast.makeText(mainActivity, "Fichier d'alertes dÈtectÈ", Toast.LENGTH_SHORT).show();
             }
             else {
                 JSONWrapper.createAlertFile(mainActivity, result);
@@ -163,10 +161,10 @@ public class Manager {
 
     }
 
-    private void generatePins(JSONObject serverPins, JSONObject userPins){
+    private void generatePins(JSONObject serverPins, JSONObject userPins, JSONObject histoPins){
 
         try {
-            myMap.updateLists(serverPins, userPins);
+            myMap.updateLists(serverPins, userPins, histoPins);
         } catch (Exception e){
             Log.w("PIN", "could not load new icons");
         }

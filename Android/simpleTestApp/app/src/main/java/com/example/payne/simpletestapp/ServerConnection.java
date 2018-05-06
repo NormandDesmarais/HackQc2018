@@ -103,8 +103,7 @@ public class ServerConnection {
 
         String param =  "?type=" + alerte.type +
                         "&lat=" + alerte.getLatitude() +
-                        "&lng=" + alerte.getLongitude() +
-                        "&date=" + new SimpleDateFormat("yyyy-MM-dd'T'HH:MM:SS").format(new Date());
+                        "&lng=" + alerte.getLongitude();
 
         try {
             this.getRequest("/putAlert", param);
