@@ -43,7 +43,7 @@
         app:layout_anchor="@+id/include"
         app:layout_anchorGravity="left|top" />
 
-    <!-- Pour le Pop Up - quand on déclare une nouvelle Alerte (addPin) -->
+    <!-- Pour le Pop Up - quand on déclare une nouvelle Alerte (addUserPin) -->
     <include
         android:id="@+id/pop_up"
         layout="@layout/pop_main"

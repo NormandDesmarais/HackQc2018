@@ -58,7 +58,7 @@ public class JSONWrapper {
     }
 
 
-    private static String getStringFromFile (String filePath) throws Exception {
+    public static String getStringFromFile (String filePath) throws Exception {
         File fl = new File(filePath);
         FileInputStream fin = new FileInputStream(fl);
         String ret = convertStreamToString(fin);
@@ -95,7 +95,7 @@ public class JSONWrapper {
         ServerConnection connection = new ServerConnection(tmp);
 
         try {
-            String tmpJSON = connection.getRequest(query);
+            String tmpJSON = connection.getRequest("", query);
 
             /*
                 "location" : {
@@ -137,7 +137,7 @@ public class JSONWrapper {
         ServerConnection connection = new ServerConnection(tmp);
 
         try {
-            String tmpJSON = connection.getRequest(query);
+            String tmpJSON = connection.getRequest("", query);
 
             /*
                 "viewport" : {

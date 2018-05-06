@@ -1,28 +1,30 @@
 package com.example.payne.simpletestapp;
 
-import android.util.JsonReader;
 import android.util.Log;
 import android.widget.Toast;
 
-import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import org.osmdroid.util.BoundingBox;
 
 import java.io.File;
+import java.util.ArrayList;
 
 public class Manager {
 
-    public static final String SERVER_ADDR = "https://hackqc.herokuapp.com/api/alertes";
+    public static final String SERVER_ADDR = "https://hackqc.herokuapp.com/api";
     public static final int PORT = 8080;
     public static final String NOTIFICATION_FILE_PATH = "/notifications.json";
     public static final String ALERT_FILE_PATH = "alertes";
+
+    public ArrayList<BoundingBox> alertesAbonnées = new ArrayList<>();
 
     public ServerConnection mainServer;
     public MainActivity mainActivity;
     public MapDisplay myMap;
 
-    public static final String testPushURL = "https://hackqc.herokuapp.com/api/putAlert";
+    public String polygone;
+
+    public static final String pushURL = "https://hackqc.herokuapp.com/api";
 
 
     public Manager(MainActivity act, MapDisplay myMap) {
@@ -47,6 +49,7 @@ public class Manager {
         }
 
         myMap.map.invalidate();
+        myMap.redrawScreen();
 
 
     }
@@ -54,7 +57,6 @@ public class Manager {
     public void drawPolygon(JSONObject polyPoints){
 
         this.mainActivity.myMap.drawPolygon(polyPoints);
-
 
     }
 
