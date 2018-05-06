@@ -66,7 +66,9 @@ This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md
 ## Acknowledgments
 
 Merci à StackOverflow pour son incroyanle apport au monde du développement technologique! Que serions-nous sans cette incroyable ressource?
+
 Merci à toutes les personnes qui sont venues nous encourager et donner des conseils, particulièrement l'équipe de Bénévoles et Mentors de HackQC 2018.
+
 Merci à toute notre équipe pour avoir sacrifié autant d'heures de sommeil pour rendre à terme ce projet !
 
 :)
