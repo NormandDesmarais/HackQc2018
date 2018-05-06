@@ -56,10 +56,10 @@
         <h3>Flux en direct</h3>
         <ul>
             <li ng-repeat="risque in risques">
-                <div class="selector" ng-click="showHideRisque($index)" ng-class="(risque.show) ? 'checked':''"></div>
+                <div class="selector" ng-click="showHideRisque($index, 'risques')" ng-class="(risque.show) ? 'checked':''"></div>
                 <span ng-bind="risque.title"></span>
                 <img ng-src="images/{{risque.icon}}" />
-                <div class="date"></div>
+                <div onclick="showDatepicker($(this));" class="date"></div>
                 <div class="datePickers">
                     <div class="text-left">&Eacute;cart de dates</div>
                     <form>
@@ -72,8 +72,26 @@
             </li>
         </ul>
         <h3>Alertes d&apos;usagers</h3>
+        <ul>
+            <li ng-repeat="userPin in userPins">
+                <div class="selector" ng-click="showHideRisque($index, 'userPins')" ng-class="(userPin.show) ? 'checked':''"></div>
+                <span ng-bind="userPin.title"></span>
+                <img ng-src="images/{{userPin.icon}}" />
+                <div onclick="showDatepicker($(this));" class="date"></div>
+                <div class="datePickers">
+                    <div class="text-left">&Eacute;cart de dates</div>
+                    <form>
+                        <div class="prepend">De:</div>
+                        <input type="date"><br>
+                        <div class="prepend">&Agrave; :</div>
+                        <input type="date">
+                    </form>
+                </div>
+            </li>
+        </ul>
         <h3>Historique</h3>
     </div>
+    <script src="js/showDatePicker.js"></script>
     <script src="js/toggleLeftPane.js"></script>
 </body>
 </html>

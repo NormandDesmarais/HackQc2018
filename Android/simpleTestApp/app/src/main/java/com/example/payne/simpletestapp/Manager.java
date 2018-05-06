@@ -5,6 +5,9 @@ import android.widget.Toast;
 
 import org.json.JSONObject;
 import org.osmdroid.util.BoundingBox;
+import org.osmdroid.views.MapView;
+import org.osmdroid.views.overlay.Marker;
+import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 
 import java.io.File;
 import java.util.ArrayList;
@@ -16,7 +19,7 @@ public class Manager {
     public static final String NOTIFICATION_FILE_PATH = "/notifications.json";
     public static final String ALERT_FILE_PATH = "alertes";
 
-    public ArrayList<BoundingBox> alertesAbonnées = new ArrayList<>();
+    public ArrayList<BoundingBox> alertesAbonnees = new ArrayList<>();
 
     public ServerConnection mainServer;
     public MainActivity mainActivity;
@@ -33,23 +36,45 @@ public class Manager {
         this.myMap = myMap;
 
         this.setupStorage();
+        this.getPinsFromServer();
 
-        // test server setup
+        myMap.map.invalidate();
+        myMap.redrawScreen();
+
+        for (final Marker pin : myMap.userPins){
+            pin.setOnMarkerClickListener(new Marker.OnMarkerClickListener() {
+                @Override
+                public boolean onMarkerClick(Marker marker, MapView mapView) {
+                    Toast.makeText(mainActivity, "CONFIRM BUBBLE", Toast.LENGTH_SHORT).show();
+                    marker.showInfoWindow();
+                    mapView.getController().animateTo(marker.getPosition());
+                    return true;
+                }
+            });
+        }
+
+
+    }
+
+//MarkerInfoWindow is the default implementation of InfoWindow for a Marker. It handles R.id.bubble_title = OverlayWithIW.getTitle(), R.id.bubble_subdescription = OverlayWithIW.getSubDescription(), R.id.bubble_description = OverlayWithIW.getSnippet(), R.id.bubble_image = Marker.getImage()
+
+    public void getPinsFromServer(){
+
         this.mainServer = new ServerConnection(Manager.SERVER_ADDR, Manager.PORT);
 
-        String quebec;
+        String quebec, userPins;
 
         try {
 
             quebec = mainServer.ping(MapDisplay.QUEBEC_BOUNDING_BOX);
-            this.generatePins(new JSONObject(quebec));
+            userPins = mainServer.getRequest("/getUserAlerts", "");
+
+            this.generatePins(new JSONObject(quebec), new JSONObject(userPins));
+
 
         } catch (Exception e){
             Log.w("PING", "failed to ping server" + Manager.SERVER_ADDR);
         }
-
-        myMap.map.invalidate();
-        myMap.redrawScreen();
 
 
     }
@@ -136,17 +161,28 @@ public class Manager {
 
     }
 
-    private void generatePins(JSONObject obj){
+    private void generatePins(JSONObject serverPins, JSONObject userPins){
 
         try {
-            myMap.updateLists(obj);
+            myMap.updateLists(serverPins, userPins);
         } catch (Exception e){
             Log.w("PIN", "could not load new icons");
         }
 
     }
 
+    public void queryNewPins(){
 
+        myMap.terrainAlerts = new ArrayList<>();
+        myMap.feuAlerts = new ArrayList<>();
+        myMap.eauAlerts = new ArrayList<>();
+        myMap.meteoAlerts = new ArrayList<>();
+        myMap.userPins = new ArrayList<>();
+        myMap.historique = new ArrayList<>();
 
+        this.getPinsFromServer();
+        myMap.redrawScreen();
+
+    }
 
 }

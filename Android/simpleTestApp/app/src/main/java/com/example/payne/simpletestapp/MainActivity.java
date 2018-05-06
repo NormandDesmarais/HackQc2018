@@ -288,13 +288,13 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             */
 
             case (R.id.highlight):
-                // TODO: Server Request for the current Bounding Box
+                manager.queryNewPins();
                 break;
-            /*
+
             case (R.id.maj):
                 // TODO: Server Request for all Monitored Zones
                 break;
-*/
+
             case (R.id.add):
                 myMap.highlightCurrent(findViewById(android.R.id.content));
                 myMap.refresh();

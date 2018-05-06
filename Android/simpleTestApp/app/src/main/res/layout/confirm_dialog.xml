@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8"?>
+
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:visibility="visible">
+
+    <!--
+    MarkerInfoWindow is the default implementation of InfoWindow for a Marker.
+    It handles R.id.bubble_title = OverlayWithIW.getTitle(),
+    R.id.bubble_subdescription = OverlayWithIW.getSubDescription(),
+    R.id.bubble_description = OverlayWithIW.getSnippet(),
+    R.id.bubble_image = Marker.getImage()
+    -->
+
+    <TextView
+        android:id="@+id/confirm_dialog"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Confirmer"
+        android:textSize="20sp" />
+
+    <ImageView
+        android:id="@+id/confirm_yes"
+        android:layout_width="50dp"
+        android:layout_height="50dp"
+        android:layout_alignBottom="@+id/confirm_dialog"
+        android:layout_alignLeft="@+id/confirm_no"
+        android:layout_alignParentTop="false"
+        android:layout_centerVertical="false"
+        android:layout_marginLeft="10dp"
+        android:layout_marginRight="5dp"
+        android:src="@drawable/icon_goutte" />
+
+    <ImageView
+        android:id="@+id/confirm_no"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:layout_alignBottom="@+id/confirm_dialog"
+        android:layout_alignParentTop="false"
+        android:layout_alignRight="@+id/confirm_yes"
+        android:layout_centerVertical="false"
+        android:src="@drawable/icon_goutte" />
+
+</RelativeLayout>
