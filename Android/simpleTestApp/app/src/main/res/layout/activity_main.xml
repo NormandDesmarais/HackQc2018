@@ -44,7 +44,6 @@
         app:layout_anchorGravity="left|top" />
 
     <!-- Pour le Pop Up - quand on déclare une nouvelle Alerte (addPin) -->
-    <!-- TODO: remove "menu_pin" and related code -->
     <include
         android:id="@+id/pop_up"
         layout="@layout/pop_main"

@@ -36,39 +36,18 @@ public class ServerConnection {
      *
      * @return
      */
-    public String ping(String path, BoundingBox boundingBox) throws Exception {
+    public String ping(BoundingBox boundingBox) throws Exception {
 
         String param =
-            "?north=" + boundingBox.getLatNorth() +
-            "&south=" + boundingBox.getLatSouth() +
-            "&east=" + boundingBox.getLonEast() +
-            "&west=" + boundingBox.getLonWest();
+            "?nord=" + boundingBox.getLatNorth() +
+            "&sud=" + boundingBox.getLatSouth() +
+            "&est=" + boundingBox.getLonEast() +
+            "&ouest=" + boundingBox.getLonWest();
 
-        String uri = this.serverAddress + path + param;
-        return this.getRequest(uri);
+        return this.getRequest(param);
 
     }
 
-
-    /**
-     *
-     * Une requête pour mettre à jour l'affichage des zones dangereuse
-     *
-     * @return
-     * @throws Exception
-     */
-    public String request(String path, BoundingBox boundingBox) throws Exception {
-
-        String param =
-                "?north=" + boundingBox.getLatNorth() +
-                "&south=" + boundingBox.getLatSouth() +
-                "&east=" + boundingBox.getLonEast() +
-                "&west=" + boundingBox.getLonWest();
-
-        String uri = this.serverAddress + path + param;
-        return this.getRequest(uri);
-
-    }
 
     /**
      *
@@ -150,7 +129,7 @@ public class ServerConnection {
 
                 try{
                     URL obj = new URL(serverAddress + param);
-                    Log.w("URLTEST : ", serverAddress + param);
+
                     HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
                     // optional default is GET
@@ -169,7 +148,6 @@ public class ServerConnection {
                     in.close();
 
                     result.response = response.toString();
-                    Log.w("RESULTAT REQUEST : ", result.response);
 
                 } catch (Exception e){
                     e.printStackTrace();
