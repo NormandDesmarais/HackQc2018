@@ -52,6 +52,7 @@ public class MapDisplay {
     public static boolean eauFilter = true;
     public static boolean meteoFilter = true;
     public static boolean historiqueFilter = false;
+    public static boolean historiqueLoaded = false;
 
     public static Drawable eauIcon;// = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_goutte);
     public static Drawable feuIcon;// = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_feu);
@@ -122,7 +123,6 @@ public class MapDisplay {
 
     public void removeAll(View view, MapEventsOverlay mapEventsOverlay) {
 
-        Toast.makeText(view.getContext(), this.map.getOverlayManager().overlays().size() - 1 + " items removed", Toast.LENGTH_SHORT).show();
         this.map.getOverlayManager().removeAll(this.map.getOverlays());
 
         map.getOverlays().add(0, mapEventsOverlay);
@@ -269,11 +269,10 @@ public class MapDisplay {
      * @param histoPins
      * @throws Exception
      */
-    public void updateLists(JSONObject serverPins, JSONObject userPins, JSONObject histoPins) throws Exception {
+    public void updateLists(JSONObject serverPins, JSONObject userPins) throws Exception {
 
         JSONArray allServerAlerts = serverPins.getJSONArray("alertes");
         JSONArray allUserAlerts = userPins.getJSONArray("alertes");
-        JSONArray allHistoAlerts = histoPins.getJSONArray("alertes");
 
         for (int i = 0; i < allServerAlerts.length(); i++) {
 
@@ -342,25 +341,6 @@ public class MapDisplay {
             }
 
             this.userPins.add(createAlertPin(new Alerte(userAlert), currentIcon));
-
-        }
-
-
-        for (int i = 0; i < allHistoAlerts.length(); i++){
-
-            JSONObject histoAlert = allHistoAlerts.getJSONObject(i).getJSONObject("alerte");
-
-            Drawable currentIcon;
-
-            switch (histoAlert.getString("type")){
-                case "Eau" : currentIcon = eauIcon; break;
-                case "Feu" : currentIcon = feuIcon; break;
-                case "Meteo" : currentIcon = meteoIcon; break;
-                case "Terrain" : currentIcon = terrainIcon; break;
-                default: currentIcon = meteoIcon;
-            }
-
-            this.userPins.add(createAlertPin(new Alerte(histoAlert), currentIcon));
 
         }
 

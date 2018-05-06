@@ -25,6 +25,9 @@ import org.osmdroid.util.BoundingBox;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
+import static com.example.payne.simpletestapp.MapDisplay.historiqueFilter;
+import static com.example.payne.simpletestapp.MapDisplay.historiqueLoaded;
+
 
 public class MainActivity extends AppCompatActivity implements MapEventsReceiver {
 
@@ -280,9 +283,6 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             @Override
             public boolean onQueryTextSubmit(String query) {
 
-                // TODO : eventually remove this Toast and FIX
-                Toast.makeText(MainActivity.this, query, Toast.LENGTH_SHORT).show();
-
                 BoundingBox boundingBox = JSONWrapper.googleBoundingBox(query);
 
                 if (boundingBox != null)
@@ -368,7 +368,27 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
 */
             case (R.id.cB_histo):
-                // TODO: Toggle "Display Historique" (add filters)
+
+                if (!historiqueLoaded){
+
+                    Toast.makeText(mainActivity, "Chargement de l'historique. Cette action peut prendre un certain temps", Toast.LENGTH_SHORT).show();
+
+                    manager.getHistorique();
+                    historiqueFilter = true;
+                    historiqueLoaded = true;
+
+                } else {
+
+                    if (item.isChecked()) {
+                        historiqueFilter = false;
+                        item.setChecked(false);
+                        myMap.refresh();
+                    } else {
+                        historiqueFilter = true;
+                        item.setChecked(true);
+                        myMap.refresh();
+                    }
+                }
                 break;
 
             case (R.id.cB_users):
@@ -444,7 +464,6 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 break;
 
             case (R.id.profileBtn):
-                Toast.makeText(this, "Profile btn clicked", Toast.LENGTH_SHORT).show();
                 break;
 
             default:

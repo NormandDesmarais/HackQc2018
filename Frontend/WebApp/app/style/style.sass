@@ -16,8 +16,39 @@ body, html
 h1, h2, h3, h4
     font-weight: lighter
 
+.navbar, #logo, #search
+    transition: 0.5s all
+
 .navbar
     background: linear-gradient(to right, $primaryColor, $mediumColor , $darkColor)
+    position: relative
+    z-index: 999999
+    height: 101px
+
+.navbar.land
+    height: 100vh
+
+#logo
+    position: absolute
+    top: 12px
+    left: 18px
+
+#logo.land
+    height: 30vh
+    left: 50%
+    top: 50%
+    transform: translate(-50%, -50%)
+
+.dl
+    color: white
+    position: absolute
+    left: 50%
+    transform: translateX(-50%)
+    top: 80vh
+    letter-spacing: 0.3px
+    font-weight: lighter
+    hr
+        border: 0.5px solid #bf5961
 
 .ol-zoom
     left: auto!important
@@ -33,11 +64,12 @@ h1, h2, h3, h4
     background-color: $expanderColor
     width: 280px
     left: 0
-    padding: 15px 5px 15px 10px
+    padding: 0px 5px 0px 10px
     transition: 0.3s all
     .inner
         height: 100%
         overflow: scroll
+        padding: 15px 0
     #expander
         background-color: $expanderColor
         height: 50px
@@ -167,8 +199,12 @@ form
     display: inline
 
 #search
+    opacity: 1
     &:hover
         cursor: pointer
+
+#search.land
+    opacity: 0
 
 #searchForm
     background: none

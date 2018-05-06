@@ -35,18 +35,19 @@
 </head>
 
 <body ng-controller="mainController">
-    <nav class="navbar">
+    <nav class="navbar land">
         <a class="navbar-brand" href="">
-            <img src="images/logo.svg" height="75">
+            <img id="logo" class="land" src="images/logo.svg" height="75">
             <span ng-bind="title"></span>
         </a>
         <div class="row">
             <div class="col-12 text-right">
                 <form ng-submit="search()"><input id="searchForm" type="text" ng-model="searchForm" placeholder="search" autocomplete="off"></form>
-                <a id="search"><img src="images/search.svg" height="35"></a>
+                <a id="search" class="land"><img src="images/search.svg" height="35"></a>
                 <script src="js/showInput.js"></script>
             </div>
         </div>
+        <div class="dl"><hr> Téléchargez l'application <hr></div>
     </nav>
     <div id="map" class="map"></div>
     <div class="arrow_box" id="popup-container"></div>
@@ -60,7 +61,7 @@
                     <div class="selector" ng-click="showHideRisque($index, 'risques')" ng-class="(risque.show) ? 'checked':''"></div>
                     <span ng-bind="risque.title"></span>
                     <img ng-src="images/{{risque.icon}}" />
-                    <div onclick="showDatepicker($(this));" class="date"></div>
+                    <div style="display:none" onclick="showDatepicker($(this));" class="date"></div>
                     <div class="datePickers">
                         <div class="text-left">&Eacute;cart de dates</div>
                         <form>
@@ -78,7 +79,7 @@
                     <div class="selector" ng-click="showHideRisque($index, 'userPins')" ng-class="(userPin.show) ? 'checked':''"></div>
                     <span ng-bind="userPin.title"></span>
                     <img ng-src="images/{{userPin.icon}}" />
-                    <div onclick="showDatepicker($(this));" class="date"></div>
+                    <div style="display:none" onclick="showDatepicker($(this));" class="date"></div>
                     <div class="datePickers">
                         <div class="text-left">&Eacute;cart de dates</div>
                         <form>
@@ -91,9 +92,27 @@
                 </li>
             </ul>
             <h3>Historique</h3>
+            <ul>
+                <li ng-repeat="histo in histos">
+                    <div class="selector" ng-click="showHideRisque($index, 'histos')" ng-class="(histo.show) ? 'checked':''"></div>
+                    <span ng-bind="histo.title"></span>
+                    <img ng-src="images/{{histo.icon}}" />
+                    <div onclick="showDatepicker($(this));" class="date"></div>
+                    <div class="datePickers">
+                        <div class="text-left">&Eacute;cart de dates</div>
+                        <form>
+                            <div class="prepend">De:</div>
+                            <input type="date"><br>
+                            <div class="prepend">&Agrave; :</div>
+                            <input type="date">
+                        </form>
+                    </div>
+                </li>
+            </ul>
         </div>
     </div>
     <script src="js/showDatePicker.js"></script>
     <script src="js/toggleLeftPane.js"></script>
+    <script src="js/land.js"></script>
 </body>
 </html>
