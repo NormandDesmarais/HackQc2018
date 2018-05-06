@@ -25,11 +25,17 @@ public class Home extends AppCompatActivity {
 
         String quebec, userPins;
 
-        // valeurs :)
+        // valeurs totales :)
         int feu = 0;
         int eau = 0;
         int meteo = 0;
         int terrain = 0;
+
+        // valeurs d'usagers
+        int feuU = 0;
+        int eauU = 0;
+        int meteoU = 0;
+        int terrainU = 0;
 
         try {
             quebec = tmpServer.ping(MapDisplay.QUEBEC_BOUNDING_BOX);
@@ -54,10 +60,10 @@ public class Home extends AppCompatActivity {
 
             for (int i = 0; i < alertesuser.length(); i++){
                 switch (((JSONObject) alertesuser.get(i)).getJSONObject("alerte").getString("type")) {
-                    case "Feu" : feu++; break;
-                    case "Eau" : eau++; break;
-                    case "Meteo" : meteo++; break;
-                    case "Terrain" : terrain++; break;
+                    case "Feu" : feuU++; break;
+                    case "Eau" : eauU++; break;
+                    case "Meteo" : meteoU++; break;
+                    case "Terrain" : terrainU++; break;
                     default: meteo++; break;
                 }
             }
@@ -65,17 +71,15 @@ public class Home extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        ((TextView) findViewById(R.id.dlb_eauMain)).setText(String.valueOf(eau) + " alertes actives");
+        ((TextView) findViewById(R.id.dlb_eauMain)).setText(String.valueOf(eau)+ " alertes actives");
         ((TextView) findViewById(R.id.dlb_feuMain)).setText(String.valueOf(feu)+ " alertes actives");
         ((TextView) findViewById(R.id.dlb_meteoMain)).setText(String.valueOf(meteo)+ " alertes actives");
         ((TextView) findViewById(R.id.dlb_terrainMain)).setText(String.valueOf(terrain)+ " alertes actives");
 
-        ((TextView) findViewById(R.id.dlb_eauSec)).setText("+" + String.valueOf(eau) + " saisies d'USAGERS");
-        ((TextView) findViewById(R.id.dlb_feuSec)).setText("+" + String.valueOf(feu)+ " saisies d'USAGERS");
-        ((TextView) findViewById(R.id.dlb_meteoSec)).setText("+" + String.valueOf(meteo)+ " saisies d'USAGERS");
-        ((TextView) findViewById(R.id.dlb_terrainSec)).setText("+" + String.valueOf(terrain)+ " saisies d'USAGERS");
-
-        Log.w("VALUES",feu + " " + eau + " " + terrain + " " + meteo);
+        ((TextView) findViewById(R.id.dlb_eauSec)).setText("+" + String.valueOf(eauU)+ " saisies d'USAGERS");
+        ((TextView) findViewById(R.id.dlb_feuSec)).setText("+" + String.valueOf(feuU)+ " saisies d'USAGERS");
+        ((TextView) findViewById(R.id.dlb_meteoSec)).setText("+" + String.valueOf(meteoU)+ " saisies d'USAGERS");
+        ((TextView) findViewById(R.id.dlb_terrainSec)).setText("+" + String.valueOf(terrainU)+ " saisies d'USAGERS");
 
         findViewById(R.id.proceed).setOnClickListener(new View.OnClickListener() {
 

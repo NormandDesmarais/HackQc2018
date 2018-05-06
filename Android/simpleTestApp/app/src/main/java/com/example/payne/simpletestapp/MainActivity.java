@@ -90,6 +90,40 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             }
         });
 
+
+        /*
+        Setting up Events for "Confirm Alert Dialog"
+         */
+        findViewById(R.id.confirm_no).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                MainActivity.mainActivity.findViewById(R.id.confirm_dialog).setVisibility(View.GONE);
+            }
+        });
+
+        findViewById(R.id.confirm_yes).setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                // TODO: GÉRER LE "YES" DU DIALOG
+                // Remove temporary Pin
+                map.getOverlays().remove(lastPlacedPin);
+
+                // Hide PopUp
+                MainActivity.mainActivity.findViewById(R.id.pop_up).setVisibility(View.GONE);
+                MapDisplay.currentlyPlacingPin = false;
+
+                /* locally register alert
+                Alerte alert = new Alerte(lastPlacedPin.getPosition().getLongitude(),
+                        lastPlacedPin.getPosition().getLatitude(),
+                        "Meteo");
+
+                myMap.addUserAlertPin(alert, MapDisplay.meteoIcon);
+                manager.postAlert(alert);
+                */
+            }
+        });
+
+
         /*
         Setting up Events for "New Alert Type" prompt dialog
          */
