@@ -34,14 +34,16 @@ public class MapDisplay {
     public static String last_type_put_down;
     public static final BoundingBox QUEBEC_BOUNDING_BOX = new BoundingBox(63,-58,40,-84);
 
+    // Ensembles de Pins (Markers) pour chaque type de filtre possible
     public ArrayList<Marker> terrainAlerts = new ArrayList<>();
     public ArrayList<Marker> feuAlerts = new ArrayList<>();
     public ArrayList<Marker> eauAlerts = new ArrayList<>();
     public ArrayList<Marker> meteoAlerts = new ArrayList<>();
 
     public ArrayList<Marker> userPins = new ArrayList<>();
-    public ArrayList<Marker> historique = new ArrayList<>();
+    public ArrayList<Marker> historique = new ArrayList<>(); // TODO: remove?
 
+    // Zones surveillées
     public ArrayList<Polygon> highlights = new ArrayList<>();
 
 
@@ -54,22 +56,21 @@ public class MapDisplay {
     public static boolean historiqueFilter = false;
     public static boolean historiqueLoaded = false;
 
-    public static Drawable eauIcon;// = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_goutte);
-    public static Drawable feuIcon;// = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_feu);
-    public static Drawable terrainIcon;// = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_seisme);
-    public static Drawable meteoIcon;// = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_vent);
+    public static Drawable eauIcon;
+    public static Drawable feuIcon;
+    public static Drawable terrainIcon;
+    public static Drawable meteoIcon;
 
 
     public MapDisplay(MapView map, Context ctx) {
         this.map = map;
         this.ctx = ctx;
 
-
+        // Setting up the image of the Pins
         eauIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_goutte);
         feuIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_feu);
         terrainIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_seisme);
         meteoIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_vent);
-
     }
 
 
@@ -266,7 +267,6 @@ public class MapDisplay {
      *
      * @param serverPins
      * @param userPins
-     * @param histoPins
      * @throws Exception
      */
     public void updateLists(JSONObject serverPins, JSONObject userPins) throws Exception {

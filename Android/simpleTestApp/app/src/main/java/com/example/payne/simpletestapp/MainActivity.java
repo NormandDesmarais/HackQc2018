@@ -29,8 +29,12 @@ import static com.example.payne.simpletestapp.MapDisplay.historiqueFilter;
 import static com.example.payne.simpletestapp.MapDisplay.historiqueLoaded;
 
 
+/**
+ * Classe de la carte.
+ */
 public class MainActivity extends AppCompatActivity implements MapEventsReceiver {
 
+    // positionnement initial au lancement de la carte
     public static final double[] MONTREAL_COORD = {45.5161, -73.6568};
 
     MapView map = null;
@@ -53,10 +57,10 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
         mainActivity = this;
 
-        //inflate and create the map
+        // Inflate and create the map
         setContentView(R.layout.activity_main);
 
-        //creating the Toolbar?
+        // Populating the Toolbar
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
         getSupportActionBar().setTitle("");
@@ -64,6 +68,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         /*
         TODO: GPS
         https://developer.android.com/guide/topics/location/strategies
+        https://github.com/miskoajkula/Gps_location
          */
 
         map = findViewById(R.id.map);
@@ -84,13 +89,11 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         manager = new Manager(this, myMap);
 
 
-
         // Logo button
         findViewById(R.id.logo).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Snackbar.make(view, "Merci d'utiliser Acclimate :) " +
-                        "Nous allons sauver la planête un petit geste à la fois!", Snackbar.LENGTH_LONG)
+                Snackbar.make(view, "Merci d'utiliser Acclimate :) ", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
             }
         });
@@ -105,11 +108,14 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 MainActivity.mainActivity.findViewById(R.id.confirm_dialog).setVisibility(View.GONE);
             }
         });
-
         findViewById(R.id.confirm_yes).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // TODO: GÉRER LE "YES" DU DIALOG
+
+                /* TODO: GÉRER LE "YES" DU DIALOG
+                Which "temporaru pin" are we removing?
+                Do we need to set "currentlyPlacingPin to false?
+                 */
                 // Remove temporary Pin
                 map.getOverlays().remove(lastPlacedPin);
                 String type="";
@@ -127,6 +133,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                     e.printStackTrace();
                 }
 
+                // Hide PopUp
                 MainActivity.mainActivity.findViewById(R.id.confirm_dialog).setVisibility(View.GONE);
                 MapDisplay.currentlyPlacingPin = false;
 
@@ -138,15 +145,12 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                         return true;
                     }
                 });
-
-                // Hide PopUp
-
             }
         });
 
-
         /*
         Setting up Events for "New Alert Type" prompt dialog
+        TODO: create static method to handle these 4 cases with less code
          */
         findViewById(R.id.wind_btn).setOnClickListener(new View.OnClickListener() {
             @Override
@@ -167,7 +171,6 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 manager.postAlert(alert);
             }
         });
-
         findViewById(R.id.water_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -189,7 +192,6 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
             }
         });
-
         findViewById(R.id.fire_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -210,7 +212,6 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
             }
         });
-
         findViewById(R.id.earth_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -249,13 +250,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         });
 
 
-        /* TODO : Add "SEARCH" and "HISTORIQUE"
-        https://developer.android.com/training/appbar/action-views */
-
-
         mapEventsOverlay = new MapEventsOverlay(this, this);
         map.getOverlays().add(0, mapEventsOverlay);
-
     }
 
     @Override
@@ -266,6 +262,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
     @Override
     public boolean longPressHelper(GeoPoint p) {
+        // TODO: Test what happens if we long-press in other components than the map? (dialogs, menu, ...)
         myMap.addUserPin(p);
         return false;
     }
@@ -279,10 +276,11 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         //Setting up Search bar
         MenuItem ourSearchItem = menu.findItem(R.id.action_search);
         SearchView sv = (SearchView) ourSearchItem.getActionView();
+
         sv.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
-
+                // To get the Bounding Box that surrounds the researched query text
                 BoundingBox boundingBox = JSONWrapper.googleBoundingBox(query);
 
                 if (boundingBox != null)
@@ -311,7 +309,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         switch (id) {
             /*
             case (R.id.action_settings):
-                Toast.makeText(this, "Who fucking cares...", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, "Who cares...", Toast.LENGTH_SHORT).show();
 
                 break;
 
@@ -368,6 +366,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
 */
             case (R.id.cB_histo):
+                // TODO: Remove for phones? Or make algo better.
 
                 if (!historiqueLoaded){
 
@@ -391,6 +390,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 }
                 break;
 
+            // Setting up the Filter Check-Boxes (cb)
             case (R.id.cB_users):
                 if (item.isChecked()) {
                     MapDisplay.showUserPins = false;

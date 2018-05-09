@@ -6,6 +6,9 @@
     android:layout_height="match_parent"
     tools:context=".MainActivity">
 
+    <!-- Secondary Activity (map) -->
+
+    <!-- Toolbar -->
     <android.support.design.widget.AppBarLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -21,13 +24,15 @@
 
     </android.support.design.widget.AppBarLayout>
 
+    <!-- The map -->
     <include
         android:id="@+id/include"
         layout="@layout/content_main"
         android:visibility="visible" />
 
 
-    <!-- TODO: (Possibly) AppAlert symbol - Messenger-like red numbers
+    <!-- Logo
+    TODO: (Possibly) AppAlert symbol - Messenger-like red numbers
     https://stablekernel.com/using-custom-views-as-menu-items/ -->
 
     <android.support.design.widget.FloatingActionButton
