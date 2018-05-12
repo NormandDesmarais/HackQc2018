@@ -12,15 +12,18 @@ public class Alertes {
 
     public Alertes(double nord, double sud, double est, double ouest,
             ArrayList<Alerte> userAlerts) {
-        if (ouest <= -84 || est >= -58 || sud <= 40 || nord >= 66) {
+        /**
+         * latitude  :    sud (-90) / nord (90)
+         * longitude : ouest (-180) / est (180)
+         */
+        if (ouest <= -84 && est >= -58 && sud <= 40 && nord >= 66) {
             this.alertes =  new ArrayList<>(userAlerts);
         }
 
         this.alertes =  new ArrayList<>();
         for (Alerte e : userAlerts) {
-            ArrayList<double[]> coord = e.getCoord().getData();
-            if (coord.get(0)[0] > ouest && coord.get(0)[0] < est
-                    && coord.get(0)[1] > sud && coord.get(0)[1] < nord) {
+            double[] coord = e.getCoord().getData().get(0);
+            if (coord[0] > ouest && coord[0] < est && coord[1] > sud && coord[1] < nord) {
                 this.alertes.add(e);
             }
                 

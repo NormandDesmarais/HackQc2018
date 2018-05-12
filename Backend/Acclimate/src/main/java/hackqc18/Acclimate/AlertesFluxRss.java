@@ -15,8 +15,8 @@ public class AlertesFluxRss {
 
     private static AlertesFluxRss theInstance = null;
     
-    private ArrayList<Double> coordX = new ArrayList<>();
-    private ArrayList<Double> coordY = new ArrayList<>();
+    private ArrayList<Double> coordLng = new ArrayList<>();
+    private ArrayList<Double> coordLat = new ArrayList<>();
     private ArrayList<Alerte> alertes = new ArrayList<>();
 
 
@@ -56,8 +56,8 @@ public class AlertesFluxRss {
             double x = Double.parseDouble(("-" + getInfosStr("-", 0, ",", coordos)));
             double y = Double.parseDouble((getInfosStr(",", (x + "").length(),
                     "<>", coordos)));
-            this.coordX.add(x);
-            this.coordY.add(y);
+            this.coordLng.add(x);
+            this.coordLat.add(y);
 
             PointJSON point = new PointJSON(x, y);
             alertes.add(new Alerte(nom, source, territoire,
@@ -122,15 +122,19 @@ public class AlertesFluxRss {
     }
 
     public ArrayList<Alerte> alertsInBox(double nord, double sud, double est, double ouest) {
+        /**
+         * latitude  :    sud (-90) / nord (90)
+         * longitude : ouest (-180) / est (180)
+         */
 
-        if (ouest <= -84 || est >= -58 || sud <= 40 || nord >= 66) {
+        if (ouest <= -84 && est >= -58 && sud <= 40 && nord >= 66) {
             return new ArrayList<>(alertes);
         }
 
         ArrayList<Alerte> result = new ArrayList<>();
         for (int i = 0; i < alertes.size(); i++) {
-            if (coordX.get(i) > ouest && coordX.get(i) < est
-                    && coordY.get(i) > sud && coordY.get(i) < nord) {
+            if (coordLng.get(i) > ouest && coordLng.get(i) < est
+                    && coordLat.get(i) > sud && coordLat.get(i) < nord) {
                 result.add(alertes.get(i));
             }
         }
