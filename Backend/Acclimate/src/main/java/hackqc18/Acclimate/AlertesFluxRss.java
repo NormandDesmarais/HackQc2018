@@ -53,16 +53,15 @@ public class AlertesFluxRss {
             certitude = getInfosStr("<b>Certitude</b> :", 1, "<br/>", alertePrg.get(i));
             urgence = getInfosStr("<b>Urgence</b> :", 1, "<br/>", alertePrg.get(i));
             String coordos = geom + "<>";
-            double x = Double.parseDouble(("-" + getInfosStr("-", 0, ",", coordos)));
-            double y = Double.parseDouble((getInfosStr(",", (x + "").length(),
+            double lng = Double.parseDouble(("-" + getInfosStr("-", 0, ",", coordos)));
+            double lat = Double.parseDouble((getInfosStr(",", (lng + "").length(),
                     "<>", coordos)));
-            this.coordLng.add(x);
-            this.coordLat.add(y);
+            this.coordLng.add(lng);
+            this.coordLat.add(lat);
 
-            PointJSON point = new PointJSON(x, y);
             alertes.add(new Alerte(nom, source, territoire,
                     certitude, severite, type, dateDeMiseAJour, "00000", urgence,
-                    description, point.toString(), point.getCoord()));
+                    description, lng, lat));
         }
 
     }

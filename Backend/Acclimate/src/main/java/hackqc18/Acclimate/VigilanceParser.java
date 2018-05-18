@@ -50,7 +50,7 @@ public class VigilanceParser {
         String nom = "", territoire = "", certitude = "", severite = "", type = "";
         String dateDeMiseAJour = "", urgence = "", description = "", geom = "", IdAlert = "";
         String source = "Ministère de la Sécurité publique du Québec";
-        double x = 0.0, y = 0.0;
+        double lng = 0.0, lat = 0.0;
         
         for (int i = 10; i < alertePrg.length; i++){
             int j = i % 11;
@@ -87,10 +87,9 @@ public class VigilanceParser {
                     description = alertePrg[i];
                     break;
                 case 10:
-                    PointJSON point = new PointJSON(x, y);
                     Alerte theAlert = new Alerte(nom, source, territoire, certitude,
                             severite, type, dateDeMiseAJour, IdAlert, urgence,
-                            description, point.toString(), point.getCoord());
+                            description, lng, lat);
                     alertes.add(theAlert);
                     break;
                 default:

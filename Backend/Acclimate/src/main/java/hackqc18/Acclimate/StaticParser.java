@@ -52,7 +52,7 @@ public class StaticParser {
         String nom = "", territoire = "", certitude = "", severite = "", type = "";
         String dateDeMiseAJour = "", urgence = "", description = "", geom = "", IdAlert = "";
         String source = "Ministère de la Sécurité publique du Québec";
-        double x = 0.0, y = 0.0;
+        double lng = 0.0, lat = 0.0;
 
         for (int i = 10; i < alertePrg.length; i++) {
             int j = i % 10;
@@ -70,10 +70,10 @@ public class StaticParser {
                     territoire = alertePrg[i];
                     break;
                 case 3:
-                    x = Double.parseDouble(alertePrg[i]);
+                    lng = Double.parseDouble(alertePrg[i]);
                     break;
                 case 4:
-                    y = Double.parseDouble(alertePrg[i]);
+                    lat = Double.parseDouble(alertePrg[i]);
                     break;
                 case 5:
                     urgence = alertePrg[i];
@@ -91,10 +91,9 @@ public class StaticParser {
                 case 9:
                     for (int k = 0; k < typesAlertes.length; k++) {
                         if (nom.equals(typesAlertes[k])) {
-                            PointJSON point = new PointJSON(x, y);
                             Alerte theAlert = new Alerte(nom, source, territoire, certitude,
                                     severite, type, dateDeMiseAJour, IdAlert, urgence,
-                                    description, point.toString(), point.getCoord());
+                                    description, lng, lat);
                             alertes.add(theAlert);
                         }
                     }

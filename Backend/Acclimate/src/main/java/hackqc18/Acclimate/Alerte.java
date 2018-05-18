@@ -1,11 +1,8 @@
 package hackqc18.Acclimate;
 
 import java.time.LocalDateTime;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class Alerte {
-
-    private static AtomicLong counter = new AtomicLong();
 
     private final String nom;
     private final String source;
@@ -14,18 +11,17 @@ public class Alerte {
     private final String severite;
     private final String type;
     private String dateDeMiseAJour;
-    private final String idAlerte;
+    private final String id;
     private final String urgence;
     private final String description;
     private final String geom;
     private int count;
-    private final long id;
-    private CoordinatesJSON coord;
+    private Geometry geometry;
 
     public Alerte(String nom, String source, String territoire,
             String certitude, String severite, String type,
-            String dateDeMiseAJour, String idAlerte, String urgence,
-            String description, String geom, CoordinatesJSON coord) {
+            String dateDeMiseAJour, String id, String urgence,
+            String description, String geom, Geometry coord) {
 
         this.nom = nom;
         this.source = source;
@@ -34,18 +30,80 @@ public class Alerte {
         this.severite = severite;
         this.type = type;
         this.dateDeMiseAJour = dateDeMiseAJour;
-        this.idAlerte = idAlerte;
+        this.id = id;
         this.urgence = urgence;
         this.description = description;
         this.geom = geom;
-        this.id = counter.incrementAndGet();
         this.count = 1;
-        this.coord = coord;
-
+        this.geometry = coord;
     }
 
-    public CoordinatesJSON getCoord() {
-        return coord;
+    public Alerte(String nom, String source, String territoire,
+            String certitude, String severite, String type,
+            String dateDeMiseAJour, String id, String urgence,
+            String description, double lng, double lat) {
+
+        this.nom = nom;
+        this.source = source;
+        this.territoire = territoire;
+        this.certitude = certitude;
+        this.severite = severite;
+        this.type = type;
+        this.dateDeMiseAJour = dateDeMiseAJour;
+        this.id = id;
+        this.urgence = urgence;
+        this.description = description;
+        this.count = 1;
+        this.geom = "";
+        this.geometry = new Geometry("Point", lng, lat);
+    }
+
+    public String getNom() {
+        return nom;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public String getTerritoire() {
+        return territoire;
+    }
+
+    public String getCertitude() {
+        return certitude;
+    }
+
+    public String getSeverite() {
+        return severite;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public String getDateDeMiseAJour() {
+        return dateDeMiseAJour;
+    }
+
+    public String getUrgence() {
+        return urgence;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public Geometry getGeometry() {
+        return geometry;
+    }
+
+    public int getCount() {
+        return count;
+    }
+
+    public String getId() {
+        return id;
     }
 
     
@@ -80,55 +138,10 @@ public class Alerte {
         return (dDays > 0 || (dDays == 0 &&
                 (dHours > 0 || (dHours == 0 && dMin > 0))));
     }
-    
-    public String getNom() {
-        return nom;
-    }
 
-    public String getSource() {
-        return source;
-    }
-
-    public String getTerritoire() {
-        return territoire;
-    }
-
-    public String getCertitude() {
-        return certitude;
-    }
-
-    public String getSeverite() {
-        return severite;
-    }
-
-    public String getType() {
-        return type;
-    }
-
-    public String getDateDeMiseAJour() {
-        return dateDeMiseAJour;
-    }
-
-    public String getIdAlerte() {
-        return idAlerte;
-    }
-
-    public String getUrgence() {
-        return urgence;
-    }
-
-    public String getDescription() {
-        return description;
-    }
-
-    public String getGeom() {
-        return geom;
-    }
-
-    @Override
-    public String toString() {
+    public String toJSON() {
         return "{\"alerte\" : {"
-                + "\"id\": \"" + idAlerte + "\","
+                + "\"id\": \"" + id + "\","
                 + "\"count\": \"" + count + "\","
                 + "\"nom\": \"" + nom + "\","
                 + "\"source\": \"" + source + "\","
@@ -141,6 +154,6 @@ public class Alerte {
                 + "\"description\": \"" + description + "\","
                 + "\"geometry\": " + geom
                 + "}}";
-
     }
+    
 }
