@@ -7,46 +7,45 @@ public class PutAlert {
 
     private final static ArrayList<Alerte> USER_ALERTS = new ArrayList<>();
     
-    private boolean status;
     private String statusMsg;
     
     public static ArrayList<Alerte> getUserAlerts() {
         return new ArrayList<>(USER_ALERTS);
     }
 
-    public PutAlert(String type, String latGet, String lngGet) {
-        this.status = false;
-        double lat = Double.parseDouble(lngGet);
-        double lng = Double.parseDouble(latGet);
+    public PutAlert(String type, String latValue, String lngValue) {
+        double lng = Double.parseDouble(lngValue);
+        double lat = Double.parseDouble(latValue);
         String date = LocalDateTime.now().toString();
+        /**
+         * latitude  :    sud (-90) / nord (90)
+         * longitude : ouest (-180) / est (180)
+         */
 
-        if (lat > -84 && lat < -58 && lng > 40 && lng < 66) {
+        if (lng > -84 && lng < -58 && lat > 40 && lat < 66) {
             
             String userAlrId = (int)distanceInMeter(-84, lng, lat, lng) + "-"
                     + (int)distanceInMeter(lat, 66, lat, lng);
 
             for (Alerte alerte : USER_ALERTS) {
-                if (alerte.getIdAlerte().equals(userAlrId)) {
+                if (alerte.getId().equals(userAlrId)) {
                     alerte.increment(lat, lng, date);
-                    this.status = true;
                     this.statusMsg = "Alerte comfirmée, merci de votre participation!";
                     return;
                 }
-                // TODO - for demo the delay is set à 0 days, 0 hours, 5 minutes
-                if (alerte.isOlderThan(0, 0, 5)) {
+                // TODO - define default duration by alert type (day, hour, min)
+                if (alerte.isOlderThan(1, 0, 0)) {
                     USER_ALERTS.remove(alerte);
                 }
 
             }
             
-            PointJSON point = new PointJSON(lat, lng);
             Alerte alerte = new Alerte(type, "usager", "inconnu",
                     "à déterminer", "inconnue", type, date, userAlrId, "inconnue",
-                    "alerte usager", point.toString(), point.getCoord());
+                    "alerte usager", lng, lat);
             
             USER_ALERTS.add(alerte);
             
-            this.status = true;
             this.statusMsg = "Nouvelle alerte ajoutée. Merci pour votre aide!";
         } else {
             this.statusMsg = "Coordonnées non supportées pour le moment.";
@@ -67,7 +66,7 @@ public class PutAlert {
         return d * 1000; // meters
     }
 
-    public String isStatus() {
+    public String statusMsg() {
         return this.statusMsg;
     }
 

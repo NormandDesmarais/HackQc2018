@@ -18,7 +18,7 @@ public class GetHisto {
     @JsonRawValue
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public String alerts(double nord, double sud, double est, double ouest) {
-        Alertes theAlerts = new Alertes(nord, sud, est, ouest, parser.getAlertes());
+        GetAlertes theAlerts = new GetAlertes(nord, sud, est, ouest, parser.getAlertes());
 
         return theAlerts.toString();
     }

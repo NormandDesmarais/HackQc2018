@@ -16,6 +16,6 @@ public class PutAlertController {
             @RequestParam(value = "lat") String lat,
             @RequestParam(value = "lng") String lng
     ) throws IOException {
-        return new PutAlert(type, lat, lng).isStatus();
+        return new PutAlert(type, lat, lng).statusMsg();
     }
 }
