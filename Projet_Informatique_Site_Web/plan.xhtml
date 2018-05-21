@@ -1,0 +1,108 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
+    <head>
+        <title>Acclimate</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+        <meta charset="utf-8"/>
+        <link rel="stylesheet" href="mystyle.css"/>
+        <script src="js/minMenu.js" type="text/javascript"></script>
+    </head>
+
+    <body>
+        <nav class="navBar" id="navBar">
+            <ul>
+                <li><a href="index.xhtml">Accueil</a></li><!--
+             --><li><a class="active" href="plan.xhtml">Plan de travail</a></li><!--
+             --><li><a href="about.xhtml">À propos</a></li><!--
+             --><li id="unique"><a href="javascript:void(0);" class="icon" onclick="showMenu()">&#9776;</a></li>
+            </ul>
+        </nav>
+
+        <div onclick="hideMenu()">
+            <h1>Outils de base</h1>
+            <h2>Comprendre la logique à deux états : V ou F, <i>on</i> ou <i>off</i>, haut voltage ou bas voltage ?</h2>
+            <p>À la base de tous les circuits électroniques se trouve une idée très simple. Chaque élément de notre système, chaque câble, chaque entrée ou sortie peut 
+                exister en deux états différents: 0 ou 1. On utilise parfois, dans le langage, différents synonymes pour représenter cette idée: vrai ou faux, V ou F, 
+                <i>on</i> ou <i>off</i>, etc. Ces différentes façons de représenter les états possibles sont toutes équivalentes mais il est important de comprendre ce que 
+                cela représente. Dans les vrais systèmes, ces deux états correspondent à un haut voltage ou à un bas voltage (habituellement, un bas voltage signifie être 
+                connecté à la mise à terre, le <i>ground</i>).</p>
+            <p>Ici, le <i>Pin</i> (à gauche) permet de créer une valeur 0 ou 1 sur le câble qui est connecté entre les deux composantes (correspondant, on s’en souvient, à un bas 
+                voltage ou un haut voltage). Le <i>LED</i> (à droite) permet simplement de faire la lecture de cette valeur associée au câble: <strong>1 résulte en une lumière rouge (allumée), et 0 en une lumière grise (éteinte)</strong>.</p>
+                
+            <div class="special">Cliquer sur une composante pour la sélectionner et cliquer à un endroit dans la fenêtre pour le placer. Attention: ne pas 
+                « <i>drag and drop</i>! »
+            </div>
+            
+            <h2>Mode d’opération</h2>
+            <p>Logisim a deux modes d’opération principal: <strong>Édition</strong> et <strong>Simulation</strong>. Si vous avez essayé de cliquer sur le <i>Pin</i> pour changer sa valeur, vous avez 
+                peut-être remarqué que cela ne fonctionne pas. C’est parce que nous sommes présentement en mode édition. Afin de pouvoir interagir avec votre circuit, 
+                le logiciel doit être en mode simulation.</p>
+            
+            <div class="special">Pour passer en mode simulation, vous devez cliquer sur la petite main complètement en haut à gauche de la fenêtre. Le mode d’édition se trouve juste à côté, c’est l’icône pointeur de souris.
+            </div>
+            
+            <p>Remarquez qu’en mode simulation, si vous rajoutez une composante vous passerez automatiquement en mode édition.</p>
+            
+            <h2><i>Input/Output</i> et <i>Wiring</i></h2>
+            <p>Les différentes composantes de base disponibles dans Logisim sont regroupées en dossier à gauche de la fenêtre. Nous avons déjà vu le <i>Pin</i> et 
+                le <i>LED</i>. 
+            Observons les différents attributs de ces composantes.</p>
+            <ul>
+                <li><i>Pin</i>
+                    <ul>
+                        <li><i>Facing</i> est un attribut commun de plusieurs composantes permet de l’orienter.</li>
+                        <li>Pour l’instant assurez-vous de garder le <strong><i>Output</i> à <i>No</i></strong>, le <strong><i>Data Bit</i> à 1</strong> et le <strong><i>Pull Behavior</i> à <i>Unchanged</i></strong>. 
+                            Nous verrons dans un tutoriel à venir l’impact de ces attributs. Toutefois, assurez-vous de changer <strong><i>Three-States</i> à <i>No</i></strong>. Cet attribut change la fonctionnalité de notre logique à deux états. Nous parlerons aussi de la logique à trois-états (<i>Three-States logic</i>) dans un tutoriel futur.</li>
+                        <li>Le <i>label</i> permet de donner un nom à la composante. Vous avez aussi un contrôle sur l’endroit où afficher ce nom et la police d’affichage. Vous pouvez déplacer une composante en cliquant dessus et son <i>label</i> suivra sa position.</li>
+                    </ul>
+                </li>
+                <li><i>LED</i>
+                    <ul>
+                        <li>On remarque que plusieurs des mêmes attributs sont présents (<i>Facing</i>, <i>Label</i>, etc). Mais en plus nous pouvons choisir différentes 
+                            couleurs pour représenter le statut 0 (<i>off</i>) et 1 (<i>on</i>).</li>
+                        <li><i>Active on High</i> permet d’inverser la fonctionnalité du <i>LED</i>. Si <i>No</i> est choisi, alors il sera « allumé » par défaut et 
+                            s’éteindra s’il lit 1.</li>
+                    </ul>
+                </li>
+            </ul>
+
+            <p>Nous ne ferons pas le tour de toutes les composantes ici. Il est plus intéressant de regarder les composantes utiles pour la construction de 
+                circuits simples permettant de bien comprendre:</p>
+                <ul>
+                    <li><i>Button</i>
+                        <ul><li>Fonctionne comme un <i>Pin</i> mais sa valeur retourne automatiquement à 0 lorsque relâché.</li></ul>
+                    </li>
+                    <li><i>Probe</i>
+                        <ul>
+                            <li>Un peu comme le <i>LED</i>, permet de savoir la valeur associée à un câble.</li>
+                            <li>Le <i>Radix</i> permet d’interpréter ce nombre selon différentes bases numériques. Voir le tutoriel sur les <a href="bus.html">bus et splitters</a> pour plus d’informations.</li>
+                        </ul>
+                    </li>
+                    <li><i>Constant</i>
+                        <ul>
+                            <li>Permet d’assigner une valeur fixe 0 ou 1 (pour l’instant) à une composante.</li>
+                            <li>Assurez-vous de laisser le <i>Data Bit</i> à 1 si vous l’utilisez.</li>
+                            <li><i>Value</i> correspond à la constante désirée : <strong>0x0 = 0</strong> et <strong>0x1 = 1</strong>.</li>
+                        </ul>
+                    </li>
+                    <li><i>Tunnel</i>
+                        <ul>
+                            <li>Il permet de simplifier des circuits en téléportant le signal d’un tunnel à l’autre. Comme un trainn qui entre d’un côté du tunnel d’une 
+                                montagne et qui ressort de l’autre ! Il y a deux tunnels qui sont connectés ensemble.</li>
+                            <li>Pour l’instant, conserver le <i>Data Bit</i> à 1.</li>
+                            <li>Ici, le label est très important car c’est ce qui définit la paire de tunnel. Il doit donc être identique dans les deux tunnels pour que 
+                                la composante fonction adéquatement.</li>
+                            <li>Évidemment, rien de tel n’existe dans le monde réel…</li>
+                        </ul>
+                    </li>
+                </ul>
+            <p class="clearFloat">La propriété <i>Data Bit</i> qu’on voit sur plusieurs composantes est une option très utile et importante du logiciel, mais qui nécessite une compréhension 
+                plus avancée. Nous verrons plus en détails son utilité dans le tutoriel sur les <a href="bus.html">bus et splitters</a>. D’ici là observons les composantes servant à 
+                créer des circuits de logique combinatoire!</p>
+            
+            <footer>
+                <img src="images/diro.png" alt="Département d'Informatique et de Recherche Opérationnelle"/>
+            </footer>
+        </div>
+    </body>
+</html>
