@@ -25,7 +25,7 @@ public class AlertesFluxRss {
         return theInstance;
     }
     
-    public AlertesFluxRss() {
+    private AlertesFluxRss() {
         parseFeed();
 
     }
@@ -114,24 +114,6 @@ public class AlertesFluxRss {
             }
         }
         return liste;
-    }
-
-    public ArrayList<Alerte> alertsInBox(double nord, double sud, double est, double ouest) {
-        /**
-         * latitude  :    sud (-90) / nord (90)
-         * longitude : ouest (-180) / est (180)
-         */
-
-        if (ouest <= -84 && est >= -58 && sud <= 40 && nord >= 66) {
-            return new ArrayList<>(alertes);
-        }
-
-        ArrayList<Alerte> result = new ArrayList<>();
-        for (Alerte alert : alertes) {
-            if (alert.overlapWithBox(nord, sud, est, ouest))
-                result.add(alert);
-        }
-        return result;
     }
 
     public ArrayList<Alerte> getAlertes() {

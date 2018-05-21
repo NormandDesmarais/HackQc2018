@@ -3,42 +3,13 @@ package hackqc18.Acclimate;
 import java.io.*;
 import java.util.ArrayList;
 
-public class StaticParser {
-
-    private ArrayList<Alerte> alertes = new ArrayList<>();
+public class StaticParser extends HistoryCsvParser {
 
     public StaticParser(String filename) {
-        String tmp = "";
-
-        try {
-
-            File fileDir = new File("src"
-                    + File.separator + "main"
-                    + File.separator + "java"
-                    + File.separator + "hackqc18"
-                    + File.separator + "Acclimate"
-                    + File.separator + "historique_alertes.csv");
-
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(
-                            new FileInputStream(fileDir), "UTF8"));
-
-            String s;
-            while ((s = reader.readLine()) != null) {
-                if (s.contains("\r")) {
-                    s.replace("\r", ",");
-                }
-
-                tmp += s;
-            }
-            reader.close();
-        } catch (IOException ex) {
-            System.err.println("Erreur à l’ouverture du fichier");
-        }
-        parseFeed(tmp);
+        super(filename);
     }
 
-    public void parseFeed(String toBeParsed) {
+    public void parseContent(String toBeParsed) {
         String[] alertePrg = toBeParsed.split(",");
 
 //        String[] typesAlertes = {"Avalanche", "Feu de brousse", "Feu de forêt",
@@ -104,7 +75,7 @@ public class StaticParser {
         }
     }
 
-    public String getShortType(String type) {
+    private String getShortType(String type) {
         String result;
         switch (type) {
             case "Feu de brousse":
@@ -136,9 +107,5 @@ public class StaticParser {
                 result = "Don't care";
         }
         return result;
-    }
-
-    public ArrayList<Alerte> getAlertes() {
-        return alertes;
     }
 }

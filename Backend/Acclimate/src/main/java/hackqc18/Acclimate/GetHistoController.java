@@ -17,6 +17,6 @@ public class GetHistoController {
             @RequestParam(value="est", defaultValue="180") double est,
             @RequestParam(value="ouest", defaultValue="-180") double ouest) {
 
-        return new GetHisto().alerts(nord, sud, est, ouest);
+        return GetHisto.theInstance().alerts(nord, sud, est, ouest);
     }
 }

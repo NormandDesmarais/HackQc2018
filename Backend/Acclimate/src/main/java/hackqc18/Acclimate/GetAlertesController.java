@@ -6,7 +6,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 /**
  * This API should be the one delete (old API).
- * GetAlertsController (with alerts in French) should be the one we keep
+ * GetAlertsController (with alerts in English) should be the one we keep
  * once all clients have migrated to the new API.
  */
 @RestController

@@ -1,50 +1,14 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package hackqc18.Acclimate;
 
-import java.io.*;
-import java.util.ArrayList;
 
-public class VigilanceParser {
-    
-    private ArrayList<Alerte> alertes = new ArrayList<>();
-    
+public class VigilanceParser extends HistoryCsvParser {
+       
     public VigilanceParser (String filename) {
-        String tmp = "";
-
-        try {
-            
-            File fileDir = new File("src" +
-                    File.separator + "main" +
-                    File.separator + "java" +
-                    File.separator + "hackqc18" +
-                    File.separator + "Acclimate" +
-                    File.separator + "vigilance.csv");
-
-            BufferedReader reader = new BufferedReader(
-                    new InputStreamReader(
-                            new FileInputStream(fileDir), "UTF8"));
-
-            String s;
-            while ((s = reader.readLine()) != null) {
-                if (s.contains("\r")) {
-                    s.replace("\r", ",");
-                }
-
-                tmp += s;
-            }
-            reader.close();
-        } catch (IOException ex) {
-            System.err.println("Erreur à l’ouverture du fichier");
-        }
-        parseFeed(tmp);
+        super(filename);
     }
     
     
-    public void parseFeed(String toBeParsed){      
+    public void parseContent(String toBeParsed){      
         String [] alertePrg = toBeParsed.split(",");        
         
         String nom = "", territoire = "", certitude = "", severite = "", type = "";
@@ -96,9 +60,5 @@ public class VigilanceParser {
                     break;
             }
         }
-    }
-    
-    public ArrayList<Alerte> getAlertes() {
-        return alertes;
     }
 }
