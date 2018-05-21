@@ -2,17 +2,19 @@ package hackqc18.Acclimate;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
- * This API should be the one delete (old API).
- * GetAlertsController (with alerts in French) should be the one we keep
+ * This API should be the one we keep (new API).
+ * GetAlertesController (with alertes in French) should be deleted
  * once all clients have migrated to the new API.
  */
 @RestController
 @RequestMapping("api")
-public class GetAlertesController {
-    @RequestMapping(value="/alertes",produces="application/json;charset=UTF-8")
+public class GetAlertsController {
+    @RequestMapping(value="/getAlerts",produces="application/json;charset=UTF-8")
+    @ResponseBody
     public String getAlerts(
             @RequestParam(value="nord", defaultValue="90") double nord,
             @RequestParam(value="sud", defaultValue="-90") double sud,
@@ -21,4 +23,3 @@ public class GetAlertesController {
         return new GetAlertes().alerts(nord, sud, est, ouest);
     }
 }
-

@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class GetHistoController {
     @RequestMapping(value="/getHisto",produces="application/json;charset=UTF-8")
     public @ResponseBody
-    String getAlertController(
+    String getHistoric(
             @RequestParam(value="nord", defaultValue="90") double nord,
             @RequestParam(value="sud", defaultValue="-90") double sud,
             @RequestParam(value="est", defaultValue="180") double est,

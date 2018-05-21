@@ -7,22 +7,23 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class Geometry {
-
+    public static final String TYPE_POINT = "Point";
+    public static final String TYPE_POLYGON = "Polygon";
+    
     private String type;
-    private final ArrayList<double[]> coordinates = new ArrayList<>();
+    private final ArrayList<double[]> coordinates;
 
-    public Geometry(String type) {
-        this.type = type;
+    /**
+     * Constructor for Point type Geometry
+     * @param lng longitudinal coordinate
+     * @param lat latitudinal coordinate
+     */
+    public Geometry(double lng, double lat) {
+        type = TYPE_POINT;
+        coordinates = new ArrayList<>();
+        coordinates.add(new double[]{lng, lat});
     }
     
-    public Geometry(String type, double x, double y) {
-        this.type = type;
-        coordinates.add(new double[]{x, y});
-    }
-
-    public void add(double x, double y) {
-        coordinates.add(new double[]{x, y});
-    }
 
     public String getType() {
         return type;

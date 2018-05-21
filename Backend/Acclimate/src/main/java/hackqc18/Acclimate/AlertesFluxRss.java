@@ -15,9 +15,7 @@ public class AlertesFluxRss {
 
     private static AlertesFluxRss theInstance = null;
     
-    private ArrayList<Double> coordLng = new ArrayList<>();
-    private ArrayList<Double> coordLat = new ArrayList<>();
-    private ArrayList<Alerte> alertes = new ArrayList<>();
+    private final ArrayList<Alerte> alertes = new ArrayList<>();
 
 
     public static AlertesFluxRss theInstance() {
@@ -32,7 +30,7 @@ public class AlertesFluxRss {
 
     }
 
-    public void parseFeed() {
+    private void parseFeed() {
         String contRss = getRssFeed();
         ArrayList<String> alertePrg = getInfos("<item>", 5, "</item>", contRss);
 
@@ -56,8 +54,6 @@ public class AlertesFluxRss {
             double lng = Double.parseDouble(("-" + getInfosStr("-", 0, ",", coordos)));
             double lat = Double.parseDouble((getInfosStr(",", (lng + "").length(),
                     "<>", coordos)));
-            this.coordLng.add(lng);
-            this.coordLat.add(lat);
 
             alertes.add(new Alerte(nom, source, territoire,
                     certitude, severite, type, dateDeMiseAJour, "00000", urgence,
@@ -66,7 +62,7 @@ public class AlertesFluxRss {
 
     }
 
-    public static String getRssFeed() {
+    private String getRssFeed() {
         try {
             String rss = "";
             URL rssSource = new URL("https://geoegl.msp.gouv.qc.ca/avp/rss/");
@@ -93,7 +89,7 @@ public class AlertesFluxRss {
         return "";
     }
 
-    public static String getInfosStr(String balise, int offset, String fin, String rss) {
+    private String getInfosStr(String balise, int offset, String fin, String rss) {
         String liste = "";
         String rssText = rss;
         int ix;
@@ -106,7 +102,7 @@ public class AlertesFluxRss {
         return liste;
     }
 
-    public static ArrayList<String> getInfos(String balise, int offset, String fin, String rss) {
+    private ArrayList<String> getInfos(String balise, int offset, String fin, String rss) {
         ArrayList<String> liste = new ArrayList<>();
         String rssText = rss;
         int ix;
@@ -131,12 +127,14 @@ public class AlertesFluxRss {
         }
 
         ArrayList<Alerte> result = new ArrayList<>();
-        for (int i = 0; i < alertes.size(); i++) {
-            if (coordLng.get(i) > ouest && coordLng.get(i) < est
-                    && coordLat.get(i) > sud && coordLat.get(i) < nord) {
-                result.add(alertes.get(i));
-            }
+        for (Alerte alert : alertes) {
+            if (alert.overlapWithBox(nord, sud, est, ouest))
+                result.add(alert);
         }
         return result;
+    }
+
+    public ArrayList<Alerte> getAlertes() {
+        return alertes;
     }
 }
