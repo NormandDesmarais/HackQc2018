@@ -8,13 +8,8 @@
     android:orientation="horizontal"
     android:visibility="visible">
 
-    <!--
-    MarkerInfoWindow is the default implementation of InfoWindow for a Marker.
-    It handles R.id.bubble_title = OverlayWithIW.getTitle(),
-    R.id.bubble_subdescription = OverlayWithIW.getSubDescription(),
-    R.id.bubble_description = OverlayWithIW.getSnippet(),
-    R.id.bubble_image = Marker.getImage()
-    -->
+    <!-- Les boutons de confirmation pour le prompt window qui demande de
+         confirmer l'alerte d'un autre usager -->
 
     <ImageView
         android:id="@+id/confirm_yes"

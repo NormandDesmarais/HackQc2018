@@ -10,6 +10,9 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 
 
+/**
+ * Classe de la Page d'Acceuil. C'est la fenêtre qui s'ouvre au lancement de l'application.
+ */
 public class Home extends AppCompatActivity {
 
     @Override
@@ -18,6 +21,7 @@ public class Home extends AppCompatActivity {
 
         setContentView(R.layout.home);
 
+        // 'proceed' est le "map button", et 'textView' est le texte "Entrer": chacun mène à la carte
         findViewById(R.id.proceed).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -34,6 +38,7 @@ public class Home extends AppCompatActivity {
         });
     }
 
+    // À chaque fois que retourne sur le Home Page, on recalcule le nombre d'alertes.
     public void onResume() {
         super.onResume();
 
@@ -41,7 +46,7 @@ public class Home extends AppCompatActivity {
 
         String quebec, userPins;
 
-        // valeurs totales :)
+        // valeurs totales
         int feu = 0;
         int eau = 0;
         int meteo = 0;
@@ -87,11 +92,13 @@ public class Home extends AppCompatActivity {
             e.printStackTrace();
         }
 
+        // Texte lié aux alertes GOUVERNEMENTALES
         ((TextView) findViewById(R.id.dlb_eauMain)).setText(String.valueOf(eau)+ " alertes actives");
         ((TextView) findViewById(R.id.dlb_feuMain)).setText(String.valueOf(feu)+ " alertes actives");
         ((TextView) findViewById(R.id.dlb_meteoMain)).setText(String.valueOf(meteo)+ " alertes actives");
         ((TextView) findViewById(R.id.dlb_terrainMain)).setText(String.valueOf(terrain)+ " alertes actives");
 
+        // Texte lié aux alertes d'USAGERS
         ((TextView) findViewById(R.id.dlb_eauSec)).setText("+" + String.valueOf(eauU)+ " saisies d'USAGERS");
         ((TextView) findViewById(R.id.dlb_feuSec)).setText("+" + String.valueOf(feuU)+ " saisies d'USAGERS");
         ((TextView) findViewById(R.id.dlb_meteoSec)).setText("+" + String.valueOf(meteoU)+ " saisies d'USAGERS");

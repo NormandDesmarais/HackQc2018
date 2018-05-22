@@ -1,11 +1,8 @@
 package hackqc18.Acclimate;
 
 import java.time.LocalDateTime;
-import java.util.concurrent.atomic.AtomicLong;
 
 public class Alerte {
-
-    private static AtomicLong counter = new AtomicLong();
 
     private final String nom;
     private final String source;
@@ -14,18 +11,17 @@ public class Alerte {
     private final String severite;
     private final String type;
     private String dateDeMiseAJour;
-    private final String idAlerte;
+    private final String id;
     private final String urgence;
     private final String description;
     private final String geom;
     private int count;
-    private final long id;
-    private CoordinatesJSON coord;
+    private final Geometry geometry;
 
     public Alerte(String nom, String source, String territoire,
             String certitude, String severite, String type,
-            String dateDeMiseAJour, String idAlerte, String urgence,
-            String description, String geom, CoordinatesJSON coord) {
+            String dateDeMiseAJour, String id, String urgence,
+            String description, String geom, Geometry coord) {
 
         this.nom = nom;
         this.source = source;
@@ -34,53 +30,34 @@ public class Alerte {
         this.severite = severite;
         this.type = type;
         this.dateDeMiseAJour = dateDeMiseAJour;
-        this.idAlerte = idAlerte;
+        this.id = id;
         this.urgence = urgence;
         this.description = description;
         this.geom = geom;
-        this.id = counter.incrementAndGet();
         this.count = 1;
-        this.coord = coord;
-
+        this.geometry = coord;
     }
 
-    public CoordinatesJSON getCoord() {
-        return coord;
+    public Alerte(String nom, String source, String territoire,
+            String certitude, String severite, String type,
+            String dateDeMiseAJour, String id, String urgence,
+            String description, double lng, double lat) {
+
+        this.nom = nom;
+        this.source = source;
+        this.territoire = territoire;
+        this.certitude = certitude;
+        this.severite = severite;
+        this.type = type;
+        this.dateDeMiseAJour = dateDeMiseAJour;
+        this.id = id;
+        this.urgence = urgence;
+        this.description = description;
+        this.count = 1;
+        this.geom = "";
+        this.geometry = new Geometry(lng, lat);
     }
 
-    
-    public void increment(double lat, double lng, String date) {
-        // TODO - renormalisé la posiiton du point
-        //      ((x*count)+lat)/(count+1)
-        //      ((y*count)+lng)/(count+1)
-        count++;
-        dateDeMiseAJour = date;
-        if (count == 10) {
-            certitude = "Observé";
-        } else if (count == 5) {
-            certitude = "Probable";
-        }
-    }
-
-    /**
-     * This method assume that the alert date is in the following format:
-     *      AAAA-MM-JJTHH:MM:SS
-     * @param days number of days
-     * @param hours number of hours
-     * @param minutes number of minutes
-     * @return true if the alert date is older than the one given
-     */
-    public boolean isOlderThan(int days, int hours, int minutes) {
-        LocalDateTime alrTime = LocalDateTime.parse(dateDeMiseAJour);
-        LocalDateTime now = LocalDateTime.now();
-        
-        int dDays = now.getDayOfYear() - alrTime.getDayOfYear() - days;
-        int dHours = now.getHour() - alrTime.getHour() - hours;
-        int dMin = now.getMinute() - alrTime.getMinute() - minutes;
-        return (dDays > 0 || (dDays == 0 &&
-                (dHours > 0 || (dHours == 0 && dMin > 0))));
-    }
-    
     public String getNom() {
         return nom;
     }
@@ -109,10 +86,6 @@ public class Alerte {
         return dateDeMiseAJour;
     }
 
-    public String getIdAlerte() {
-        return idAlerte;
-    }
-
     public String getUrgence() {
         return urgence;
     }
@@ -121,26 +94,69 @@ public class Alerte {
         return description;
     }
 
-    public String getGeom() {
-        return geom;
+    public Geometry getGeometry() {
+        return geometry;
     }
 
-    @Override
-    public String toString() {
-        return "{\"alerte\" : {"
-                + "\"id\": \"" + idAlerte + "\","
-                + "\"count\": \"" + count + "\","
-                + "\"nom\": \"" + nom + "\","
-                + "\"source\": \"" + source + "\","
-                + "\"territoire\": \"" + territoire + "\","
-                + "\"certitude\": \"" + certitude + "\","
-                + "\"severite\": \"" + severite + "\","
-                + "\"type\": \"" + type + "\","
-                + "\"dateDeMiseAJour\": \"" + dateDeMiseAJour + "\","
-                + "\"urgence\": \"" + urgence + "\","
-                + "\"description\": \"" + description + "\","
-                + "\"geometry\": " + geom
-                + "}}";
+    public int getCount() {
+        return count;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void increment(double lat, double lng, String date) {
+        // TODO - renormalisé la posiiton du point
+        //      ((x*count)+lat)/(count+1)
+        //      ((y*count)+lng)/(count+1)
+        count++;
+        dateDeMiseAJour = date;
+        if (count == 10) {
+            certitude = "Observé";
+        } else if (count == 5) {
+            certitude = "Probable";
+        }
+    }
+
+    /**
+     * This method assume that the alert date is in the following format:
+     * AAAA-MM-JJTHH:MM:SS
+     *
+     * @param days number of days
+     * @param hours number of hours
+     * @param minutes number of minutes
+     * @return true if the alert date is older than the one given
+     */
+    public boolean isOlderThan(int days, int hours, int minutes) {
+        LocalDateTime alrTime = LocalDateTime.parse(dateDeMiseAJour);
+        LocalDateTime now = LocalDateTime.now();
+
+        int dDays = now.getDayOfYear() - alrTime.getDayOfYear() - days;
+        int dHours = now.getHour() - alrTime.getHour() - hours;
+        int dMin = now.getMinute() - alrTime.getMinute() - minutes;
+        return (dDays > 0 || (dDays == 0
+                && (dHours > 0 || (dHours == 0 && dMin > 0))));
+    }
+
+    /**
+     * This method only supports Point type Alert for now.
+     *
+     * @param nord northernmost latitude
+     * @param sud southernmost latitude
+     * @param est easternmost longitude
+     * @param ouest westernmost longitude
+     * @return true if the point is within the box defined by nord, sud, est et
+     * ouest.
+     */
+    public boolean overlapWithBox(
+            double nord, double sud, double est, double ouest) {
+        double coordLng = geometry.getCoordinates().get(0)[0];
+        double coordLat = geometry.getCoordinates().get(0)[1];
+
+        return (coordLng > ouest && coordLng < est
+                && coordLat > sud && coordLat < nord);
 
     }
+
 }

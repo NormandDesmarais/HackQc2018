@@ -91,7 +91,7 @@
 
     <!-- "Mark Favorite", should appear as action button if possible -->
 
-    <!-- DEPRECATED !!
+    <!-- DEPRECATED !! TODO : remove?
     <item
         android:id="@+id/posBtn"
         android:orderInCategory="100"

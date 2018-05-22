@@ -59,10 +59,6 @@ Mention spéciale
 
 Alpha 1.0
 
-## License
-
-This project is licensed under the MIT License - see the [LICENSE.md](LICENSE.md) file for details
-
 ## Acknowledgments
 
 Merci à StackOverflow pour son incroyanle apport au monde du développement technologique! Que serions-nous sans cette incroyable ressource?

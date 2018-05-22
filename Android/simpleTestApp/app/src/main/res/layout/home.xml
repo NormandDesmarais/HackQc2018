@@ -49,5 +49,4 @@
         android:textColor="@color/number_features_tile_text_color"
         android:textSize="16sp" />
 
-
 </LinearLayout>
