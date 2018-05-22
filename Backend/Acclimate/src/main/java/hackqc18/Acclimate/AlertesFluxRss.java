@@ -1,41 +1,43 @@
 package hackqc18.Acclimate;
 
-import java.net.*;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
-import java.io.*;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.net.URLConnection;
+//import java.text.SimpleDateFormat;
+//import java.util.Date;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.stereotype.Component;
 
 /**
  *
  *
  */
+@Component
 public class AlertesFluxRss {
 
-    private static AlertesFluxRss theInstance = null;
-    
-    private final ArrayList<Alerte> alertes = new ArrayList<>();
+    private static ArrayList<Alerte> alertes = new ArrayList<>();
+
+//    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 
 
-    public static AlertesFluxRss theInstance() {
-        if (theInstance == null) {
-            theInstance = new AlertesFluxRss();
-        }
-        return theInstance;
-    }
-    
-    private AlertesFluxRss() {
-        parseFeed();
-
-    }
-
+    @Scheduled(fixedRate = 1000 * 180) // scheduled to parse every 3 min
+//    @Scheduled(fixedRate = 1000 * 10) // scheduled to parse every 10 sec
     private void parseFeed() {
+//        Logger.getLogger(AlertesFluxRss.class.getName()).log(Level.SEVERE, "The time is now {0}", dateFormat.format(new Date()));
+
         String contRss = getRssFeed();
         ArrayList<String> alertePrg = getInfos("<item>", 5, "</item>", contRss);
 
         String nom, source, territoire, certitude, severite, type;
         String dateDeMiseAJour, urgence, description, geom;
+        ArrayList<Alerte> newAlerts = new ArrayList<>();
         for (int i = 0; i < alertePrg.size(); i++) {
             nom = getInfosStr("<title>", 0, "</title>", alertePrg.get(i));
             String coords = getInfosStr("<b>Urgence</b>", 0, "amp;zoom", alertePrg.get(i));
@@ -55,11 +57,11 @@ public class AlertesFluxRss {
             double lat = Double.parseDouble((getInfosStr(",", (lng + "").length(),
                     "<>", coordos)));
 
-            alertes.add(new Alerte(nom, source, territoire,
+            newAlerts.add(new Alerte(nom, source, territoire,
                     certitude, severite, type, dateDeMiseAJour, "00000", urgence,
                     description, lng, lat));
         }
-
+        alertes = newAlerts;
     }
 
     private String getRssFeed() {
@@ -71,15 +73,15 @@ public class AlertesFluxRss {
                     new InputStreamReader(
                             rssSrc.getInputStream(), StandardCharsets.UTF_8));
             String inputLine;
-            
+
             while ((inputLine = in.readLine()) != null) {
                 rss += inputLine;
             }
-            
+
             in.close();
-            
+
             String rssCleaned = rss.replaceAll("&lt;", "<").replaceAll("&gt;", ">").substring(564);
-            
+
             return rssCleaned;
         } catch (MalformedURLException ex) {
             Logger.getLogger(AlertesFluxRss.class.getName()).log(Level.SEVERE, null, ex);
@@ -116,7 +118,7 @@ public class AlertesFluxRss {
         return liste;
     }
 
-    public ArrayList<Alerte> getAlertes() {
+    public static ArrayList<Alerte> getAlertes() {
         return alertes;
     }
 }

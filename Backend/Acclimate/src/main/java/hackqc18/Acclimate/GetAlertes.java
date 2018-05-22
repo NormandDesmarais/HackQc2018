@@ -9,7 +9,7 @@ public class GetAlertes {
     @JsonInclude(JsonInclude.Include.NON_NULL)
     public String alerts(double nord, double sud, double est, double ouest) {
         Alerts theAlerts = new Alerts(nord, sud, est, ouest,
-                AlertesFluxRss.theInstance().getAlertes());
+                AlertesFluxRss.getAlertes());
 
         return theAlerts.toString();
     }
