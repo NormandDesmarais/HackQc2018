@@ -1,14 +1,24 @@
 <!DOCTYPE html>
 <html xmlns="http://www.w3.org/1999/xhtml" lang="fr" xml:lang="fr">
     <head>
-        <title>Olivier Lepage-Applin</title>
+        <title>Sophie Savoie</title>
         <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
         <meta charset="utf-8"/>
-        <link rel="stylesheet" href="mystyle.css"/>
+        <link rel="stylesheet" href="https://www.webdepot.umontreal.ca/Usagers/p1071435/MonDepotPublic/Acclimate/mystyle.css"/>
+        <script src="js/minMenu.js" type="text/javascript"></script>
     </head>
 
     <body>
-        <div>
+        <nav class="navBar" id="navBar">
+            <ul>
+               <li><a class="active" href="https://www.webdepot.umontreal.ca/Usagers/p1071435/MonDepotPublic/Acclimate/index.xhtml">Accueil</a></li><!-- Pour enlever l'espace...
+            --><li><a href="https://www.webdepot.umontreal.ca/Usagers/p1071435/MonDepotPublic/Acclimate/plan.xhtml">Plan de travail</a></li><!-- https://css-tricks.com/fighting-the-space-between-inline-block-elements/
+            --><li><a href="https://www.webdepot.umontreal.ca/Usagers/p1071435/MonDepotPublic/Acclimate/about.xhtml">À propos</a></li><!--
+            --><li id="unique"><a href="javascript:void(0);" class="icon" onclick="showMenu()">&#9776;</a></li>
+            </ul>
+        </nav>
+
+        <div onclick="hideMenu()">
             <h1>Projet Informatique (Été 2018)</h1>
             <h1><a href="https://www.webdepot.umontreal.ca/Usagers/p1071435/MonDepotPublic/Acclimate/index.xhtml?uniq=-lx1j15">Acclimate</a></h1>
             <h2 class="center">Olivier Lepage-Applin</h2>
