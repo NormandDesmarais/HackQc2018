@@ -19,86 +19,184 @@
         </nav>
 
         <div onclick="hideMenu()">
-            <h1>Outils de base</h1>
-            <h2>Comprendre la logique à deux états : V ou F, <i>on</i> ou <i>off</i>, haut voltage ou bas voltage ?</h2>
-            <p>À la base de tous les circuits électroniques se trouve une idée très simple. Chaque élément de notre système, chaque câble, chaque entrée ou sortie peut 
-                exister en deux états différents: 0 ou 1. On utilise parfois, dans le langage, différents synonymes pour représenter cette idée: vrai ou faux, V ou F, 
-                <i>on</i> ou <i>off</i>, etc. Ces différentes façons de représenter les états possibles sont toutes équivalentes mais il est important de comprendre ce que 
-                cela représente. Dans les vrais systèmes, ces deux états correspondent à un haut voltage ou à un bas voltage (habituellement, un bas voltage signifie être 
-                connecté à la mise à terre, le <i>ground</i>).</p>
-            <p>Ici, le <i>Pin</i> (à gauche) permet de créer une valeur 0 ou 1 sur le câble qui est connecté entre les deux composantes (correspondant, on s’en souvient, à un bas 
-                voltage ou un haut voltage). Le <i>LED</i> (à droite) permet simplement de faire la lecture de cette valeur associée au câble: <strong>1 résulte en une lumière rouge (allumée), et 0 en une lumière grise (éteinte)</strong>.</p>
-                
-            <div class="special">Cliquer sur une composante pour la sélectionner et cliquer à un endroit dans la fenêtre pour le placer. Attention: ne pas 
-                « <i>drag and drop</i>! »
-            </div>
-            
-            <h2>Mode d’opération</h2>
-            <p>Logisim a deux modes d’opération principal: <strong>Édition</strong> et <strong>Simulation</strong>. Si vous avez essayé de cliquer sur le <i>Pin</i> pour changer sa valeur, vous avez 
-                peut-être remarqué que cela ne fonctionne pas. C’est parce que nous sommes présentement en mode édition. Afin de pouvoir interagir avec votre circuit, 
-                le logiciel doit être en mode simulation.</p>
-            
-            <div class="special">Pour passer en mode simulation, vous devez cliquer sur la petite main complètement en haut à gauche de la fenêtre. Le mode d’édition se trouve juste à côté, c’est l’icône pointeur de souris.
-            </div>
-            
-            <p>Remarquez qu’en mode simulation, si vous rajoutez une composante vous passerez automatiquement en mode édition.</p>
-            
-            <h2><i>Input/Output</i> et <i>Wiring</i></h2>
-            <p>Les différentes composantes de base disponibles dans Logisim sont regroupées en dossier à gauche de la fenêtre. Nous avons déjà vu le <i>Pin</i> et 
-                le <i>LED</i>. 
-            Observons les différents attributs de ces composantes.</p>
-            <ul>
-                <li><i>Pin</i>
+            <h1>Plan de travail</h1>
+            <h2>Client</h2>
+                <p>
                     <ul>
-                        <li><i>Facing</i> est un attribut commun de plusieurs composantes permet de l’orienter.</li>
-                        <li>Pour l’instant assurez-vous de garder le <strong><i>Output</i> à <i>No</i></strong>, le <strong><i>Data Bit</i> à 1</strong> et le <strong><i>Pull Behavior</i> à <i>Unchanged</i></strong>. 
-                            Nous verrons dans un tutoriel à venir l’impact de ces attributs. Toutefois, assurez-vous de changer <strong><i>Three-States</i> à <i>No</i></strong>. Cet attribut change la fonctionnalité de notre logique à deux états. Nous parlerons aussi de la logique à trois-états (<i>Three-States logic</i>) dans un tutoriel futur.</li>
-                        <li>Le <i>label</i> permet de donner un nom à la composante. Vous avez aussi un contrôle sur l’endroit où afficher ce nom et la police d’affichage. Vous pouvez déplacer une composante en cliquant dessus et son <i>label</i> suivra sa position.</li>
-                    </ul>
-                </li>
-                <li><i>LED</i>
-                    <ul>
-                        <li>On remarque que plusieurs des mêmes attributs sont présents (<i>Facing</i>, <i>Label</i>, etc). Mais en plus nous pouvons choisir différentes 
-                            couleurs pour représenter le statut 0 (<i>off</i>) et 1 (<i>on</i>).</li>
-                        <li><i>Active on High</i> permet d’inverser la fonctionnalité du <i>LED</i>. Si <i>No</i> est choisi, alors il sera « allumé » par défaut et 
-                            s’éteindra s’il lit 1.</li>
-                    </ul>
-                </li>
-            </ul>
+                    <!--
+                        •	GPS
+                            o	Web – Localisation
+                        •	Gérer serveur down
+                            o	Androïd : afficher l’historique
+                            o	Web : Afficher roulette lorsque l’on est en attente du serveur
+                        •	Web : ajouter les alertes usager
+                        •	Gestion user : 
+                            o	Compte utilisateur
+                            o	Gérer la sécurité avec Sqlite ou Nosql
+                        •	Historique : info? (voir général)
+                        •	Refactoring
+                            o	Distinguer alertes user
+                            o	Rechercher par adresse pour BBOX
+                            o	Notifications
+                        •	Notifications
+                            o	Android
+                            o	Background task
+                    -->
 
-            <p>Nous ne ferons pas le tour de toutes les composantes ici. Il est plus intéressant de regarder les composantes utiles pour la construction de 
-                circuits simples permettant de bien comprendre:</p>
-                <ul>
-                    <li><i>Button</i>
-                        <ul><li>Fonctionne comme un <i>Pin</i> mais sa valeur retourne automatiquement à 0 lorsque relâché.</li></ul>
-                    </li>
-                    <li><i>Probe</i>
+                        <li>GPS</li>
                         <ul>
-                            <li>Un peu comme le <i>LED</i>, permet de savoir la valeur associée à un câble.</li>
-                            <li>Le <i>Radix</i> permet d’interpréter ce nombre selon différentes bases numériques. Voir le tutoriel sur les <a href="bus.html">bus et splitters</a> pour plus d’informations.</li>
+                            <li>Web - Localisation</li>
                         </ul>
-                    </li>
-                    <li><i>Constant</i>
+                        <li>Gérer serveur down</li>
                         <ul>
-                            <li>Permet d’assigner une valeur fixe 0 ou 1 (pour l’instant) à une composante.</li>
-                            <li>Assurez-vous de laisser le <i>Data Bit</i> à 1 si vous l’utilisez.</li>
-                            <li><i>Value</i> correspond à la constante désirée : <strong>0x0 = 0</strong> et <strong>0x1 = 1</strong>.</li>
+                            <li>Android : afficher l’historique</li>
+                            <li>Web : Afficher roulette lorsque l’on est en attente du serveur</li>
                         </ul>
-                    </li>
-                    <li><i>Tunnel</i>
+                        <li>Web : ajouter les alertes usager</li>
+                        <li>Gestion user :</li>
                         <ul>
-                            <li>Il permet de simplifier des circuits en téléportant le signal d’un tunnel à l’autre. Comme un trainn qui entre d’un côté du tunnel d’une 
-                                montagne et qui ressort de l’autre ! Il y a deux tunnels qui sont connectés ensemble.</li>
-                            <li>Pour l’instant, conserver le <i>Data Bit</i> à 1.</li>
-                            <li>Ici, le label est très important car c’est ce qui définit la paire de tunnel. Il doit donc être identique dans les deux tunnels pour que 
-                                la composante fonction adéquatement.</li>
-                            <li>Évidemment, rien de tel n’existe dans le monde réel…</li>
+                            <li>Compte utilisateur</li>
+                            <li>Gérer la sécurité avec SQLite ou NoSQL</li>
                         </ul>
-                    </li>
-                </ul>
-            <p class="clearFloat">La propriété <i>Data Bit</i> qu’on voit sur plusieurs composantes est une option très utile et importante du logiciel, mais qui nécessite une compréhension 
-                plus avancée. Nous verrons plus en détails son utilité dans le tutoriel sur les <a href="bus.html">bus et splitters</a>. D’ici là observons les composantes servant à 
-                créer des circuits de logique combinatoire!</p>
+                        <li>Historique : info? (voir général)</li>
+                        <li>Refactoring</li>
+                        <ul>
+                            <li>Distinguer alertes user</li>
+                            <li>Rechercher par adresse pour BoundingBox</li>
+                            <li>Notifications</li>
+                        </ul>
+                        <li>Notifications</li>
+                        <ul>
+                            <li>Android</li>
+                            <li>Background task</li>
+                        </ul>
+                    </ul>
+                </p>
+
+            <h2>Serveur</h2>
+                <p>
+                    <ul>
+                    <!--
+                        •	Refactoring
+                            o	Json
+                            o	Classes Alertes
+                            o	Classes BDD
+                        •	BDD
+                            o	Thread pour charger dans le background
+                            o	Ajouter nouvelles BDD
+                        •	Gestion User
+                            o	Logique de poids pour user fiables
+                        •	Historique (voir général)
+                            o	Métrique?
+                            o	Info?
+                        •	Alertes
+                            o	Effectuer un traitement sur la localisation des alertes (ex : Étendre pour rivières)
+                            o	Déterminer les méthodes d’analyse
+                        •	Gérer la durée des alertes usagers
+                        •	Lissage polygones
+                        •	Format BDD server
+                            o	Usager
+                            o	MySQL
+                            o	NoSQL
+                    -->
+
+                        <li>Refactoring</li>
+                        <ul>
+                            <li>JSON</li>
+                            <li>Classes Alertes</li>
+                            <li>Classes BDD</li>
+                        </ul>
+                        <li>Base de Données (BDD)</li>
+                        <ul>
+                            <li>Thread pour charger le background</li>
+                            <li>Ajouter nouvelles BDD</li>
+                        </ul>
+                        <li>Historique (voir général)</li>
+                        <ul>
+                            <li>Métrique ?</li>
+                            <li>Info ?</li>
+                        </ul>
+                        <li>Alertes</li>
+                        <ul>
+                            <li>Effectuer un traitement sur la localisation des alertes (ex : Étendre pour rivières)</li>
+                            <li>Déterminer les méthodes d’analyse</li>
+                        </ul>
+                        <li>Gérer la durée des alertes usagers</li>
+                        <li>Lissage des polygones</li>
+                        <li>Format BDD serveur</li>
+                        <ul>
+                            <li>Usager</li>
+                            <li>MySQL</li>
+                            <li>NoSQL</li>
+                        </ul>
+                    </ul>
+                </p>
+            
+            <h2>Général</h2>
+                <p>
+                    <ul>
+                    <!--
+                        •	Gérer les users
+                            o	Socket?
+                                	Plus flexible
+                                	Mais est-ce supporté par Java Script?
+                            o	Ou URL avec query chiffrée
+                                	Attention : limite URL à moins de 200 caractères
+                        •	Historique
+                            o	Ajouter algorithme d’évaluation des risques (métrique) (voir littérature)
+                            o	Ajouter infos : ressources, quoi faire au cas de…, prévention
+                            o	Plage de dates : gérer par serveur ou client?
+                        •	Alertes
+                            o	Ajouter photos
+                            o	Réduction automatique
+                        •	Format des alertes
+                    -->
+
+                        <li>Gérer les usagers</li>
+                        <ul>
+                            <li>Socket? (Plus flexible, mais est-ce supporté par JavaScript?)</li>
+                            <li>Ou URL avec query chiffrée? (Attention : limite URL à moins de 200 caractères)</li>
+                        </ul>
+                        <li>Historique</li>
+                        <ul>
+                            <li>Ajouter algorithme d’évaluation des risques (métrique) (voir littérature)</li>
+                            <li>Ajouter infos : ressources, quoi faire au cas de…, prévention</li>
+                            <li>Plage de dates : gérer par serveur ou client?</li>
+                            <li>Regrouper les points en fonction du niveau de 'zoom' (réduction du lag)</li>
+                        </ul>
+                        <li>Alertes</li>
+                        <ul>
+                            <li>Ajouter photos</li>
+                            <li>Réduction automatique</li>
+                        </ul>
+                        <li>Format des alertes</li>
+                        <li>Ajouter plus de BDD?</li>
+                        <ul>
+                            <li><a href="https://meteo.gc.ca/warnings/index_f.html">Alertes Environnement Canada</a></li>
+                            <li><a href="http://sopfeu.qc.ca">Feux de forêt (Sopfeu)</a></li>
+                        </ul>
+                    </ul>
+                </p>
+
+            <h2>Administratif</h2>
+                <p>
+                    <ul>
+                    <!--
+                        •	Envoyer courriels
+                            o	Ville de Montréal
+                            o	Gouvernement du Québec/Canada
+                        •	Contacter HackQc pour obtenir le prix
+                        •	Trouver un nouveau nom
+                    -->
+                    
+                        <li>Contacter autorités possiblement intéressées: envoyer courriels</li>
+                        <ul>
+                            <li>Ville de Montréal</li>
+                            <li>Gouvernement du Québec/Canada</li>
+                        </ul>
+                        <li>Trouver un nouveau nom (nom de domaine non-disponible)</li>
+                    </ul>
+                </p>
             
             <footer>
                 <img src="images/diro.png" alt="Département d'Informatique et de Recherche Opérationnelle"/>
