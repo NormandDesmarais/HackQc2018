@@ -41,10 +41,6 @@ footer {
 
     /* Section pour les DIV de contenu (<body>) */
 
-i:hover { /* Les termes en anglais ainsi que ceux reliés à la terminologie de Logisim */
-  color: white;
-}
-
 .specialStrong {
   border: 1px solid red;
   width: 40%;
