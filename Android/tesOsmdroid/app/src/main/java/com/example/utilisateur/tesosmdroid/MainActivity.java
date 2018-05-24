@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
@@ -34,8 +35,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
     public static final double[] MONTREAL_COORD = {45.5161, -73.6568};
 
-    public MapView map = null;
-    public MapDisplay myMap = null;
+    public MapView map;
+    public MapDisplay myMap;
     public MapEventsOverlay mapEventsOverlay;
 
     @Override public void onCreate(Bundle savedInstanceState) {
@@ -59,6 +60,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         //inflate and create the map
         setContentView(R.layout.activity_main);
 
+
         map = (MapView) findViewById(R.id.map);
         myMap = new MapDisplay(map);
         map.setTileSource(TileSourceFactory.MAPNIK);
@@ -80,6 +82,11 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         Button addPin = (Button) findViewById(R.id.addPin);
         Button circleBtn = (Button) findViewById(R.id.circleBtn);
 
+        try {
+            JSONwrapper js = new JSONwrapper("test.json");
+        } catch (Exception e){
+            Log.w("erreur : ", e.toString());
+        }
 
 
         posBtn.setOnClickListener(new View.OnClickListener() {
