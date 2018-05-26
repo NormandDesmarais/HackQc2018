@@ -23,52 +23,38 @@
             <h2>Client</h2>
                 <p>
                     <ul>
-                    <!--
-                        •	GPS
-                            o	Web – Localisation
-                        •	Gérer serveur down
-                            o	Androïd : afficher l’historique
-                            o	Web : Afficher roulette lorsque l’on est en attente du serveur
-                        •	Web : ajouter les alertes usager
-                        •	Gestion user : 
-                            o	Compte utilisateur
-                            o	Gérer la sécurité avec Sqlite ou Nosql
-                        •	Historique : info? (voir général)
-                        •	Refactoring
-                            o	Distinguer alertes user
-                            o	Rechercher par adresse pour BBOX
-                            o	Notifications
-                        •	Notifications
-                            o	Android
-                            o	Background task
-                    -->
-
                         <li>GPS</li>
                         <ul>
-                            <li>Web - Localisation</li>
+                            <li>Localisation automatique de l'appareil mobile de l'usager</li>
                         </ul>
-                        <li>Gérer serveur down</li>
+                        <li>Efficacité</li>
                         <ul>
-                            <li>Android : afficher l’historique</li>
-                            <li>Web : Afficher roulette lorsque l’on est en attente du serveur</li>
+                            <li>Protole d'affichage pour un très grand nombre de points</li>
+                            <li>Affichage de polygones</li>
+                            <li>Regrouper les points en fonction du niveau de 'zoom' (réduction du lag)</li>
                         </ul>
-                        <li>Web : ajouter les alertes usager</li>
-                        <li>Gestion user :</li>
+                        <li>Gestion des erreurs du serveur</li>
+                        <ul>
+                            <li>Android : affichage de l’historique</li>
+                            <li>Web : Affichage d'une roulette lorsque l’on est en attente du serveur</li>
+                        </ul>
+                        <li>Web : ajouter les alertes usager sur la carte</li>
+                        <li>Gestion des profils utilisateurs :</li>
                         <ul>
                             <li>Compte utilisateur</li>
                             <li>Gérer la sécurité avec SQLite ou NoSQL</li>
                         </ul>
-                        <li>Historique : info? (voir général)</li>
                         <li>Refactoring</li>
                         <ul>
-                            <li>Distinguer alertes user</li>
-                            <li>Rechercher par adresse pour BoundingBox</li>
-                            <li>Notifications</li>
+                            <li>Distinguer les alertes des usagers des alertes officielles</li>
+                            <li>Ajouter une BoundingBox en fonction d'une adresse</li>
+                            <li>Filtrer l'historique en fonction d'une plage de dates</li>
                         </ul>
-                        <li>Notifications</li>
+                        <li>Notifications des alertes</li>
                         <ul>
-                            <li>Android</li>
-                            <li>Background task</li>
+                            <li>Implémentation Android</li>
+                            <li>Système d'envoi de requêtes périodiques au serveur</li>
+                            <li>Permettre l'ajout de photos par les usagers</li>
                         </ul>
                     </ul>
                 </p>
@@ -76,46 +62,18 @@
             <h2>Serveur</h2>
                 <p>
                     <ul>
-                    <!--
-                        •	Refactoring
-                            o	Json
-                            o	Classes Alertes
-                            o	Classes BDD
-                        •	BDD
-                            o	Thread pour charger dans le background
-                            o	Ajouter nouvelles BDD
-                        •	Gestion User
-                            o	Logique de poids pour user fiables
-                        •	Historique (voir général)
-                            o	Métrique?
-                            o	Info?
-                        •	Alertes
-                            o	Effectuer un traitement sur la localisation des alertes (ex : Étendre pour rivières)
-                            o	Déterminer les méthodes d’analyse
-                        •	Gérer la durée des alertes usagers
-                        •	Lissage polygones
-                        •	Format BDD server
-                            o	Usager
-                            o	MySQL
-                            o	NoSQL
-                    -->
-
                         <li>Refactoring</li>
                         <ul>
-                            <li>JSON</li>
+                            <li>Formatage des communications JSON entre le serveur et l'application</li>
                             <li>Classes Alertes</li>
-                            <li>Classes BDD</li>
+                            <li>Classes BDD afin de faciliter l'ajout de bases de données</li>
                         </ul>
                         <li>Base de Données (BDD)</li>
                         <ul>
-                            <li>Thread pour charger le background</li>
-                            <li>Ajouter nouvelles BDD</li>
+                            <li>Implémenter un système qui permet la mise à jour périodique des bases de données sur le serveur</li>
+                            <li>Ajouter de nouvelles BDD</li>
                         </ul>
-                        <li>Historique (voir général)</li>
-                        <ul>
-                            <li>Métrique ?</li>
-                            <li>Info ?</li>
-                        </ul>
+
                         <li>Alertes</li>
                         <ul>
                             <li>Effectuer un traitement sur la localisation des alertes (ex : Étendre pour rivières)</li>
@@ -123,11 +81,11 @@
                         </ul>
                         <li>Gérer la durée des alertes usagers</li>
                         <li>Lissage des polygones</li>
-                        <li>Format BDD serveur</li>
+                        <li>Formatage des BDD serveur</li>
                         <ul>
-                            <li>Usager</li>
-                            <li>MySQL</li>
-                            <li>NoSQL</li>
+                            <li>Implémenter une BDD pour la gestion des comptes utilisateurs</li>
+                            <li>Implémenter une BDD pour la gestion des alertes courantes avec MySQL ou NoSQL</li>
+                            <li>Implémenter une BDD pour la gestion de l'historique des alertes</li>
                         </ul>
                     </ul>
                 </p>
@@ -135,61 +93,20 @@
             <h2>Général</h2>
                 <p>
                     <ul>
-                    <!--
-                        •	Gérer les users
-                            o	Socket?
-                                	Plus flexible
-                                	Mais est-ce supporté par Java Script?
-                            o	Ou URL avec query chiffrée
-                                	Attention : limite URL à moins de 200 caractères
-                        •	Historique
-                            o	Ajouter algorithme d’évaluation des risques (métrique) (voir littérature)
-                            o	Ajouter infos : ressources, quoi faire au cas de…, prévention
-                            o	Plage de dates : gérer par serveur ou client?
-                        •	Alertes
-                            o	Ajouter photos
-                            o	Réduction automatique
-                        •	Format des alertes
-                    -->
-
-                        <li>Gérer les usagers</li>
+                        <li>Établir une politique de sécurité</li>
+                        <li>Bases de données historiques des alertes</li>
                         <ul>
-                            <li>Socket? (Plus flexible, mais est-ce supporté par JavaScript?)</li>
-                            <li>Ou URL avec query chiffrée? (Attention : limite URL à moins de 200 caractères)</li>
+                            <li>Ajouter un algorithme d’évaluation des risques</li>
+                            <li>Ajouter des informations à donner aux usagers en lien avec les risques naturels : organismes, ressources, prévention, etc.</li>
                         </ul>
-                        <li>Historique</li>
-                        <ul>
-                            <li>Ajouter algorithme d’évaluation des risques (métrique) (voir littérature)</li>
-                            <li>Ajouter infos : ressources, quoi faire au cas de…, prévention</li>
-                            <li>Plage de dates : gérer par serveur ou client?</li>
-                            <li>Regrouper les points en fonction du niveau de 'zoom' (réduction du lag)</li>
-                        </ul>
-                        <li>Alertes</li>
-                        <ul>
-                            <li>Ajouter photos</li>
-                            <li>Réduction automatique</li>
-                        </ul>
-                        <li>Format des alertes</li>
-                        <li>Ajouter plus de BDD?</li>
-                        <ul>
-                            <li><a href="https://meteo.gc.ca/warnings/index_f.html">Alertes Environnement Canada</a></li>
-                            <li><a href="http://sopfeu.qc.ca">Feux de forêt (Sopfeu)</a></li>
-                        </ul>
+                        <li>Unification du format des alertes entre le serveur et l'application</li>
                     </ul>
                 </p>
 
             <h2>Administratif</h2>
                 <p>
                     <ul>
-                    <!--
-                        •	Envoyer courriels
-                            o	Ville de Montréal
-                            o	Gouvernement du Québec/Canada
-                        •	Contacter HackQc pour obtenir le prix
-                        •	Trouver un nouveau nom
-                    -->
-                    
-                        <li>Contacter autorités possiblement intéressées: envoyer courriels</li>
+                        <li>Contacter les autorités possiblement intéressées</li>
                         <ul>
                             <li>Ville de Montréal</li>
                             <li>Gouvernement du Québec/Canada</li>
