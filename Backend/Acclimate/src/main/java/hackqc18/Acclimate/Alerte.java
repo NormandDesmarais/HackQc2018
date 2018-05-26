@@ -4,39 +4,24 @@ import java.time.LocalDateTime;
 
 public class Alerte {
 
-    private final String nom;
-    private final String source;
-    private final String territoire;
+    private String id;
+    private String nom;
+    private String source;
+    private String territoire;
     private String certitude;
-    private final String severite;
-    private final String type;
+    private String severite;
+    private String type;
     private String dateDeMiseAJour;
-    private final String id;
-    private final String urgence;
-    private final String description;
-    private final String geom;
+    private String urgence;
+    private String description;
     private int count;
-    private final Geometry geometry;
+    private Geometry geometry;
 
-    public Alerte(String nom, String source, String territoire,
-            String certitude, String severite, String type,
-            String dateDeMiseAJour, String id, String urgence,
-            String description, String geom, Geometry coord) {
 
-        this.nom = nom;
-        this.source = source;
-        this.territoire = territoire;
-        this.certitude = certitude;
-        this.severite = severite;
-        this.type = type;
-        this.dateDeMiseAJour = dateDeMiseAJour;
-        this.id = id;
-        this.urgence = urgence;
-        this.description = description;
-        this.geom = geom;
-        this.count = 1;
-        this.geometry = coord;
+    public Alerte() {
+        
     }
+    
 
     public Alerte(String nom, String source, String territoire,
             String certitude, String severite, String type,
@@ -54,7 +39,6 @@ public class Alerte {
         this.urgence = urgence;
         this.description = description;
         this.count = 1;
-        this.geom = "";
         this.geometry = new Geometry(lng, lat);
     }
 
@@ -104,6 +88,54 @@ public class Alerte {
 
     public String getId() {
         return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public void setNom(String nom) {
+        this.nom = nom;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
+    public void setTerritoire(String territoire) {
+        this.territoire = territoire;
+    }
+
+    public void setCertitude(String certitude) {
+        this.certitude = certitude;
+    }
+
+    public void setSeverite(String severite) {
+        this.severite = severite;
+    }
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setDateDeMiseAJour(String dateDeMiseAJour) {
+        this.dateDeMiseAJour = dateDeMiseAJour;
+    }
+
+    public void setUrgence(String urgence) {
+        this.urgence = urgence;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public void setCount(int count) {
+        this.count = count;
+    }
+
+    public void setGeometry(Geometry geometry) {
+        this.geometry = geometry;
     }
 
     public void increment(double lat, double lng, String date) {

@@ -6,13 +6,20 @@ import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.persistence.Embeddable;
+
+@Embeddable
 public class Geometry {
     public static final String TYPE_POINT = "Point";
     public static final String TYPE_POLYGON = "Polygon";
     
     private String type;
-    private final ArrayList<double[]> coordinates;
+    private ArrayList<double[]> coordinates;
 
+    public Geometry() {
+        
+    }
+    
     /**
      * Constructor for Point type Geometry
      * @param lng longitudinal coordinate
@@ -33,6 +40,14 @@ public class Geometry {
         return coordinates;
     }
 
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setCoordinates(ArrayList<double[]> coordinates) {
+        this.coordinates = coordinates;
+    }
 
     @Override
     public String toString() {

@@ -12,7 +12,7 @@ public class VigilanceParser extends HistoryCsvParser {
         String [] alertePrg = toBeParsed.split(",");        
         
         String nom = "", territoire = "", certitude = "", severite = "", type = "";
-        String dateDeMiseAJour = "", urgence = "", description = "", geom = "", IdAlert = "";
+        String dateDeMiseAJour = "", urgence = "", description = "", IdAlert = "";
         String source = "Ministère de la Sécurité publique du Québec";
         double lng = 0.0, lat = 0.0;
         

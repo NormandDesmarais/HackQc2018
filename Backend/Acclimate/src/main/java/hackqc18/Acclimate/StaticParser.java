@@ -1,7 +1,5 @@
 package hackqc18.Acclimate;
 
-import java.io.*;
-import java.util.ArrayList;
 
 public class StaticParser extends HistoryCsvParser {
 
@@ -21,7 +19,7 @@ public class StaticParser extends HistoryCsvParser {
         String[] typesAlertes = {"Feu de forêt", "Inondation"};
 
         String nom = "", territoire = "", certitude = "", severite = "", type = "";
-        String dateDeMiseAJour = "", urgence = "", description = "", geom = "", IdAlert = "";
+        String dateDeMiseAJour = "", urgence = "", description = "", IdAlert = "";
         String source = "Ministère de la Sécurité publique du Québec";
         double lng = 0.0, lat = 0.0;
 
