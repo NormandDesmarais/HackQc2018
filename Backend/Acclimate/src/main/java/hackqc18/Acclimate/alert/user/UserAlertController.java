@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 import hackqc18.Acclimate.alert.Alert;
@@ -20,6 +19,14 @@ import hackqc18.Acclimate.alert.AlertStub;
 // The @RestController annotation informs Spring that this class is
 // a REST controller. In the background, Spring does all the magic
 // to redirect related HTTP requests to this class.
+//
+// @RestController also invokes @ResponseBody for the class.
+// The @ResponseBody annotation informs Spring that the object returned
+// by methods must be translated into JSON format. Optionally,
+// we could also support XML format if need be, both at the same time
+// (the request header "Content-Type" would indicate whether to
+// use "application/json" or "text/xml").
+//
 // The @RequestMapping annotation defines the base URL managed by this
 // class. All requests starting with "{site-URL}/api/user/alerts" will be
 // redirected to this class.
@@ -36,11 +43,6 @@ public class UserAlertController {
     
     // TODO - add the right response HTTP status
     //
-    // The @ResponseBody annotation informs Spring that the object returned
-    // by the method must be translated into JSON format. Optionally,
-    // we could also support XML format if need be, both at the same time
-    // time (the request header "Content-Type" would indicate whether to
-    // use "application/json" or "text/xml").
     /**
      * The GET method associated with the URL "api/user/alerts". It
      * retrieves and returns the collection of user alerts. Optional filter
@@ -53,7 +55,6 @@ public class UserAlertController {
      * @return a list of alerts in JSON format
      */
     @RequestMapping(method = RequestMethod.GET)
-    @ResponseBody
     public List<Alert> getAllAlerts(
                     @RequestParam(value="north", defaultValue="90") double north,
                     @RequestParam(value="south", defaultValue="-90") double south,
@@ -72,7 +73,6 @@ public class UserAlertController {
      * @return the alert or empty if not found
      */
     @RequestMapping(method = RequestMethod.GET, value="/{alertId}")
-    @ResponseBody
     public Alert getAlert(@PathVariable String alertId) {
         return userAlertService.getAlert(alertId);
     }
@@ -90,7 +90,6 @@ public class UserAlertController {
      * @return a newly created alert or an existing one
      */
     @RequestMapping(method = RequestMethod.POST)
-    @ResponseBody
     public Alert addAlert(@RequestBody AlertStub alertStub) {
         return userAlertService.addAlert(alertStub);
     }
@@ -117,7 +116,6 @@ public class UserAlertController {
      * not found
      */
     @RequestMapping(method = RequestMethod.PUT, value="/{alertId}")
-    @ResponseBody
     public Alert updateAlert(
                     @PathVariable String alertId,
                     @RequestBody AlertStub alertStub) {
@@ -137,7 +135,6 @@ public class UserAlertController {
      * @return the deleted alert or an empty body if it wasn't found
      */
     @RequestMapping(method = RequestMethod.DELETE, value="/{alertId}")
-    @ResponseBody
     public Alert removeAlert(@PathVariable String alertId) {
         return userAlertService.removeAlert(alertId);
     }

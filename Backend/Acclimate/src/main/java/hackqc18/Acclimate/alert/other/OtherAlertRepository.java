@@ -1,6 +1,9 @@
 package hackqc18.Acclimate.alert.other;
 
 import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.MalformedURLException;
@@ -38,20 +41,17 @@ public class OtherAlertRepository {
     private final int fetchingDelay = 180; // minutes
     private final String rssURL = "https://geoegl.msp.gouv.qc.ca/avp/rss/";
 
-    
-    
     /**
      * Method that mocks the findById method of the CrudRepository interface.
      * 
-     * @param id the id of the alert of interest
-     * @return an optional instance that may contains the alert if it
-     * exists.
+     * @param id
+     *            the id of the alert of interest
+     * @return an optional instance that may contains the alert if it exists.
      */
     public Optional<Alert> findById(String id) {
         return Optional.ofNullable(alerts.get(id));
     }
 
-    
     /**
      * Method that mocks the findAll method of the CrudRepository interface.
      * 
@@ -60,11 +60,10 @@ public class OtherAlertRepository {
     public Iterable<Alert> findAll() {
         return alerts.values();
     }
-   
-    
+
     /**
-     * Utility method used to fetch alerts from the live stream at
-     * periodic intervals.
+     * Utility method used to fetch alerts from the live stream at periodic
+     * intervals.
      */
     // The @Scheduled annotation informs Spring to create a
     // task with the annotated method and to run it in a separate
@@ -106,16 +105,16 @@ public class OtherAlertRepository {
                             (lng + "").length(), "<>", coordos)));
 
             String alertId = createId(nom, lng, lat);
-            newAlerts.put(alertId, new Alert(alertId, nom, source,
-                            territoire, certitude, severite, type,
-                            dateDeMiseAJour, urgence, description, lng, lat));
+            newAlerts.put(alertId, new Alert(alertId, nom, source, territoire,
+                            certitude, severite, type, dateDeMiseAJour, urgence,
+                            description, lng, lat));
         }
         alerts = newAlerts;
     }
 
-    
     /**
      * Utility method that actually fetch the RSS feed.
+     * 
      * @return the feed in XML format
      */
     private String getRssFeed() {
@@ -133,6 +132,13 @@ public class OtherAlertRepository {
 
             in.close();
 
+//            if (!(new File("AlertRSS.xml")).exists()) {
+//                FileWriter fw = new FileWriter("AlertRSS.xml");
+//                BufferedWriter writer = new BufferedWriter(fw);
+//                writer.append(rss);
+//                writer.close();
+//            }
+//            System.err.println(rss);
             String rssCleaned = rss.replaceAll("&lt;", "<")
                             .replaceAll("&gt;", ">").substring(564);
 
@@ -147,9 +153,9 @@ public class OtherAlertRepository {
         return "";
     }
 
-    
     /**
      * Utility method that splits the RSS stream string into alerts.
+     * 
      * @param balise
      * @param offset
      * @param fin
@@ -171,9 +177,9 @@ public class OtherAlertRepository {
         return liste;
     }
 
-    
     /**
      * Utility method that extract a specific value for a given key.
+     * 
      * @param balise
      * @param offset
      * @param fin
@@ -195,10 +201,10 @@ public class OtherAlertRepository {
         return liste;
     }
 
-
     /**
-     * Utility method that creates a unique id from the alert name,
-     * longitude and latitude.
+     * Utility method that creates a unique id from the alert name, longitude
+     * and latitude.
+     * 
      * @param stub
      * @return
      */
