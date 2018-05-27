@@ -183,8 +183,8 @@ public class Alerte {
      */
     public boolean overlapWithBox(
             double nord, double sud, double est, double ouest) {
-        double coordLng = geometry.getCoordinates().get(0)[0];
-        double coordLat = geometry.getCoordinates().get(0)[1];
+        double coordLng = geometry.getCoordinates()[0];
+        double coordLat = geometry.getCoordinates()[1];
 
         return (coordLng > ouest && coordLng < est
                 && coordLat > sud && coordLat < nord);

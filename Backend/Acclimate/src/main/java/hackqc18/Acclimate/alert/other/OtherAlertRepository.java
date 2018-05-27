@@ -19,7 +19,14 @@ import java.util.logging.Logger;
 import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
+import com.fasterxml.jackson.core.JsonParseException;
+import com.fasterxml.jackson.databind.JsonMappingException;
+import com.fasterxml.jackson.databind.exc.MismatchedInputException;
+import com.fasterxml.jackson.dataformat.xml.XmlMapper;
+
 import hackqc18.Acclimate.alert.Alert;
+import hackqc18.Acclimate.alert.other.rss.ItemRSS;
+import hackqc18.Acclimate.alert.other.rss.Rss;
 
 // TODO: This is a mock repository. Eventually it should
 // extends CrudRepository and be declared as an interface... but it will do
@@ -40,6 +47,7 @@ public class OtherAlertRepository {
     private static HashMap<String, Alert> alerts = new HashMap<>();
     private final int fetchingDelay = 180; // minutes
     private final String rssURL = "https://geoegl.msp.gouv.qc.ca/avp/rss/";
+    private final XmlMapper xmlMapper = new XmlMapper();
 
     /**
      * Method that mocks the findById method of the CrudRepository interface.
@@ -61,57 +69,25 @@ public class OtherAlertRepository {
         return alerts.values();
     }
 
+    
+    
     /**
-     * Utility method used to fetch alerts from the live stream at periodic
-     * intervals.
+     * Utility method used to fetch alerts from the live RSS stream at
+     * periodic intervals.
      */
     // The @Scheduled annotation informs Spring to create a
     // task with the annotated method and to run it in a separate
     // thread at the given fixed rate. @Schedule only works if the
     // @EnableScheduling annotation has been set in the application class.
     @Scheduled(fixedRate = 1000 * fetchingDelay)
-    private void fetchRssFeedTask() {
-        String contRss = getRssFeed();
-        ArrayList<String> alertePrg = getInfos("<item>", 5, "</item>", contRss);
-
-        String nom, source, territoire, certitude, severite, type;
-        String dateDeMiseAJour, urgence, description, geom;
-        HashMap<String, Alert> newAlerts = new HashMap<>();
-        for (int i = 0; i < alertePrg.size(); i++) {
-            nom = getInfosStr("<title>", 0, "</title>", alertePrg.get(i));
-            String coords = getInfosStr("<b>Urgence</b>", 0, "amp;zoom",
-                            alertePrg.get(i));
-            geom = getInfosStr("center=", 4, "&", coords);
-            String auteur = getInfosStr("Auteur", 150, "br/>",
-                            alertePrg.get(i));
-            source = getInfosStr(":", 5, "<", auteur);
-            type = getInfosStr("<b>Type</b> :", 1, "<br/>", alertePrg.get(i));
-            dateDeMiseAJour = getInfosStr("<b>Date de mise à jour</b> :", 1,
-                            "<br/>", alertePrg.get(i));
-            description = getInfosStr("<b>Description</b> :", 1, "<br/>",
-                            alertePrg.get(i));
-            severite = getInfosStr("<b>Sévérite</b> :", 1, "<br/>",
-                            alertePrg.get(i));
-            territoire = getInfosStr("<b>Secteur</b> :", 1, "<br/>",
-                            alertePrg.get(i));
-            certitude = getInfosStr("<b>Certitude</b> :", 1, "<br/>",
-                            alertePrg.get(i));
-            urgence = getInfosStr("<b>Urgence</b> :", 1, "<br/>",
-                            alertePrg.get(i));
-            String coordos = geom + "<>";
-            double lng = Double.parseDouble(
-                            ("-" + getInfosStr("-", 0, ",", coordos)));
-            double lat = Double.parseDouble((getInfosStr(",",
-                            (lng + "").length(), "<>", coordos)));
-
-            String alertId = createId(nom, lng, lat);
-            newAlerts.put(alertId, new Alert(alertId, nom, source, territoire,
-                            certitude, severite, type, dateDeMiseAJour, urgence,
-                            description, lng, lat));
-        }
-        alerts = newAlerts;
+    private void updateAlertsFromRssFeedTask() {
+        
+        String feed = getRssFeed();
+        parseFeed(feed);
+        
     }
 
+    
     /**
      * Utility method that actually fetch the RSS feed.
      * 
@@ -119,30 +95,22 @@ public class OtherAlertRepository {
      */
     private String getRssFeed() {
         try {
-            String rss = "";
-            URL rssSource = new URL(rssURL);
-            URLConnection rssSrc = rssSource.openConnection();
+            String feed = "";
+            URL url = new URL(rssURL);
+            URLConnection rssSrc = url.openConnection();
             BufferedReader in = new BufferedReader(new InputStreamReader(
                             rssSrc.getInputStream(), StandardCharsets.UTF_8));
             String inputLine;
 
             while ((inputLine = in.readLine()) != null) {
-                rss += inputLine;
+                feed += inputLine;
             }
 
             in.close();
 
-//            if (!(new File("AlertRSS.xml")).exists()) {
-//                FileWriter fw = new FileWriter("AlertRSS.xml");
-//                BufferedWriter writer = new BufferedWriter(fw);
-//                writer.append(rss);
-//                writer.close();
-//            }
-//            System.err.println(rss);
-            String rssCleaned = rss.replaceAll("&lt;", "<")
-                            .replaceAll("&gt;", ">").substring(564);
+//            System.err.println(feed);
 
-            return rssCleaned;
+            return feed;
         } catch (MalformedURLException ex) {
             Logger.getLogger(OtherAlertRepository.class.getName())
                             .log(Level.SEVERE, null, ex);
@@ -153,63 +121,92 @@ public class OtherAlertRepository {
         return "";
     }
 
+    
     /**
-     * Utility method that splits the RSS stream string into alerts.
-     * 
-     * @param balise
-     * @param offset
-     * @param fin
-     * @param rss
-     * @return an list of alerts in XML format
+     * Parse the content of the feed using Jackson XmlMapper to
+     * automatically map the feed on the class Rss. The old
+     * alerts list is replaced after all alerts has been processed
+     * to reduce problems with the findAll or findById methods.
+     * @param feed the content of the RSS feed
      */
-    private ArrayList<String> getInfos(String balise, int offset, String fin,
-                    String rss) {
-        ArrayList<String> liste = new ArrayList<>();
-        String rssText = rss;
-        int ix;
-        for (String word : rssText.split(fin)) {
-            if (word.contains(balise)) {
-                ix = rssText.indexOf(word) + balise.length();
-                liste.add(rssText.substring(ix + offset,
-                                rssText.indexOf(fin, ix + 1)));
+    private void parseFeed(String feed)  {
+        try {
+            
+            String tmpStrs[];
+            String alertId, nom, source, territoire, certitude,
+            severite, type, dateDeMiseAJour, urgence, description;
+            double lng, lat;
+            HashMap<String, Alert> newAlerts = new HashMap<>();
+            Rss rssObject = xmlMapper.readValue(feed, Rss.class);
+            
+            for (ItemRSS item : rssObject.getChannel().getItem()) {
+//                System.err.println(item.getDescription());
+                
+                /**
+                 * The name is stored in item.title
+                 */
+                nom = item.getTitle();
+                
+                /**
+                 * item.guid contains coordinates and alertId in the form of :
+                 *    "{url}?...&center={lng},{lat}&...#{alertId}"
+                 * ex:"{url}/?context=avp&center=-73.6387202781213,45.6928705203507&zoom=10#MSP.SS.043208"
+                 */
+                tmpStrs = item.getGuid().split("#");
+                alertId = tmpStrs[1].replaceAll("\\.", "-");
+                tmpStrs = tmpStrs[0].split("center=")[1].split("&")[0].split(",");
+                lng = Double.parseDouble(tmpStrs[0]);
+                lat = Double.parseDouble(tmpStrs[1]);
+                
+                /**
+                 * descriptions contains all other parameters  in the form
+                 * of key value pairs:
+                 *      <b>{key}</b> : {value}
+                 * separated by "<br/>".
+                 */
+                tmpStrs = item.getDescription().split("<br/>");
+                source          = tmpStrs[0].split(":")[1].trim();
+                type            = tmpStrs[1].split(":")[1].trim();
+                dateDeMiseAJour = tmpStrs[2].split(":")[1].trim();
+                description     = tmpStrs[3].split(":")[1].trim();
+                severite        = tmpStrs[4].split(":")[1].trim();
+                territoire      = tmpStrs[5].split(":")[1].trim();
+                certitude       = tmpStrs[6].split(":")[1].trim();
+                urgence         = tmpStrs[7].split(":")[1].trim();
+                
+                newAlerts.put(alertId, new Alert(alertId, nom, source, territoire,
+                                certitude, severite, type, dateDeMiseAJour, urgence,
+                                description, lng, lat));
             }
+            
+            alerts = newAlerts;
+            
+        } catch (MismatchedInputException ex) {
+            Logger.getLogger(OtherAlertRepository.class.getName())
+                            .log(Level.WARNING, null, ex);
+        } catch (JsonParseException ex) {
+            Logger.getLogger(OtherAlertRepository.class.getName())
+            .log(Level.WARNING, null, ex);
+        } catch (JsonMappingException ex) {
+            Logger.getLogger(OtherAlertRepository.class.getName())
+            .log(Level.WARNING, null, ex);
+        } catch (IOException ex) {
+            Logger.getLogger(OtherAlertRepository.class.getName())
+            .log(Level.WARNING, null, ex);
         }
-        return liste;
     }
 
-    /**
-     * Utility method that extract a specific value for a given key.
-     * 
-     * @param balise
-     * @param offset
-     * @param fin
-     * @param rss
-     * @return
-     */
-    private String getInfosStr(String balise, int offset, String fin,
-                    String rss) {
-        String liste = "";
-        String rssText = rss;
-        int ix;
-        for (String word : rssText.split(fin)) {
-            if (word.contains(balise)) {
-                ix = rssText.indexOf(word) + balise.length();
-                liste += (rssText.substring(ix + offset,
-                                rssText.indexOf(fin, ix + 1)));
-            }
-        }
-        return liste;
-    }
 
-    /**
-     * Utility method that creates a unique id from the alert name, longitude
-     * and latitude.
-     * 
-     * @param stub
-     * @return
-     */
-    private String createId(String name, double lng, double lat) {
-        return (name.hashCode() + "-" + lng + "-" + lat).replaceAll("\\.", "");
-    }
+
+//    /**
+//     * Utility method that creates a unique id from the alert name, longitude
+//     * and latitude.
+//     * 
+//     * @param stub
+//     * @return
+//     */
+//    private String createId(String name, double lng, double lat) {
+//        return (name.hashCode() + "-" + lng + "-" + lat).replaceAll("\\.", "");
+//    }
 
 }

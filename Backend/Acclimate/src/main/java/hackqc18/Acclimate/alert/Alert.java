@@ -216,8 +216,8 @@ public class Alert {
      */
     public boolean overlapWithBox(
             double north, double south, double east, double west) {
-        double coordLng = geometry.getCoordinates().get(0)[0];
-        double coordLat = geometry.getCoordinates().get(0)[1];
+        double coordLng = geometry.getCoordinates()[0];
+        double coordLat = geometry.getCoordinates()[1];
 
         return (coordLng > west && coordLng < east
                 && coordLat > south && coordLat < north);
