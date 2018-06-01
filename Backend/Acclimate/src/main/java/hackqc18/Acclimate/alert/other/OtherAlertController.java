@@ -39,8 +39,6 @@ public class OtherAlertController {
     private OtherAlertService otherAlertService;
 
 
-    // TODO - add the right response HTTP status
-    //
     /**
      * The GET method associated with the URL "api/other/alerts". It retrieves
      * and returns the collection of user alerts. Optional filter parameters
@@ -62,7 +60,6 @@ public class OtherAlertController {
     }
 
 
-    // TODO - add the right response HTTP status
     /**
      * The GET method associated with the URL "api/other/alerts/{alertId}",
      * where alertId is variable. It returns the associated alert if it exists

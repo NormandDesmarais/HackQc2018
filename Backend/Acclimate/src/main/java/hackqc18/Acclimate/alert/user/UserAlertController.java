@@ -47,8 +47,6 @@ public class UserAlertController {
     private UserAlertService userAlertService;
 
 
-    // TODO - add the right response HTTP status
-    //
     /**
      * The GET method associated with the URL "api/user/alerts". It retrieves
      * and returns the collection of user alerts. Optional filter parameters
@@ -70,7 +68,6 @@ public class UserAlertController {
     }
 
 
-    // TODO - add the right response HTTP status
     /**
      * The GET method associated with the URL "api/user/alerts/{alertId}", where
      * alertId is variable. It returns the associated alert if it exists or an
@@ -85,7 +82,6 @@ public class UserAlertController {
     }
 
 
-    // TODO - add the right response HTTP status
     /**
      * The POST method associated with the URL "api/user/alerts". It retrieves
      * the alert type, longitude and latitude from the request body and create a
@@ -109,8 +105,6 @@ public class UserAlertController {
     }
 
 
-    // TODO - add the right response HTTP status
-    //
     // NOTE: the AlertStub is not used so far, but this could change in
     // the future.
     //
@@ -145,7 +139,6 @@ public class UserAlertController {
     }
 
 
-    // TODO - add the right response HTTP status
     // NOTE: we might need to deactivate this request for security.
     // In case a hacker founds it and destroy our database just for fun.
     // Or we should only allow it for users with admin privileges.
