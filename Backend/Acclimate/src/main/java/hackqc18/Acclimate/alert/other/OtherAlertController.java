@@ -3,9 +3,9 @@ package hackqc18.Acclimate.alert.other;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -37,42 +37,43 @@ public class OtherAlertController {
     // of the class UserAlertService.
     @Autowired
     private OtherAlertService otherAlertService;
-    
-    
+
+
     // TODO - add the right response HTTP status
     //
     /**
-     * The GET method associated with the URL "api/other/alerts". It
-     * retrieves and returns the collection of user alerts. Optional filter
-     * parameters could be provided to limit the number of alerts to a 
-     * given region.
+     * The GET method associated with the URL "api/other/alerts". It retrieves
+     * and returns the collection of user alerts. Optional filter parameters
+     * could be provided to limit the number of alerts to a given region.
+     *
      * @param north the northern latitude (default: 90)
      * @param south the southern latitude (default: -90)
      * @param east the eastern longitude (default: 180)
      * @param west the western longitude (default: -180)
      * @return a list of alerts in JSON format
      */
-    @RequestMapping(method = RequestMethod.GET)
+    @GetMapping
     public List<Alert> getAllAlerts(
-                    @RequestParam(value="north", defaultValue="90") double north,
-                    @RequestParam(value="south", defaultValue="-90") double south,
-                    @RequestParam(value="east", defaultValue="180") double east,
-                    @RequestParam(value="west", defaultValue="-180") double west) {
+            @RequestParam(defaultValue = "90") double north,
+            @RequestParam(defaultValue = "-90") double south,
+            @RequestParam(defaultValue = "180") double east,
+            @RequestParam(defaultValue = "-180") double west) {
         return otherAlertService.getAllAlerts(north, south, east, west);
     }
-    
-    
+
+
     // TODO - add the right response HTTP status
     /**
      * The GET method associated with the URL "api/other/alerts/{alertId}",
-     * where alertId is variable. It returns the associated alert if it
-     * exists or an empty body otherwise.
+     * where alertId is variable. It returns the associated alert if it exists
+     * or an empty body otherwise.
+     *
      * @param alertId the id of the alert of interest
      * @return the alert or empty if not found
      */
-    @RequestMapping(method = RequestMethod.GET, value="/{alertId}")
+    @GetMapping("/{alertId}")
     public Alert getAlert(@PathVariable String alertId) {
         return otherAlertService.getAlert(alertId);
     }
-    
+
 }

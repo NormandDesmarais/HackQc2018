@@ -11,21 +11,26 @@ public class Rss {
 
     private ChannelRSS channel;
 
+
     public Rss() {
 
     }
+
 
     public ChannelRSS getChannel() {
         return channel;
     }
 
+
     public void setChannel(ChannelRSS channel) {
         this.channel = channel;
     }
 
+
     public String getVersion() {
         return version;
     }
+
 
     public void setVersion(String version) {
         this.version = version;
