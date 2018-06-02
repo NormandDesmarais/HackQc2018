@@ -2,6 +2,7 @@ package hackqc18.Acclimate;
 
 import java.time.LocalDateTime;
 
+@Deprecated
 public class Alerte {
 
     private String id;
@@ -19,9 +20,9 @@ public class Alerte {
 
 
     public Alerte() {
-        
+
     }
-    
+
 
     public Alerte(String nom, String source, String territoire,
             String certitude, String severite, String type,

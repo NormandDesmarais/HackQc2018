@@ -1,4 +1,4 @@
-package hackqc18.Acclimate.alert.other;
+package hackqc18.Acclimate.alert.repository;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -21,8 +21,8 @@ import com.fasterxml.jackson.databind.exc.MismatchedInputException;
 import com.fasterxml.jackson.dataformat.xml.XmlMapper;
 
 import hackqc18.Acclimate.alert.Alert;
-import hackqc18.Acclimate.alert.other.rss.ItemRSS;
-import hackqc18.Acclimate.alert.other.rss.Rss;
+import hackqc18.Acclimate.alert.rss.ItemRSS;
+import hackqc18.Acclimate.alert.rss.Rss;
 
 // TODO: This is a mock repository. Eventually it should
 // extends CrudRepository and be declared as an interface... but it will do
@@ -38,7 +38,7 @@ import hackqc18.Acclimate.alert.other.rss.Rss;
 // The @Component informs Spring that this class must be instantiated
 // as a Singleton so that only one instance will be available at any time.
 @Component
-public class OtherAlertRepository {
+public class OtherAlertRepository implements AlertRepository {
 
     private static HashMap<String, Alert> alerts = new HashMap<>();
     private final int fetchingDelay = 180; // minutes
@@ -52,6 +52,7 @@ public class OtherAlertRepository {
      * @param id the id of the alert of interest
      * @return an optional instance that may contains the alert if it exists.
      */
+    @Override
     public Optional<Alert> findById(String id) {
         return Optional.ofNullable(alerts.get(id));
     }
@@ -60,8 +61,9 @@ public class OtherAlertRepository {
     /**
      * Method that mocks the findAll method of the CrudRepository interface.
      *
-     * @return a iterable list of alerts
+     * @return an iterable list of alerts
      */
+    @Override
     public Iterable<Alert> findAll() {
         return alerts.values();
     }
@@ -194,15 +196,16 @@ public class OtherAlertRepository {
         }
     }
 
-    // /**
-    // * Utility method that creates a unique id from the alert name, longitude
-    // * and latitude.
-    // *
-    // * @param stub
-    // * @return
-    // */
-    // private String createId(String name, double lng, double lat) {
-    // return (name.hashCode() + "-" + lng + "-" + lat).replaceAll("\\.", "");
-    // }
+
+    @Override
+    public boolean existsById(String id) {
+        return alerts.containsKey(id);
+    }
+
+
+    @Override
+    public long count() {
+        return alerts.size();
+    }
 
 }

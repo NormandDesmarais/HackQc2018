@@ -1,4 +1,4 @@
-package hackqc18.Acclimate.alert.other.rss;
+package hackqc18.Acclimate.alert.rss;
 
 public class ItemRSS {
 

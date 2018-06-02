@@ -1,10 +1,14 @@
 package hackqc18.Acclimate;
 
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.bind.annotation.RestController;
 
 
 @RestController
 @RequestMapping("api")
+@Deprecated
 public class GetUserAlertsController {
     @RequestMapping(value="/getUserAlerts",produces="application/json;charset=UTF-8")
     public @ResponseBody

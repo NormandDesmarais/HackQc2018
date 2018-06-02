@@ -1,5 +1,6 @@
 package hackqc18.Acclimate.exception;
 
+import javax.naming.OperationNotSupportedException;
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.core.annotation.AnnotationUtils;
@@ -17,10 +18,33 @@ public class GlobalControllerExceptionHandler {
     public static final String DEFAULT_ERROR_VIEW = "error";
 
 
+    /**
+     * Handler for AlertNotFoundException, wraps the exception message within a
+     * VndErrors and generates a NOT_FOUND HTTP status (404).
+     *
+     * @param ex the exception
+     * @return a vendor error message to be displayed to the user
+     */
     @ResponseBody
     @ExceptionHandler(AlertNotFoundException.class)
     @ResponseStatus(HttpStatus.NOT_FOUND)
     VndErrors userAlertNotFoundExceptionHandler(AlertNotFoundException ex) {
+        return new VndErrors(DEFAULT_ERROR_VIEW, ex.getLocalizedMessage());
+    }
+
+
+    /**
+     * Handler for OperationNotSupportedException, wraps the exception message
+     * within a VndErrors and generates a FORBIDDEN HTTP status (403).
+     *
+     * @param ex the exception
+     * @return a vendor error message to be displayed to the user
+     */
+    @ResponseBody
+    @ExceptionHandler(OperationNotSupportedException.class)
+    @ResponseStatus(HttpStatus.FORBIDDEN)
+    VndErrors operationNotSupportedExceptionHandler(
+            OperationNotSupportedException ex) {
         return new VndErrors(DEFAULT_ERROR_VIEW, ex.getLocalizedMessage());
     }
 

@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRawValue;
 
 
+@Deprecated
 public class GetUserAlerts {
 
     @JsonRawValue
@@ -11,7 +12,7 @@ public class GetUserAlerts {
     public String alerts(double nord, double sud, double est, double ouest) {
         Alerts theAlerts = new Alerts(nord, sud, est, ouest,
                 PutAlert.getUserAlerts());
-        
+
         return theAlerts.toString();
     }
 

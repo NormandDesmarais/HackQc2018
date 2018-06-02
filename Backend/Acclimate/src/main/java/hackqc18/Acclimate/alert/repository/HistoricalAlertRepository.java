@@ -1,15 +1,67 @@
-package hackqc18.Acclimate;
+package hackqc18.Acclimate.alert.repository;
+
+import java.util.Optional;
 
 import org.springframework.stereotype.Component;
 
-// @Component indicates to Spring that it must manage the creation and
-// injection of a unique instance of this class were needed.
-@Component
-@Deprecated
-public class StaticParser extends CsvAlerteParser {
+import hackqc18.Acclimate.alert.Alert;
+import hackqc18.Acclimate.alert.CsvAlertParser;
 
-    public StaticParser() {
+// TODO: This is a mock repository. Eventually it should
+// extends CrudRepository and be declared as an interface... but it will do
+// for now...
+
+/**
+ * Interface used to define the historical alert repository. This interface will
+ * automatically be instantiated as a Singleton by Spring at compile time by
+ * inserting the following declaration in classes that needs this repository:
+ *
+ * @Autowired private HistoricalAlertRepository historicalAlertRepository;
+ */
+// The @Component informs Spring that this class must be instantiated
+// as a Singleton so that only one instance will be available at any time.
+@Component
+public class HistoricalAlertRepository extends CsvAlertParser
+        implements AlertRepository {
+
+    public HistoricalAlertRepository() {
         super("historique_alertes.csv");
+        openAndParse();
+    }
+
+
+    /**
+     * Method that mocks the findById method of the CrudRepository interface.
+     *
+     * @param id the id of the alert of interest
+     * @return an optional instance that may contains the alert if it exists.
+     */
+    @Override
+    public Optional<Alert> findById(String id) {
+        return Optional.ofNullable(alerts.get(id));
+    }
+
+
+    /**
+     * Method that mocks the findAll method of the CrudRepository interface.
+     *
+     * @return an iterable list of alerts
+     */
+    @Override
+    public Iterable<Alert> findAll() {
+        return alerts.values();
+    }
+
+
+    @Override
+    public boolean existsById(String id) {
+        return alerts.containsKey(id);
+    }
+
+
+    @Override
+    public long count() {
+        return alerts.size();
     }
 
 
@@ -72,10 +124,9 @@ public class StaticParser extends CsvAlerteParser {
                     for (int k = 0; k < typesAlertes.length; k++) {
                         if (nom.equals(typesAlertes[k])) {
                             alertId = createId(type, dateDeMiseAJour, lng, lat);
-                            Alerte theAlert = new Alerte(nom, source,
-                                    territoire, certitude, severite, type,
-                                    dateDeMiseAJour, alertId, urgence,
-                                    description, lng, lat);
+                            Alert theAlert = new Alert(alertId, nom, source, territoire,
+                                    certitude, severite, type, dateDeMiseAJour,
+                                    urgence, description, lng, lat);
                             alerts.put(alertId, theAlert);
                             break;
                         }
@@ -121,5 +172,4 @@ public class StaticParser extends CsvAlerteParser {
         }
         return result;
     }
-
 }

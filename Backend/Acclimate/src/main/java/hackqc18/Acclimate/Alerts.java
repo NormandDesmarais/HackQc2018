@@ -1,11 +1,13 @@
 package hackqc18.Acclimate;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
+
+@Deprecated
 public class Alerts {
 
     private ArrayList<Alerte> alertes;
@@ -75,7 +77,7 @@ public class Alerts {
 //    /**
 //     * Uncomment this code once clients have removed the string "alerte"
 //     * for each alert.
-//     * @return 
+//     * @return
 //     */
 //    public ArrayList<Alerte> getAlertes() {
 //        return alertes;

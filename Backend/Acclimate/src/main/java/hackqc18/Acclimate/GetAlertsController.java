@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RestController;
  */
 @RestController
 @RequestMapping("api")
+@Deprecated
 public class GetAlertsController {
     @RequestMapping(value="/getAlerts",produces="application/json;charset=UTF-8")
     @ResponseBody

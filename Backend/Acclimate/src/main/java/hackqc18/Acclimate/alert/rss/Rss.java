@@ -1,4 +1,4 @@
-package hackqc18.Acclimate.alert.other.rss;
+package hackqc18.Acclimate.alert.rss;
 
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlProperty;
 import com.fasterxml.jackson.dataformat.xml.annotation.JacksonXmlRootElement;

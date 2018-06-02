@@ -1,14 +1,16 @@
 package hackqc18.Acclimate;
 
 
+import java.io.IOException;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
-import java.io.IOException;
 
 @RestController
 @RequestMapping("api")
+@Deprecated
 public class PutAlertController {
     @RequestMapping(value = "/putAlert")
     public @ResponseBody String putUserAlert(

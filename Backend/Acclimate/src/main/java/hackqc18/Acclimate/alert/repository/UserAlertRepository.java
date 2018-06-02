@@ -1,4 +1,4 @@
-package hackqc18.Acclimate.alert.user;
+package hackqc18.Acclimate.alert.repository;
 
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;

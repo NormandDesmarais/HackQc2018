@@ -1,7 +1,9 @@
-package hackqc18.Acclimate.alert.user;
+package hackqc18.Acclimate.alert;
 
 import java.net.URI;
 import java.util.List;
+
+import javax.naming.OperationNotSupportedException;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -16,8 +18,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
-import hackqc18.Acclimate.alert.Alert;
-import hackqc18.Acclimate.alert.AlertStub;
+import hackqc18.Acclimate.exception.AlertNotFoundException;
 
 /**
  * Controller class for user alerts.
@@ -37,64 +38,74 @@ import hackqc18.Acclimate.alert.AlertStub;
 // class. All requests starting with "{site-URL}/api/user/alerts" will be
 // redirected to this class.
 @RestController
-@RequestMapping("api/user/alerts")
-public class UserAlertController {
+@RequestMapping("api/{alertType}/alerts")
+public class AlertController {
 
     // The @Autowired annotation informs Spring to instantiate the variable
     // userAlertService with the singleton (unique single instance) instance
     // of the class UserAlertService.
     @Autowired
-    private UserAlertService userAlertService;
+    private AlertService alertService;
 
 
     /**
-     * The GET method associated with the URL "api/user/alerts". It retrieves
-     * and returns the collection of user alerts. Optional filter parameters
-     * could be provided to limit the number of alerts to a given region.
+     * The GET method associated with the URL "api/{alertType}/alerts". It
+     * retrieves and returns the collection of user alerts. Optional filter
+     * parameters could be provided to limit the number of alerts to a given
+     * region.
      *
      * @param north the northern latitude (default: 90)
      * @param south the southern latitude (default: -90)
      * @param east the eastern longitude (default: 180)
      * @param west the western longitude (default: -180)
      * @return a list of alerts in JSON format
+     * @throws OperationNotSupportedException
      */
     @GetMapping
     public List<Alert> getAllAlerts(
+            @PathVariable String alertType,
             @RequestParam(defaultValue = "90") double north,
             @RequestParam(defaultValue = "-90") double south,
             @RequestParam(defaultValue = "180") double east,
-            @RequestParam(defaultValue = "-180") double west) {
-        return userAlertService.getAllAlerts(north, south, east, west);
+            @RequestParam(defaultValue = "-180") double west) throws OperationNotSupportedException {
+        return alertService.findAllAlerts(alertType, north, south, east, west);
     }
 
 
     /**
-     * The GET method associated with the URL "api/user/alerts/{alertId}", where
-     * alertId is variable. It returns the associated alert if it exists or an
-     * empty body otherwise.
+     * The GET method associated with the URL
+     * "api/{alertType}/alerts/{alertId}", where alertId is variable. It returns
+     * the associated alert if it exists or an empty body otherwise.
      *
      * @param alertId the id of the alert of interest
      * @return the alert or empty if not found
+     * @throws OperationNotSupportedException
+     * @throws AlertNotFoundException
      */
     @GetMapping("/{alertId}")
-    public Alert getAlert(@PathVariable String alertId) {
-        return userAlertService.getAlert(alertId);
+    public Alert getAlert(
+            @PathVariable String alertType,
+            @PathVariable String alertId) throws AlertNotFoundException, OperationNotSupportedException {
+        return alertService.findAlertById(alertType, alertId);
     }
 
 
     /**
-     * The POST method associated with the URL "api/user/alerts". It retrieves
-     * the alert type, longitude and latitude from the request body and create a
-     * new alert. If a similar alert exist within a 1 KM square, then it
-     * increases the count of the existing alert and returns it.
+     * The POST method associated with the URL "api/{alertType}/alerts". It
+     * retrieves the alert type, longitude and latitude from the request body
+     * and create a new alert. If a similar alert exist within a 1 KM square,
+     * then it increases the count of the existing alert and returns it.
      *
      * @param alertStub a simple class containing the alert type, longitude and
      *        latitude
      * @return a newly created alert or an existing one
+     * @throws OperationNotSupportedException
      */
     @PostMapping
-    public ResponseEntity<Alert> addAlert(@RequestBody AlertStub alertStub) {
-        Alert alert = userAlertService.addAlert(alertStub);
+    public ResponseEntity<Alert> addAlert(
+            @PathVariable String alertType,
+            @RequestBody AlertStub alertStub) throws OperationNotSupportedException {
+        Alert alert = alertService.createAlert(alertType, alertStub);
         if (alert.getCount() == 1) { // new alert
             URI location = ServletUriComponentsBuilder.fromCurrentRequest()
                     .path("/{alertId}").buildAndExpand(alert.getId()).toUri();
@@ -121,21 +132,24 @@ public class UserAlertController {
     // sends AlertStubs, they can't replace an existing, thus we default
     // to PATCH in order to respect RESTfull API.
     /**
-     * The PATCH method associated with the URL "api/user/alerts/{alertId}",
-     * where alertId is variable. If the alert with the corresponding alertId
-     * exists, it increases its count and adjust the "certitude" status
-     * accordingly. The modified alert is returned or an empty body if the alert
-     * was not found.
+     * The PATCH method associated with the URL
+     * "api/{alertType}/alerts/{alertId}", where alertId is variable. If the
+     * alert with the corresponding alertId exists, it increases its count and
+     * adjust the "certitude" status accordingly. The modified alert is returned
+     * or an empty body if the alert was not found.
      *
      * @param alertId the id of the alert of interest
      * @param alertStub a simple class containing the alert type, longitude and
      *        latitude
      * @return the modified alert or an empty body if the alert was not found
+     * @throws OperationNotSupportedException
      */
     @PatchMapping("/{alertId}")
-    public Alert updateAlert(@PathVariable String alertId,
-            @RequestBody AlertStub alertStub) {
-        return userAlertService.updateAlert(alertId, alertStub);
+    public Alert updateAlert(
+            @PathVariable String alertType,
+            @PathVariable String alertId,
+            @RequestBody AlertStub alertStub) throws OperationNotSupportedException {
+        return alertService.updateAlert(alertType, alertId, alertStub);
     }
 
 
@@ -143,15 +157,18 @@ public class UserAlertController {
     // In case a hacker founds it and destroy our database just for fun.
     // Or we should only allow it for users with admin privileges.
     /**
-     * The DELETE method associated with the URL "api/user/alerts/{alertId}",
-     * where alertId is variable. It deletes the corresponding alert from the
-     * database if it is found.
+     * The DELETE method associated with the URL
+     * "api/{alertType}/alerts/{alertId}", where alertId is variable. It deletes
+     * the corresponding alert from the database if it is found.
      *
      * @param alertId the id of the alert of interest
      * @return the deleted alert or an empty body if it wasn't found
+     * @throws OperationNotSupportedException
      */
     @DeleteMapping("/{alertId}")
-    public Alert removeAlert(@PathVariable String alertId) {
-        return userAlertService.removeAlert(alertId);
+    public Alert removeAlert(
+            @PathVariable String alertType,
+            @PathVariable String alertId) throws OperationNotSupportedException {
+        return alertService.deleteAlert(alertType, alertId);
     }
 }
