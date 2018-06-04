@@ -1,0 +1,3 @@
+https://stackoverflow.com/questions/18142745/how-do-i-generate-a-salt-in-java-for-salted-hash
+
+https://crackstation.net/hashing-security.htm

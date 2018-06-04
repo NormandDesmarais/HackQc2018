@@ -1,0 +1,9 @@
+https://developer.android.com/training/id-auth/authenticate
+https://developer.android.com/training/articles/security-ssl
+http://blog.crazybob.org/2010/02/android-trusting-ssl-certificates.html
+https://www.codeproject.com/KB/android/SSLVerification_Android.aspx?display=Mobile
+
+http://square.github.io/okhttp/
+
+
+Caution: Many web sites describe a poor alternative solution which is to install a TrustManager that does nothing. If you do this you might as well not be encrypting your communication, because anyone can attack your users at a public Wi-Fi hotspot by using DNS tricks to send your users' traffic through a proxy of their own that pretends to be your server. The attacker can then record passwords and other personal data. This works because the attacker can generate a certificate and—without a TrustManager that actually validates that the certificate comes from a trusted source—your app could be talking to anyone. So don't do this, not even temporarily. You can always make your app trust the issuer of the server's certificate, so just do it.
