@@ -169,7 +169,7 @@ public class AlertService {
      * Utility method which selects the right repository based on the alert
      * type.
      *
-     * @param alertType the alert type ("user", "other" or "historical")
+     * @param alertType the alert type ("user", "live" or "historical")
      * @return the corresponding alert repository
      */
     private AlertRepository selectRepository(String alertType) {
@@ -177,7 +177,7 @@ public class AlertService {
         switch (alertType) {
         case "user":
             return userAlertRepository;
-        case "other":
+        case "live":
             return liveAlertRepository;
         case "historical":
             return historicalAlertRepository;
