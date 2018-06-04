@@ -10,7 +10,7 @@ import org.springframework.stereotype.Service;
 
 import hackqc18.Acclimate.alert.repository.AlertRepository;
 import hackqc18.Acclimate.alert.repository.HistoricalAlertRepository;
-import hackqc18.Acclimate.alert.repository.OtherAlertRepository;
+import hackqc18.Acclimate.alert.repository.LiveAlertRepository;
 import hackqc18.Acclimate.alert.repository.UserAlertRepositoryProxy;
 import hackqc18.Acclimate.exception.AlertNotFoundException;
 import hackqc18.Acclimate.exception.UnsupportedAlertTypeException;
@@ -34,7 +34,7 @@ public class AlertService {
     @Autowired
     private UserAlertRepositoryProxy  userAlertRepository;
     @Autowired
-    private OtherAlertRepository      otherAlertRepository;
+    private LiveAlertRepository      liveAlertRepository;
     @Autowired
     private HistoricalAlertRepository historicalAlertRepository;
 
@@ -178,7 +178,7 @@ public class AlertService {
         case "user":
             return userAlertRepository;
         case "other":
-            return otherAlertRepository;
+            return liveAlertRepository;
         case "historical":
             return historicalAlertRepository;
         default:

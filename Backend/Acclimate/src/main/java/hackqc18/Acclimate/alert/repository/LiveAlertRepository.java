@@ -38,10 +38,10 @@ import hackqc18.Acclimate.alert.rss.Rss;
 // The @Component informs Spring that this class must be instantiated
 // as a Singleton so that only one instance will be available at any time.
 @Component
-public class OtherAlertRepository implements AlertRepository {
+public class LiveAlertRepository implements AlertRepository {
 
     private static HashMap<String, Alert> alerts = new HashMap<>();
-    private final int fetchingDelay = 180; // minutes
+    private final int fetchingDelay = 180; // secondes
     private final String rssURL = "https://geoegl.msp.gouv.qc.ca/avp/rss/";
     private final XmlMapper xmlMapper = new XmlMapper();
 
@@ -110,10 +110,10 @@ public class OtherAlertRepository implements AlertRepository {
 
             return feed;
         } catch (MalformedURLException ex) {
-            Logger.getLogger(OtherAlertRepository.class.getName())
+            Logger.getLogger(LiveAlertRepository.class.getName())
                     .log(Level.SEVERE, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(OtherAlertRepository.class.getName())
+            Logger.getLogger(LiveAlertRepository.class.getName())
                     .log(Level.SEVERE, null, ex);
         }
         return "";
@@ -182,16 +182,16 @@ public class OtherAlertRepository implements AlertRepository {
             alerts = newAlerts;
 
         } catch (MismatchedInputException ex) {
-            Logger.getLogger(OtherAlertRepository.class.getName())
+            Logger.getLogger(LiveAlertRepository.class.getName())
                     .log(Level.WARNING, null, ex);
         } catch (JsonParseException ex) {
-            Logger.getLogger(OtherAlertRepository.class.getName())
+            Logger.getLogger(LiveAlertRepository.class.getName())
                     .log(Level.WARNING, null, ex);
         } catch (JsonMappingException ex) {
-            Logger.getLogger(OtherAlertRepository.class.getName())
+            Logger.getLogger(LiveAlertRepository.class.getName())
                     .log(Level.WARNING, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(OtherAlertRepository.class.getName())
+            Logger.getLogger(LiveAlertRepository.class.getName())
                     .log(Level.WARNING, null, ex);
         }
     }
