@@ -1,3 +1,4 @@
+derby.log
 bin/
 /target/
 !.mvn/wrapper/maven-wrapper.jar

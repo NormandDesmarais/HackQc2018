@@ -3,6 +3,7 @@ package hackqc18.Acclimate;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.annotation.JsonRawValue;
 
+@Deprecated
 public class GetAlertes {
 
     @JsonRawValue

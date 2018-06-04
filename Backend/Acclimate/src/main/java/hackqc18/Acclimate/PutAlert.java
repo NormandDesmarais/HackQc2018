@@ -3,12 +3,13 @@ package hackqc18.Acclimate;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 
+@Deprecated
 public class PutAlert {
 
     private final static ArrayList<Alerte> USER_ALERTS = new ArrayList<>();
-    
+
     private String statusMsg;
-    
+
     public static ArrayList<Alerte> getUserAlerts() {
         return new ArrayList<>(USER_ALERTS);
     }
@@ -23,7 +24,7 @@ public class PutAlert {
          */
 
         if (lng > -84 && lng < -58 && lat > 40 && lat < 66) {
-            
+
             String userAlrId = (int)distanceInMeter(-84, lng, lat, lng) + "-"
                     + (int)distanceInMeter(lat, 66, lat, lng);
 
@@ -39,13 +40,13 @@ public class PutAlert {
                 }
 
             }
-            
+
             Alerte alerte = new Alerte(type, "usager", "inconnu",
                     "à déterminer", "inconnue", type, date, userAlrId, "inconnue",
                     "alerte usager", lng, lat);
-            
+
             USER_ALERTS.add(alerte);
-            
+
             this.statusMsg = "Nouvelle alerte ajoutée. Merci pour votre aide!";
         } else {
             this.statusMsg = "Coordonnées non supportées pour le moment.";

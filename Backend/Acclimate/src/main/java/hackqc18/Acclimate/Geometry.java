@@ -2,17 +2,24 @@ package hackqc18.Acclimate;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import java.util.ArrayList;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
+import javax.persistence.Embeddable;
+
+// TODO: add support for polygon or replace with GeoTools classes
+@Embeddable
 public class Geometry {
     public static final String TYPE_POINT = "Point";
     public static final String TYPE_POLYGON = "Polygon";
     
     private String type;
-    private final ArrayList<double[]> coordinates;
+    private double[] coordinates;
 
+    public Geometry() {
+        
+    }
+    
     /**
      * Constructor for Point type Geometry
      * @param lng longitudinal coordinate
@@ -20,8 +27,7 @@ public class Geometry {
      */
     public Geometry(double lng, double lat) {
         type = TYPE_POINT;
-        coordinates = new ArrayList<>();
-        coordinates.add(new double[]{lng, lat});
+        coordinates = new double[]{lng, lat};
     }
     
 
@@ -29,10 +35,18 @@ public class Geometry {
         return type;
     }
 
-    public ArrayList<double[]> getCoordinates() {
+    public double[] getCoordinates() {
         return coordinates;
     }
 
+
+    public void setType(String type) {
+        this.type = type;
+    }
+
+    public void setCoordinates(double[] coordinates) {
+        this.coordinates = coordinates;
+    }
 
     @Override
     public String toString() {

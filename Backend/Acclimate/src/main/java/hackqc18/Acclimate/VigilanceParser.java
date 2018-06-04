@@ -1,26 +1,28 @@
 package hackqc18.Acclimate;
 
 
-public class VigilanceParser extends HistoryCsvParser {
-       
+@Deprecated
+public class VigilanceParser extends CsvAlerteParser {
+
     public VigilanceParser (String filename) {
         super(filename);
     }
-    
-    
-    public void parseContent(String toBeParsed){      
-        String [] alertePrg = toBeParsed.split(",");        
-        
+
+
+    @Override
+    public void parseContent(String toBeParsed){
+        String [] alertePrg = toBeParsed.split(",");
+
         String nom = "", territoire = "", certitude = "", severite = "", type = "";
-        String dateDeMiseAJour = "", urgence = "", description = "", geom = "", IdAlert = "";
+        String dateDeMiseAJour = "", urgence = "", description = "", alertId = "";
         String source = "Ministère de la Sécurité publique du Québec";
         double lng = 0.0, lat = 0.0;
-        
+
         for (int i = 10; i < alertePrg.length; i++){
             int j = i % 11;
-            
+
             switch(j){
-                case 0: 
+                case 0:
                     nom = alertePrg[i];
                     break;
                 case 1:
@@ -33,7 +35,7 @@ public class VigilanceParser extends HistoryCsvParser {
                     certitude = alertePrg[i];
                     break;
                 case 4:
-                    severite = alertePrg[i]; 
+                    severite = alertePrg[i];
                     break;
                 case 5:
                     type = alertePrg[i];
@@ -42,7 +44,7 @@ public class VigilanceParser extends HistoryCsvParser {
                     dateDeMiseAJour = alertePrg[i];
                     break;
                 case 7:
-                    IdAlert = alertePrg[i];
+                    alertId = alertePrg[i];
                     break;
                 case 8:
                     urgence = alertePrg[i];
@@ -51,10 +53,11 @@ public class VigilanceParser extends HistoryCsvParser {
                     description = alertePrg[i];
                     break;
                 case 10:
+//                    alertId = createId(type, dateDeMiseAJour, lng, lat);
                     Alerte theAlert = new Alerte(nom, source, territoire, certitude,
-                            severite, type, dateDeMiseAJour, IdAlert, urgence,
+                            severite, type, dateDeMiseAJour, alertId, urgence,
                             description, lng, lat);
-                    alertes.add(theAlert);
+                    alerts.put(alertId, theAlert);
                     break;
                 default:
                     break;

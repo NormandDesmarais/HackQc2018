@@ -4,9 +4,10 @@
  */
 package hackqc18.Acclimate;
 
+@Deprecated
 public class AlerteWrapper {
     private final Alerte alerte;
-    
+
     public AlerteWrapper(Alerte alerte) {
         this.alerte = alerte;
     }
@@ -14,6 +15,6 @@ public class AlerteWrapper {
     public Alerte getAlerte() {
         return alerte;
     }
-    
-    
+
+
 }

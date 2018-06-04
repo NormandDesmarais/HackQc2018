@@ -1,27 +1,36 @@
 package hackqc18.Acclimate;
 
-import java.io.*;
-import java.util.ArrayList;
+import org.springframework.stereotype.Component;
 
-public class StaticParser extends HistoryCsvParser {
+// @Component indicates to Spring that it must manage the creation and
+// injection of a unique instance of this class were needed.
+@Component
+@Deprecated
+public class StaticParser extends CsvAlerteParser {
 
-    public StaticParser(String filename) {
-        super(filename);
+    public StaticParser() {
+        super("historique_alertes.csv");
     }
 
+
+    @Override
     public void parseContent(String toBeParsed) {
         String[] alertePrg = toBeParsed.split(",");
 
-//        String[] typesAlertes = {"Avalanche", "Feu de brousse", "Feu de forêt",
-//            "Géomorphologique (ex. érosion)", "Glace", "Inondation",
-//            "Inondation par ruissellement", "Mouvement de terrain", "Onde de tempête",
-//            "Orage violent", "Ouragan", "Pluie", "Pluie verglaçante",
-//            "Tempête hivernale", "Tornade", "Tremblement de terre",
-//            "Vent de tempête"};
-        String[] typesAlertes = {"Feu de forêt", "Inondation"};
+        // String[] typesAlertes = {"Avalanche", "Feu de brousse", "Feu de
+        // forêt",
+        // "Géomorphologique (ex. érosion)", "Glace", "Inondation",
+        // "Inondation par ruissellement", "Mouvement de terrain", "Onde de
+        // tempête",
+        // "Orage violent", "Ouragan", "Pluie", "Pluie verglaçante",
+        // "Tempête hivernale", "Tornade", "Tremblement de terre",
+        // "Vent de tempête"};
+        String[] typesAlertes = { "Feu de forêt", "Inondation" };
 
-        String nom = "", territoire = "", certitude = "", severite = "", type = "";
-        String dateDeMiseAJour = "", urgence = "", description = "", geom = "", IdAlert = "";
+        String nom = "", territoire = "", certitude = "", severite = "",
+                type = "";
+        String dateDeMiseAJour = "", urgence = "", description = "",
+                alertId = "";
         String source = "Ministère de la Sécurité publique du Québec";
         double lng = 0.0, lat = 0.0;
 
@@ -62,10 +71,13 @@ public class StaticParser extends HistoryCsvParser {
                 case 9:
                     for (int k = 0; k < typesAlertes.length; k++) {
                         if (nom.equals(typesAlertes[k])) {
-                            Alerte theAlert = new Alerte(nom, source, territoire, certitude,
-                                    severite, type, dateDeMiseAJour, IdAlert, urgence,
+                            alertId = createId(type, dateDeMiseAJour, lng, lat);
+                            Alerte theAlert = new Alerte(nom, source,
+                                    territoire, certitude, severite, type,
+                                    dateDeMiseAJour, alertId, urgence,
                                     description, lng, lat);
-                            alertes.add(theAlert);
+                            alerts.put(alertId, theAlert);
+                            break;
                         }
                     }
                     break;
@@ -74,6 +86,7 @@ public class StaticParser extends HistoryCsvParser {
             }
         }
     }
+
 
     private String getShortType(String type) {
         String result;
@@ -108,4 +121,5 @@ public class StaticParser extends HistoryCsvParser {
         }
         return result;
     }
+
 }
