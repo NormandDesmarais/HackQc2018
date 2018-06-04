@@ -1,8 +1,5 @@
 package com.example.payne.simpletestapp;
 
-import android.provider.ContactsContract;
-import android.util.Log;
-import android.widget.Toast;
 
 import org.osmdroid.util.BoundingBox;
 
@@ -10,9 +7,8 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-import java.sql.Timestamp;
-import java.text.SimpleDateFormat;
-import java.util.Date;
+
+import javax.net.ssl.HttpsURLConnection;
 
 
 public class ServerConnection {
@@ -64,6 +60,8 @@ public class ServerConnection {
 
                 try{
                     URL obj = new URL(serverAddress + path + param);
+                    /* TODO: Boolean for Secured-cast connection:
+                    HttpsURLConnection con = (HttpsURLConnection) obj.openConnection(); */
                     HttpURLConnection con = (HttpURLConnection) obj.openConnection();
 
                     // optional default is GET
