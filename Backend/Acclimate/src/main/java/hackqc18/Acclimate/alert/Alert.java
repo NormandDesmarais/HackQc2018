@@ -5,8 +5,6 @@ import java.time.LocalDateTime;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 
-import hackqc18.Acclimate.Geometry;
-
 @Entity
 public class Alert {
 

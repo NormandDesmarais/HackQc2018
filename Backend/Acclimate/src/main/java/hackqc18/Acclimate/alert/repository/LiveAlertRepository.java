@@ -40,10 +40,11 @@ import hackqc18.Acclimate.alert.rss.Rss;
 @Component
 public class LiveAlertRepository implements AlertRepository {
 
-    private static HashMap<String, Alert> alerts = new HashMap<>();
-    private final int fetchingDelay = 180; // secondes
-    private final String rssURL = "https://geoegl.msp.gouv.qc.ca/avp/rss/";
-    private final XmlMapper xmlMapper = new XmlMapper();
+    private static HashMap<String, Alert> alerts        = new HashMap<>();
+    private final int                     fetchingDelay = 180;                                     // secondes
+    private final String                  rssURL
+                                                        = "https://geoegl.msp.gouv.qc.ca/avp/rss/";
+    private final XmlMapper               xmlMapper     = new XmlMapper();
 
 
     /**
@@ -110,11 +111,15 @@ public class LiveAlertRepository implements AlertRepository {
 
             return feed;
         } catch (MalformedURLException ex) {
+            // We don't want the application to stop if the feed is not
+            // available, so just log a warning
             Logger.getLogger(LiveAlertRepository.class.getName())
-                    .log(Level.SEVERE, null, ex);
+                    .log(Level.WARNING, null, ex);
         } catch (IOException ex) {
+            // We don't want the application to stop if the feed is not
+            // available, so just log a warning
             Logger.getLogger(LiveAlertRepository.class.getName())
-                    .log(Level.SEVERE, null, ex);
+                    .log(Level.WARNING, null, ex);
         }
         return "";
     }

@@ -1,6 +1,8 @@
-package hackqc18.Acclimate;
+package hackqc18.Acclimate.deprecated;
 
 import java.time.LocalDateTime;
+
+import hackqc18.Acclimate.alert.Geometry;
 
 @Deprecated
 public class Alerte {

@@ -1,4 +1,4 @@
-package hackqc18.Acclimate;
+package hackqc18.Acclimate.deprecated;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -86,9 +86,9 @@ public class AlertesFluxRss {
 
             return rssCleaned;
         } catch (MalformedURLException ex) {
-            Logger.getLogger(AlertesFluxRss.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AlertesFluxRss.class.getName()).log(Level.WARNING, null, ex);
         } catch (IOException ex) {
-            Logger.getLogger(AlertesFluxRss.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(AlertesFluxRss.class.getName()).log(Level.WARNING, null, ex);
         }
         return "";
     }

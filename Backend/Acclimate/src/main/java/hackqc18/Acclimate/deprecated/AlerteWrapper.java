@@ -2,7 +2,7 @@
  * This class should be removed once clients support JSON alerts
  * without the tag "alert"
  */
-package hackqc18.Acclimate;
+package hackqc18.Acclimate.deprecated;
 
 @Deprecated
 public class AlerteWrapper {

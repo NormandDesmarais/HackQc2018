@@ -7,6 +7,8 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public abstract class CsvAlertParser {
 
@@ -41,7 +43,8 @@ public abstract class CsvAlertParser {
             }
             reader.close();
         } catch (IOException ex) {
-            System.err.println("Erreur à l’ouverture du fichier");
+            Logger.getLogger(CsvAlertParser.class.getName()).log(Level.WARNING,
+                    "Erreur à l’ouverture du fichier '" + filename + "'.", ex);
         }
         parseContent(toBeParsed);
     }

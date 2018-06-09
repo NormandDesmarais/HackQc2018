@@ -20,6 +20,10 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
 import hackqc18.Acclimate.exception.AlertNotFoundException;
 
+// IMPORTANT !!!
+// TODO: Make sure that all input validations are done on the server side because
+// hacking clients is a peace of cake compare to hacking the server!!!
+
 /**
  * Controller class for user alerts.
  */
@@ -90,6 +94,14 @@ public class AlertController {
     }
 
 
+    // TODO: add a specific message to distinguish new alerts from confirmation
+    // of a previous one. For example:
+    //     new alert    : "Nouvelle alerte ajoutée. Merci pour votre aide!"
+    //     confirmation : "Alerte comfirmée, merci de votre participation!"
+    // This implies that either the Alert class must be updated to add a
+    // status message or it is wrapped inside another class that contains
+    // the message. This last implementation would be better and could be
+    // used/extended to provide better status messages for all requests.
     /**
      * The POST method associated with the URL "api/{alertType}/alerts". It
      * retrieves the alert type, longitude and latitude from the request body
