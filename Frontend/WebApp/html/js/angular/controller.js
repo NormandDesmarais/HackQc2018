@@ -97,6 +97,12 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
                 case "Eau" :
                     icon = "../images/icon_goutte.png";
                     break;
+                case "Orage violent" :
+                    icon = "../images/icon_seisme.png";
+                    break;
+                case "Feu de forêt" :
+                    icon = "../images/icon_feu.png";
+                    break;
             }
             arr.push({
                 show: show,
@@ -242,40 +248,88 @@ app.controller('mainController', ['$scope', 'Request', function($scope, Request)
 
 
     function pinsToMap(type, jsonFile){
-        var icon = "../images/pin_feu.png";
+        var icon = "../images/pin_feu.png"; // default
 
-        switch (type){
-            case "Inondation" :
-                icon = "../images/pin_goutte.png";
-                break;
-            case "Suivi des cours d'eau" :
-                icon = "../images/pin_goutte.png";
-                break;
-            case "Vent" :
-                icon = "../images/pin_vent.png";
-                break;
-            case "Pluie" :
-                icon = "../images/pin_pluie.png";
-                break;
-            case "Neige" :
-                icon = "../images/pin_pluie.png";
-                break;
-            case "Meteo" :
-                icon = "../images/pin_vent.png";
-                break;
-            case "Feu" :
-                icon = "../images/pin_feu.png";
-                break;
-            case "Terrain" :
-                icon = "../images/pin_seisme.png";
-                break;
-            case "Eau" :
-                icon = "../images/pin_goutte.png";
-                break;
-        }
+        jsonFile.features.forEach(json => { // hack pour les UserPins
+          if(json.source == "usager") {
+            switch(type) {
+                case "Inondation" :
+                    icon = "../images/pin_UserWater.png";
+                    break;
+                case "Suivi des cours d'eau" :
+                    icon = "../images/pin_UserWater.png";
+                    break;
+                case "Vent" :
+                    icon = "../images/pin_UserWind.png";
+                    break;
+                case "Pluie" :
+                    icon = "../images/pin_UserWater.png";
+                    break;
+                case "Neige" :
+                    icon = "../images/pin_UserWind.png";
+                    break;
+                case "Meteo" :
+                    icon = "../images/pin_UserWind.png";
+                    break;
+                case "Feu" :
+                    icon = "../images/pin_UserFire.png";
+                    break;
+                case "Terrain" :
+                    icon = "../images/pin_UserEarth.png";
+                    break;
+                case "Eau" :
+                    icon = "../images/pin_UserWater.png";
+                    break;
+                case "Orage violent" :
+                    icon = "../images/pin_UserWind.png";
+                    break;
+                case "Feu de forêt" :
+                    icon = "../images/pin_UserFire.png";
+                    break;
+            }
+          } else {
+            switch(type) {
+                case "Inondation" :
+                    icon = "../images/pin_goutte.png";
+                    break;
+                case "Suivi des cours d'eau" :
+                    icon = "../images/pin_goutte.png";
+                    break;
+                case "Vent" :
+                    icon = "../images/pin_vent.png";
+                    break;
+                case "Pluie" :
+                    icon = "../images/pin_pluie.png";
+                    break;
+                case "Neige" :
+                    icon = "../images/pin_pluie.png";
+                    break;
+                case "Meteo" :
+                    icon = "../images/pin_vent.png";
+                    break;
+                case "Feu" :
+                    icon = "../images/pin_feu.png";
+                    break;
+                case "Terrain" :
+                    icon = "../images/pin_seisme.png";
+                    break;
+                case "Eau" :
+                    icon = "../images/pin_goutte.png";
+                    break;
+                case "Orage violent" :
+                    icon = "../images/pin_vent.png";
+                    break;
+                case "Feu de forêt" :
+                    icon = "../images/pin_feu.png";
+                    break;
+            }
+          }
+        })
+
+
 
         var image = new ol.style.Icon(/** @type {olx.style.IconOptions} */ ({
-            anchor: [0.5, 30],
+            anchor: [0.5, 30], // 62 pour les nouvelles pins
             anchorXUnits: 'fraction',
             anchorYUnits: 'pixels',
             opacity: 0.8,
