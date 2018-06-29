@@ -64,7 +64,7 @@ public class MapDisplay {
 
     public MapDisplay(MapView map, Context ctx) {
         this.map = map;
-        this.ctx = ctx;
+        MapDisplay.ctx = ctx;
 
         // Setting up the image of the Pins
         eauIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_goutte);
@@ -171,7 +171,7 @@ public class MapDisplay {
         if (!showUserPins){
             showUserPins = !showUserPins;
 
-            MainActivity.mainActivity.menu.findItem(R.id.cB_users).setChecked(true);
+            MainActivity.menu.findItem(R.id.cB_users).setChecked(true);
         }
 
         GeoPoint pos = new GeoPoint(alerte.getLatitude(), alerte.getLongitude());
