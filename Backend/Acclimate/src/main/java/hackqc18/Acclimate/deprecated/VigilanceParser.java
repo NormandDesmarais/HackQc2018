@@ -1,4 +1,4 @@
-package hackqc18.Acclimate;
+package hackqc18.Acclimate.deprecated;
 
 
 @Deprecated

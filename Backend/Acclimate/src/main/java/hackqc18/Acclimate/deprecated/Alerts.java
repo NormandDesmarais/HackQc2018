@@ -1,4 +1,4 @@
-package hackqc18.Acclimate;
+package hackqc18.Acclimate.deprecated;
 
 import java.util.ArrayList;
 import java.util.logging.Level;
@@ -104,7 +104,7 @@ public class Alerts {
         try {
             return mapper.writeValueAsString(this);
         } catch (JsonProcessingException ex) {
-            Logger.getLogger(Alerts.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Alerts.class.getName()).log(Level.WARNING, null, ex);
         }
         return "[]";
     }

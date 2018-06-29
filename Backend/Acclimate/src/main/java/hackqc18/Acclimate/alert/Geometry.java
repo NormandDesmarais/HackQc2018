@@ -1,7 +1,10 @@
-package hackqc18.Acclimate;
+package hackqc18.Acclimate.alert;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import hackqc18.Acclimate.deprecated.Alerte;
+
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
