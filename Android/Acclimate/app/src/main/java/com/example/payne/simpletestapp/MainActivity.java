@@ -8,11 +8,12 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
+
+
 
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
@@ -113,7 +114,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             public void onClick(View view) {
 
                 /* TODO: GÉRER LE "YES" DU DIALOG
-                Which "temporaru pin" are we removing?
+                Which "temporary pin" are we removing?
                 Do we need to set "currentlyPlacingPin to false?
                  */
                 // Remove temporary Pin

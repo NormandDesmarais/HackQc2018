@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "746348091619",
+    "firebase_url": "https://acclimate-c79ea.firebaseio.com",
+    "project_id": "acclimate-c79ea",
+    "storage_bucket": "acclimate-c79ea.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:746348091619:android:319462681830ab8d",
+        "android_client_info": {
+          "package_name": "com.example.payne.simpletestapp"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "746348091619-6g0e6m9kk2ibhnti2jtgmptvhv14c8fp.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.payne.simpletestapp",
+            "certificate_hash": "4d6ce3e04f4e7df0d23d1942af0c283b0fb7302a"
+          }
+        },
+        {
+          "client_id": "746348091619-eol6p6a03risogk3bds3e83l0tja2rfl.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDS0bgc_5gzL1zH-r6avvhy3pyEHhOG0Fk"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "746348091619-eol6p6a03risogk3bds3e83l0tja2rfl.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
