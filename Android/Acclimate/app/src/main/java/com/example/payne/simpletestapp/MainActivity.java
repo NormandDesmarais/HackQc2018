@@ -1,7 +1,7 @@
 package com.example.payne.simpletestapp;
 
 import android.content.Context;
-import android.content.SharedPreferences;
+import android.graphics.drawable.Drawable;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.Snackbar;
@@ -13,8 +13,6 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.widget.Toast;
 
-
-
 import org.osmdroid.api.IMapController;
 import org.osmdroid.config.Configuration;
 import org.osmdroid.events.MapEventsReceiver;
@@ -25,9 +23,6 @@ import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
-
-import static com.example.payne.simpletestapp.MapDisplay.historiqueFilter;
-import static com.example.payne.simpletestapp.MapDisplay.historiqueLoaded;
 
 
 /**
@@ -52,6 +47,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
+
         //handle permissions first, before map is created. not depicted here
         final Context ctx = getApplicationContext();
         Configuration.getInstance().load(ctx, PreferenceManager.getDefaultSharedPreferences(ctx));
@@ -73,8 +69,11 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
          */
 
         map = findViewById(R.id.map);
-        myMap = new MapDisplay(map, this);
+        myMap = new MapDisplay(map);
         map.setTileSource(TileSourceFactory.MAPNIK);
+
+        // Setting up MonitoredZones Shared Preferences
+        DeviceStorage.setUpMonitoredZonesSharedPrefs(ctx, myMap);
 
         // set zoom control and multi-touch gesture
         map.setBuiltInZoomControls(false);
@@ -151,86 +150,29 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
 
         /*
         Setting up Events for "New Alert Type" prompt dialog
-        TODO: create static method to handle these 4 cases with less code
          */
         findViewById(R.id.wind_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Remove temporary Pin
-                map.getOverlays().remove(lastPlacedPin);
-
-                // Hide PopUp
-                MainActivity.mainActivity.findViewById(R.id.pop_up).setVisibility(View.GONE);
-                MapDisplay.currentlyPlacingPin = false;
-
-                // locally register alert
-                Alerte alert = new Alerte(lastPlacedPin.getPosition().getLongitude(),
-                        lastPlacedPin.getPosition().getLatitude(),
-                        "Meteo");
-
-                myMap.addUserAlertPin(alert, MapDisplay.meteoIcon);
-                manager.postAlert(alert);
+                placingPin(map, myMap, "Meteo", MapDisplay.meteoIcon);
             }
         });
         findViewById(R.id.water_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-
-                // Remove temporary Pin
-                map.getOverlays().remove(lastPlacedPin);
-
-                // Hide PopUp
-                MainActivity.mainActivity.findViewById(R.id.pop_up).setVisibility(View.GONE);
-                MapDisplay.currentlyPlacingPin = false;
-
-                // locally register alert
-                Alerte alert = new Alerte(lastPlacedPin.getPosition().getLongitude(),
-                        lastPlacedPin.getPosition().getLatitude(),
-                        "Eau");
-
-                myMap.addUserAlertPin(alert, MapDisplay.eauIcon);
-                manager.postAlert(alert);
-
+                placingPin(map, myMap, "Eau", MapDisplay.eauIcon);
             }
         });
         findViewById(R.id.fire_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Remove temporary Pin
-                map.getOverlays().remove(lastPlacedPin);
-
-                // Hide PopUp
-                MainActivity.mainActivity.findViewById(R.id.pop_up).setVisibility(View.GONE);
-                MapDisplay.currentlyPlacingPin = false;
-
-                // locally register alert
-                Alerte alert = new Alerte(lastPlacedPin.getPosition().getLongitude(),
-                        lastPlacedPin.getPosition().getLatitude(),
-                        "Feu");
-
-                myMap.addUserAlertPin(alert, MapDisplay.feuIcon);
-                manager.postAlert(alert);
-
+                placingPin(map, myMap, "Feu", MapDisplay.feuIcon);
             }
         });
         findViewById(R.id.earth_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                // Remove temporary Pin
-                map.getOverlays().remove(lastPlacedPin);
-
-                // Hide PopUp
-                MainActivity.mainActivity.findViewById(R.id.pop_up).setVisibility(View.GONE);
-                MapDisplay.currentlyPlacingPin = false;
-
-                // locally register alert
-                Alerte alert = new Alerte(lastPlacedPin.getPosition().getLongitude(),
-                        lastPlacedPin.getPosition().getLatitude(),
-                        "Terrain");
-
-                myMap.addUserAlertPin(alert, MapDisplay.terrainIcon);
-                manager.postAlert(alert);
-
+                placingPin(map, myMap, "Terrain", MapDisplay.terrainIcon);
             }
         });
 
@@ -309,6 +251,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         //noinspection SimplifiableIfStatement
         switch (id) {
             /*
+            https://github.com/sophiesavoie/hackathon/commit/1a4632f48d31911c1c1e4062f57e756593e1c3b7
+
             case (R.id.action_settings):
                 Toast.makeText(this, "Who cares...", Toast.LENGTH_SHORT).show();
 
@@ -347,7 +291,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 break;
 
             case (R.id.add):
-                myMap.highlightCurrent(findViewById(android.R.id.content));
+                DeviceStorage.addCurrentBoundingBoxToMZSP(myMap);
+                //myMap.highlightCurrent(findViewById(android.R.id.content));
                 myMap.refresh();
                 break;
 
@@ -363,108 +308,41 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             case (R.id.circleBtn):
                 myMap.drawCircleAtCenter(1000, 5);
                 break;
+            */
 
-
-*/
             case (R.id.cB_histo):
                 // TODO: Remove for phones? Or make algo better.
 
-                if (!historiqueLoaded){
+                if (!MapDisplay.historiqueLoaded){
 
                     Toast.makeText(mainActivity, "Chargement de l'historique. Cette action peut prendre un certain temps", Toast.LENGTH_SHORT).show();
 
                     manager.getHistorique();
-                    historiqueFilter = true;
-                    historiqueLoaded = true;
+                    MapDisplay.historiqueFilter = true;
+                    MapDisplay.historiqueLoaded = true;
 
                 } else {
-
-                    if (item.isChecked()) {
-                        historiqueFilter = false;
-                        item.setChecked(false);
-                        myMap.refresh();
-                    } else {
-                        historiqueFilter = true;
-                        item.setChecked(true);
-                        myMap.refresh();
-                    }
+                    MapDisplay.historiqueFilter = filterTypeBtn(item);
+                    myMap.refresh();
                 }
                 break;
 
             // Setting up the Filter Check-Boxes (cb)
             case (R.id.cB_users):
-                if (item.isChecked()) {
-                    MapDisplay.showUserPins = false;
-                    item.setChecked(false);
-                    myMap.refresh();
-                } else {
-                    MapDisplay.showUserPins = true;
-                    item.setChecked(true);
-                    myMap.refresh();
-                }
-                break;
-
+                MapDisplay.showUserPins = filterTypeBtn(item); myMap.refresh(); break;
             case (R.id.cB_zones):
-                if (item.isChecked()) {
-                    MapDisplay.isHighlight = false;
-                    item.setChecked(false);
-                    myMap.refresh();
-                } else {
-                    MapDisplay.isHighlight = true;
-                    item.setChecked(true);
-                    myMap.refresh();
-                }
-                break;
-
+                MapDisplay.showMonitoredZones = filterTypeBtn(item); myMap.refresh(); break;
             case (R.id.cB_fire):
-                if (item.isChecked()) {
-                    MapDisplay.feuFilter = false;
-                    item.setChecked(false);
-                    myMap.refresh();
-                } else {
-                    MapDisplay.feuFilter = true;
-                    item.setChecked(true);
-                    myMap.refresh();
-                }
-                break;
-
+                MapDisplay.feuFilter = filterTypeBtn(item); myMap.refresh(); break;
             case (R.id.cB_water):
-                if (item.isChecked()) {
-                    MapDisplay.eauFilter = false;
-                    item.setChecked(false);
-                    myMap.refresh();
-                } else {
-                    MapDisplay.eauFilter = true;
-                    item.setChecked(true);
-                    myMap.refresh();
-                }
-                break;
-
+                MapDisplay.eauFilter = filterTypeBtn(item); myMap.refresh(); break;
             case (R.id.cB_terrain):
-                if (item.isChecked()) {
-                    MapDisplay.terrainFilter = false;
-                    item.setChecked(false);
-                    myMap.refresh();
-                } else {
-                    MapDisplay.terrainFilter = true;
-                    item.setChecked(true);
-                    myMap.refresh();
-                }
-                break;
-
+                MapDisplay.terrainFilter = filterTypeBtn(item); myMap.refresh(); break;
             case (R.id.cB_meteo):
-                if (item.isChecked()) {
-                    MapDisplay.meteoFilter = false;
-                    item.setChecked(false);
-                    myMap.refresh();
-                } else {
-                    MapDisplay.meteoFilter = true;
-                    item.setChecked(true);
-                    myMap.refresh();
-                }
-                break;
+                MapDisplay.meteoFilter = filterTypeBtn(item); myMap.refresh(); break;
 
             case (R.id.profileBtn):
+                // TODO: Launch FIREBASE Activity here
                 break;
 
             default:
@@ -478,8 +356,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         super.onResume();
         //this will refresh the osmdroid configuration on resuming.
         //if you make changes to the configuration, use
-        SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
-        Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
+        //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
+        //Configuration.getInstance().load(this, PreferenceManager.getDefaultSharedPreferences(this));
         map.onResume(); //needed for compass, my location overlays, v6.0.0 and up
     }
 
@@ -490,5 +368,33 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         //SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(this);
         //Configuration.getInstance().save(this, prefs);
         map.onPause();  //needed for compass, my location overlays, v6.0.0 and up
+    }
+
+    /*
+    private static section : pour le Refactor
+     */
+
+    // Pour du Refactor (reducing code duplication)
+    private static void placingPin(MapView map, MapDisplay myMap, String type, Drawable icon) {
+        // Remove temporary Pin
+        map.getOverlays().remove(lastPlacedPin);
+
+        // Hide PopUp
+        MainActivity.mainActivity.findViewById(R.id.pop_up).setVisibility(View.GONE);
+        MapDisplay.currentlyPlacingPin = false;
+
+        // locally register alert
+        Alerte alert = new Alerte(lastPlacedPin.getPosition().getLongitude(),
+                lastPlacedPin.getPosition().getLatitude(),
+                type);
+
+        myMap.addUserAlertPin(alert, icon);
+        manager.postAlert(alert);
+    }
+
+    // Pour du Refactor (reducing code duplication)
+    private static boolean filterTypeBtn(MenuItem item) {
+        item.setChecked(!item.isChecked());
+        return item.isChecked();
     }
 }

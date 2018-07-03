@@ -61,7 +61,7 @@
     <item
         android:id="@+id/cB_zones"
         android:checkable="true"
-        android:checked="false"
+        android:checked="true"
         android:title="@string/cB_zones"
         app:showAsAction="never" />
     <item

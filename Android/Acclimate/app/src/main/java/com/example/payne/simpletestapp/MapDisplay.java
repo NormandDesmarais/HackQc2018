@@ -1,11 +1,8 @@
 package com.example.payne.simpletestapp;
 
-import android.content.Context;
 import android.graphics.Color;
 import android.graphics.drawable.Drawable;
-import android.util.Log;
 import android.view.View;
-import android.widget.Toast;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -29,7 +26,6 @@ public class MapDisplay {
 
     public MapView map;
     private double[] lastTouch = {0, 0};
-    static private Context ctx;
     public static boolean currentlyPlacingPin = false;
     public static String last_type_put_down;
     public static final BoundingBox QUEBEC_BOUNDING_BOX = new BoundingBox(63,-58,40,-84);
@@ -44,10 +40,10 @@ public class MapDisplay {
     public ArrayList<Marker> historique = new ArrayList<>(); // TODO: remove?
 
     // Zones surveillées
-    public ArrayList<Polygon> highlights = new ArrayList<>();
+    public ArrayList<Polygon> monitoredZones = new ArrayList<>();
 
 
-    public static boolean isHighlight = false;
+    public static boolean showMonitoredZones = true;
     public static boolean showUserPins = true;
     public static boolean terrainFilter = true;
     public static boolean feuFilter = true;
@@ -62,9 +58,9 @@ public class MapDisplay {
     public static Drawable meteoIcon;
 
 
-    public MapDisplay(MapView map, Context ctx) {
+
+    public MapDisplay(MapView map) {
         this.map = map;
-        MapDisplay.ctx = ctx;
 
         // Setting up the image of the Pins
         eauIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_goutte);
@@ -76,6 +72,10 @@ public class MapDisplay {
 
     /**
      * North, south, east, west
+     *
+     * ex:
+     * TOP-LEFT COORD = {result[0], result[3]}
+     * BOT-RIGHT COORD = {result[1], result[2]}
      *
      * @return
      */
@@ -89,21 +89,32 @@ public class MapDisplay {
         result[3] = current.getLonWest();
 
         return result;
-
     }
 
     public void highlightCurrent(View view) {
 
         double[] corners = getBoundingBox();
+
+        ajouterPolygon(this, corners[0], corners[1], corners[2], corners[3]);
+
+        MainActivity.manager.addUserNotification(map.getBoundingBox());
+    }
+
+    /**
+     * Pour ajouter une zone colorée là où mentionné.
+     * Utilisé pour signifier qu'une zone est surveillée.
+     */
+    public static void ajouterPolygon(MapDisplay mapD, double north, double south, double east, double west) {
+
         List<GeoPoint> geoPoints = new ArrayList<>();
 
         //add your points here
-        geoPoints.add(new GeoPoint(corners[0], corners[2])); // North East
-        geoPoints.add(new GeoPoint(corners[0], corners[3])); // North West
-        geoPoints.add(new GeoPoint(corners[1], corners[3])); // South West
-        geoPoints.add(new GeoPoint(corners[1], corners[2])); // South East
+        geoPoints.add(new GeoPoint(north, east));
+        geoPoints.add(new GeoPoint(north, west));
+        geoPoints.add(new GeoPoint(south, west));
+        geoPoints.add(new GeoPoint(south, east));
 
-        Polygon polygon = new Polygon(this.map);    //see note below
+        Polygon polygon = new Polygon(mapD.map);    //see note below
         polygon.setFillColor(Color.argb(75, 255, 0, 0));
         geoPoints.add(geoPoints.get(0));    //forces the loop to close
         polygon.setPoints(geoPoints);
@@ -116,10 +127,9 @@ public class MapDisplay {
         polygon.setTitle("Zone d'alerte");
         polygon.setSnippet("Vous recevrez desnotifications lorsqu'une nouvelle alerte " +
                 "sera détecté à l'intérieur de cette zone");
-        polygon.setSubDescription("pour vous désabonner èa cette alerte, aller des votre compte client");
+        polygon.setSubDescription("Pour vous désabonner à cette alerte, aller des votre compte client");
 
-        this.highlights.add(polygon);
-        MainActivity.manager.addUserNotification(map.getBoundingBox());
+        mapD.monitoredZones.add(polygon);
     }
 
     public void removeAll(View view, MapEventsOverlay mapEventsOverlay) {
@@ -141,7 +151,7 @@ public class MapDisplay {
     public void addUserPin(GeoPoint pos) {
 
         if (!currentlyPlacingPin) {
-            currentlyPlacingPin = !currentlyPlacingPin;
+            currentlyPlacingPin = false;
 
             Marker pin = new Marker(map);
             pin.setPosition(pos);
@@ -356,8 +366,8 @@ public class MapDisplay {
         if(meteoFilter) this.drawAlertPins(meteoAlerts, meteoIcon);
 
 
-        if (isHighlight){
-            for (Polygon p : highlights){
+        if (showMonitoredZones){
+            for (Polygon p : monitoredZones){
                 this.map.getOverlayManager().add(p);
             }
         }
@@ -375,15 +385,11 @@ public class MapDisplay {
         }
 
         this.map.invalidate();
-
     }
 
     public void refresh(){
-
         this.removeAll(MainActivity.mainActivity.findViewById(android.R.id.content),
                 MainActivity.mapEventsOverlay);
         this.redrawScreen();
-
     }
-
 }

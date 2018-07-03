@@ -24,7 +24,7 @@ public class Home extends AppCompatActivity {
         // Get instance of Vibrator from current Context
         Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
         // Vibrate for 400 milliseconds
-        v.vibrate(1400);
+        v.vibrate(300);
 
         setContentView(R.layout.home);
 
@@ -99,7 +99,7 @@ public class Home extends AppCompatActivity {
             e.printStackTrace();
         }
 
-        // Texte lié aux alertes GOUVERNEMENTALES
+        // Texte lié aux alertes OFFICIELLES
         ((TextView) findViewById(R.id.dlb_eauMain)).setText(String.valueOf(eau)+ " alertes actives");
         ((TextView) findViewById(R.id.dlb_feuMain)).setText(String.valueOf(feu)+ " alertes actives");
         ((TextView) findViewById(R.id.dlb_meteoMain)).setText(String.valueOf(meteo)+ " alertes actives");
