@@ -27,9 +27,9 @@ public class MonitoredZone {
 
     @Override
     public String toString() {
-        return DeviceStorage.MZs_separator + topCoord +
-                DeviceStorage.MZ_coord_separator + botCoord +
-                DeviceStorage.MZ_coord_separator + rightCoord+
-                DeviceStorage.MZ_coord_separator + leftCoord ;
+        return Preferences.MZS_SEPARATOR + topCoord +
+                Preferences.MZ_COORD_SEPARATOR + botCoord +
+                Preferences.MZ_COORD_SEPARATOR + rightCoord+
+                Preferences.MZ_COORD_SEPARATOR + leftCoord ;
     }
 }

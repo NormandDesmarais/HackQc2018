@@ -73,7 +73,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         map.setTileSource(TileSourceFactory.MAPNIK);
 
         // Setting up MonitoredZones Shared Preferences
-        DeviceStorage.setUpMonitoredZonesSharedPrefs(ctx, myMap);
+        Preferences.setUpPrefs(ctx, myMap);
 
         // set zoom control and multi-touch gesture
         map.setBuiltInZoomControls(false);
@@ -291,7 +291,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 break;
 
             case (R.id.add):
-                DeviceStorage.addCurrentBoundingBoxToMZSP(myMap);
+                Preferences.addCurrentBoundingBoxToMZSP(myMap);
                 //myMap.highlightCurrent(findViewById(android.R.id.content));
                 myMap.refresh();
                 break;

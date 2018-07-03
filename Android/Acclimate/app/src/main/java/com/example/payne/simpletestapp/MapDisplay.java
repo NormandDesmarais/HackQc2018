@@ -39,24 +39,23 @@ public class MapDisplay {
     public ArrayList<Marker> userPins = new ArrayList<>();
     public ArrayList<Marker> historique = new ArrayList<>(); // TODO: remove?
 
-    // Zones surveillées
+    // Rectangles colorés (zones surveillées)
     public ArrayList<Polygon> monitoredZones = new ArrayList<>();
 
-
-    public static boolean showMonitoredZones = true;
-    public static boolean showUserPins = true;
-    public static boolean terrainFilter = true;
+    // Filtres (préférences), dans l'ordre du menu
     public static boolean feuFilter = true;
     public static boolean eauFilter = true;
+    public static boolean terrainFilter = true;
     public static boolean meteoFilter = true;
+    public static boolean showMonitoredZones = true;
     public static boolean historiqueFilter = false;
     public static boolean historiqueLoaded = false;
+    public static boolean showUserPins = true;
 
     public static Drawable eauIcon;
     public static Drawable feuIcon;
     public static Drawable terrainIcon;
     public static Drawable meteoIcon;
-
 
 
     public MapDisplay(MapView map) {
