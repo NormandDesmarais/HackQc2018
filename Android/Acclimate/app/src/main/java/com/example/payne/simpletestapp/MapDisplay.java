@@ -52,22 +52,32 @@ public class MapDisplay {
     public static boolean historiqueFilter = false;
     public static boolean historiqueLoaded = false;
 
+    // Official pins
     public static Drawable eauIcon;
     public static Drawable feuIcon;
     public static Drawable terrainIcon;
     public static Drawable meteoIcon;
+    // User pins
+    public static Drawable userEauIcon;
+    public static Drawable userFeuIcon;
+    public static Drawable userTerrainIcon;
+    public static Drawable userMeteoIcon;
 
 
     public MapDisplay(MapView map) {
         this.map = map;
 
-        // TODO: Integrate User_Pins !
-
-        // Setting up the image of the Pins
+        // Setting up the image of the Official Pins
         eauIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_goutte);
         feuIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_feu);
         terrainIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_seisme);
         meteoIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_vent);
+
+        // User Pins
+        userEauIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_user_water);
+        userFeuIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_user_fire);
+        userTerrainIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_user_earth);
+        userMeteoIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_user_wind);
     }
 
 
@@ -126,9 +136,9 @@ public class MapDisplay {
 
         // infos
         polygon.setTitle("Zone d'alerte");
-        polygon.setSnippet("Vous recevrez desnotifications lorsqu'une nouvelle alerte " +
-                "sera détecté à l'intérieur de cette zone");
-        polygon.setSubDescription("Pour vous désabonner à cette alerte, aller des votre compte client");
+        polygon.setSnippet("Vous recevrez des notifications lorsqu'une nouvelle alerte " +
+                "sera détectée à l'intérieur de cette zone.");
+        polygon.setSubDescription("Pour vous désabonner à cette alerte, aller dans votre compte client.");
 
         mapD.monitoredZones.add(polygon);
     }
@@ -144,7 +154,7 @@ public class MapDisplay {
     }
 
     /**
-     * Create a signle temporary default pin and puts it on the map.
+     * Create a single temporary default pin and puts it on the map.
      * Used for User input on the phone.
      *
      * @param   pos     position fr the defaul pin
@@ -167,7 +177,6 @@ public class MapDisplay {
 
             MainActivity.lastPlacedPin = pin;
             showPopUp();
-
         }
     }
 
@@ -220,7 +229,7 @@ public class MapDisplay {
         pin.setIcon(icon);
 
 
-        if (alerte.description.equals("alerte usager")){
+        if (alerte.description.equals("alerte usager")) {
 
             pin.setTitle("Type : " + alerte.type);
 
@@ -239,8 +248,8 @@ public class MapDisplay {
 
             String description = alerte.source + " " + alerte.dateDeMiseAJour;
             pin.setSubDescription(description);
-
         }
+
         return pin;
     }
 
@@ -249,7 +258,6 @@ public class MapDisplay {
 
         for (Marker m : markers) {
             map.getOverlayManager().add(m);
-
         }
     }
 
@@ -342,19 +350,17 @@ public class MapDisplay {
             Drawable currentIcon;
 
             switch (userAlert.getString("type")){
-                case "Eau" : currentIcon = eauIcon; break;
-                case "Feu" : currentIcon = feuIcon; break;
-                case "Meteo" : currentIcon = meteoIcon; break;
-                case "Terrain" : currentIcon = terrainIcon; break;
-                default: currentIcon = meteoIcon;
+                case "Eau" : currentIcon = userEauIcon; break;
+                case "Feu" : currentIcon = userFeuIcon; break;
+                case "Meteo" : currentIcon = userMeteoIcon; break;
+                case "Terrain" : currentIcon = userTerrainIcon; break;
+                default: currentIcon = userMeteoIcon;
             }
 
             this.userPins.add(createAlertPin(new Alerte(userAlert), currentIcon));
-
         }
 
         this.map.invalidate();
-
     }
 
     public void redrawScreen() {

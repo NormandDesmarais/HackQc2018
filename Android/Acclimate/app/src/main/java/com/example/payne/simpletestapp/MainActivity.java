@@ -24,6 +24,17 @@ import org.osmdroid.util.BoundingBox;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
+/*
+    TODO: (JEREMI ?)
+        - FireBase integration
+        - "Settings" Activity integration (menu option)
+        - Clicking on Pins -> Center screen with Pin at bottom (for long description InfoWindows)
+        - Set up thread for loading #pins in Home
+        - GPS locator
+        - Search precision (centering is off)
+        - Notifications for added pins in Monitored Zones
+        - Initial center of loaded map = Preference ? Position ?
+ */
 
 /**
  * Classe de la carte.
@@ -109,7 +120,8 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
             @Override
             public void onClick(View view) {
 
-                /* TODO: GÉRER LE "YES" DU DIALOG
+                /*
+                TODO: GÉRER LE "YES" DU DIALOG
                 Which "temporary pin" are we removing?
                 Do we need to set "currentlyPlacingPin to false?
                  */
@@ -151,25 +163,25 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         findViewById(R.id.wind_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                placingPin(map, myMap, "Meteo", MapDisplay.meteoIcon);
+                placingPin(map, myMap, "Meteo", MapDisplay.userMeteoIcon);
             }
         });
         findViewById(R.id.water_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                placingPin(map, myMap, "Eau", MapDisplay.eauIcon);
+                placingPin(map, myMap, "Eau", MapDisplay.userEauIcon);
             }
         });
         findViewById(R.id.fire_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                placingPin(map, myMap, "Feu", MapDisplay.feuIcon);
+                placingPin(map, myMap, "Feu", MapDisplay.userFeuIcon);
             }
         });
         findViewById(R.id.earth_btn).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                placingPin(map, myMap, "Terrain", MapDisplay.terrainIcon);
+                placingPin(map, myMap, "Terrain", MapDisplay.userTerrainIcon);
             }
         });
 
