@@ -72,9 +72,6 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         myMap = new MapDisplay(map);
         map.setTileSource(TileSourceFactory.MAPNIK);
 
-        // Setting up MonitoredZones Shared Preferences
-        Preferences.setUpPrefs(ctx, myMap);
-
         // set zoom control and multi-touch gesture
         map.setBuiltInZoomControls(false);
         map.setMultiTouchControls(true);
@@ -216,6 +213,10 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         getMenuInflater().inflate(R.menu.menu_main, menu);
         MainActivity.menu = menu;
 
+        // Loading Preferences stored in the phone (or initializing them)
+        Preferences.setUpPrefs(this, myMap);
+        myMap.refresh();
+
         //Setting up Search bar
         MenuItem ourSearchItem = menu.findItem(R.id.action_search);
         SearchView sv = (SearchView) ourSearchItem.getActionView();
@@ -322,24 +323,30 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                     MapDisplay.historiqueLoaded = true;
 
                 } else {
-                    MapDisplay.historiqueFilter = filterTypeBtn(item);
+                    MapDisplay.historiqueFilter = toggleFilterCB(item);
                     myMap.refresh();
                 }
                 break;
 
             // Setting up the Filter Check-Boxes (cb)
-            case (R.id.cB_users):
-                MapDisplay.showUserPins = filterTypeBtn(item); myMap.refresh(); break;
-            case (R.id.cB_zones):
-                MapDisplay.showMonitoredZones = filterTypeBtn(item); myMap.refresh(); break;
-            case (R.id.cB_fire):
-                MapDisplay.feuFilter = filterTypeBtn(item); myMap.refresh(); break;
+            case (R.id.cB_fire): // TODO: FINISH
+                MapDisplay.feuFilter = Preferences.toggleFilterPref(item, 0);
+                myMap.refresh(); break;
             case (R.id.cB_water):
-                MapDisplay.eauFilter = filterTypeBtn(item); myMap.refresh(); break;
+                MapDisplay.eauFilter = Preferences.toggleFilterPref(item, 1);
+                myMap.refresh(); break;
             case (R.id.cB_terrain):
-                MapDisplay.terrainFilter = filterTypeBtn(item); myMap.refresh(); break;
+                MapDisplay.terrainFilter = Preferences.toggleFilterPref(item, 2);
+                myMap.refresh(); break;
             case (R.id.cB_meteo):
-                MapDisplay.meteoFilter = filterTypeBtn(item); myMap.refresh(); break;
+                MapDisplay.meteoFilter = Preferences.toggleFilterPref(item, 3);
+                myMap.refresh(); break;
+            case (R.id.cB_zones):
+                MapDisplay.showMonitoredZones = Preferences.toggleFilterPref(item, 4);
+                myMap.refresh(); break;
+            case (R.id.cB_users):
+                MapDisplay.showUserPins = Preferences.toggleFilterPref(item, 5);
+                myMap.refresh(); break;
 
             case (R.id.profileBtn):
                 // TODO: Launch FIREBASE Activity here
@@ -392,8 +399,13 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
         manager.postAlert(alert);
     }
 
-    // Pour du Refactor (reducing code duplication)
-    private static boolean filterTypeBtn(MenuItem item) {
+    /**
+     * Pour toggle le CheckBox Item.
+     *
+     * @param item se doit d'être un CB.
+     * @return TRUE si l'état final du CB est "checked".
+     */
+    private static boolean toggleFilterCB(MenuItem item) {
         item.setChecked(!item.isChecked());
         return item.isChecked();
     }

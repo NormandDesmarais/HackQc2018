@@ -48,9 +48,9 @@ public class MapDisplay {
     public static boolean terrainFilter = true;
     public static boolean meteoFilter = true;
     public static boolean showMonitoredZones = true;
+    public static boolean showUserPins = true;
     public static boolean historiqueFilter = false;
     public static boolean historiqueLoaded = false;
-    public static boolean showUserPins = true;
 
     public static Drawable eauIcon;
     public static Drawable feuIcon;
@@ -60,6 +60,8 @@ public class MapDisplay {
 
     public MapDisplay(MapView map) {
         this.map = map;
+
+        // TODO: Integrate User_Pins !
 
         // Setting up the image of the Pins
         eauIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_goutte);
@@ -289,47 +291,45 @@ public class MapDisplay {
 
             switch (serverAlert.getString("type")) {
 
-                case "Feu":
-                    this.feuAlerts.add(createAlertPin(new Alerte(serverAlert), feuIcon));
-                    break;
-
-                case "Eau":
-                    this.eauAlerts.add(createAlertPin(new Alerte(serverAlert), eauIcon));
-                    break;
-
-                case "Meteo":
-                    this.meteoAlerts.add(createAlertPin(new Alerte(serverAlert), meteoIcon));
-                    break;
-
-                case "Terrain":
-                    this.terrainAlerts.add(createAlertPin(new Alerte(serverAlert), terrainIcon));
-                    break;
-
-                case "Inondation" :
+                case "Suivi des cours d'eau":
+                case "Inondation":
                     Alerte tmp1 = new Alerte(serverAlert);
                     tmp1.type = "Eau";
                     this.eauAlerts.add(createAlertPin(tmp1, eauIcon));
                     break;
 
-                case "Suivi des cours d'eau" :
+                case "Vent":
                     Alerte tmp2 = new Alerte(serverAlert);
-                    tmp2.type = "Eau";
-                    this.eauAlerts.add(createAlertPin(tmp2, eauIcon));
+                    tmp2.type = "Meteo";
+                    this.meteoAlerts.add(createAlertPin(tmp2, meteoIcon));
                     break;
 
-                case "vent" :
+                case "Pluie":
                     Alerte tmp3 = new Alerte(serverAlert);
                     tmp3.type = "Meteo";
                     this.meteoAlerts.add(createAlertPin(tmp3, meteoIcon));
                     break;
 
-                case "pluie" :
-                    Alerte tmp4 = new Alerte(serverAlert);
-                    tmp4.type = "Meteo";
-                    this.meteoAlerts.add(createAlertPin(tmp4, meteoIcon));
+                case "feu":
+                case "Feu de forêt":
+                case "Feu":
+                    this.feuAlerts.add(createAlertPin(new Alerte(serverAlert), feuIcon));
+                    break;
+
+                case "eau":
+                case "Eau":
+                    this.eauAlerts.add(createAlertPin(new Alerte(serverAlert), eauIcon));
+                    break;
+
+                case "Tornade": // Parce que le "terrainIcon" ressemble à une tornade.. ?
+                case "terrain":
+                case "Terrain":
+                    this.terrainAlerts.add(createAlertPin(new Alerte(serverAlert), terrainIcon));
                     break;
 
                 default:
+                case "meteo":
+                case "Meteo":
                     this.meteoAlerts.add(createAlertPin(new Alerte(serverAlert), meteoIcon));
                     break;
             }

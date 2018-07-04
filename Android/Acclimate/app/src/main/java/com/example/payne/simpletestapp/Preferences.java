@@ -3,6 +3,8 @@ package com.example.payne.simpletestapp;
 
 import android.content.Context;
 import android.content.SharedPreferences;
+import android.view.Menu;
+import android.view.MenuItem;
 
 import java.util.ArrayList;
 
@@ -25,14 +27,6 @@ import java.util.ArrayList;
      */
 public class Preferences {
 
-    /*
-    https://developer.android.com/training/data-storage/files#WriteInternalStorage
-    https://stackoverflow.com/questions/14376807/how-to-read-write-string-from-a-file-in-android?noredirect=1&lq=1
-
-    public static final String APPLICATION_ID = "com.example.payne.simpletestapp"; // pour le Folder_Path
-    public static final int MAX_SIZE = 1024; // Pour ne pas détruire la mémoire
-    */
-
     private static int nbrZones = 0;
     private static ArrayList<MonitoredZone> monitoredZones = new ArrayList<>();
 
@@ -44,8 +38,6 @@ public class Preferences {
     public static final String MZ_COORD_SEPARATOR = "&";
 
     public static final String KEY_SP_FILTERS_LIST = "flist";
-
-    //TODO: Ajouter la sauvegarde des préférences au niveau des FILTRES.
 
     private static SharedPreferences mZ_sP;
     private static SharedPreferences f_sP;
@@ -71,6 +63,7 @@ public class Preferences {
         mZ_sP = context.getSharedPreferences(DIR_SP_MONITORED_ZONES, Context.MODE_PRIVATE);
         String masterMZ = mZ_sP.getString(KEY_SP_MZS_LIST, "");
 
+        // Uniquement s'il existe déjà des données
         if(masterMZ.length() != 0) {
             String[] allMZ = masterMZ.split(MZS_SEPARATOR);
 
@@ -91,42 +84,35 @@ public class Preferences {
         // Load filter preferences
         f_sP = context.getSharedPreferences(DIR_SP_FILTERS, Context.MODE_PRIVATE);
         String masterFilters = f_sP.getString(KEY_SP_FILTERS_LIST, "");
+        Menu menu = MainActivity.menu;
 
         if(masterFilters.length() != 0) {
-
-            MainActivity.mainActivity.findViewById(android.R.id.content);
-            MainActivity.mainActivity.findViewById(android.R.id.content);
-            MainActivity.mainActivity.findViewById(android.R.id.content);
-            MainActivity.mainActivity.findViewById(android.R.id.content);
-            MainActivity.mainActivity.findViewById(android.R.id.content);
-            MainActivity.mainActivity.findViewById(android.R.id.content);
-            MainActivity.mainActivity.findViewById(android.R.id.content);
-
-            /*
-            myMap.feuFilter
-            myMap.eauFilter
-            myMap.terrainFilter
-            myMap.meteoFilter
-            myMap.showMonitoredZones
-            myMap.historiqueFilter
-            myMap.historiqueLoaded
-            myMap.showUserPins
-             */
 
             for(int i = 0; i < masterFilters.length(); i++) {
                 int value = Integer.parseInt(masterFilters.charAt(i) + "");
 
-                if(value == 0) {
-
-                }
-                if(value == 1) {
-
+                // Dans l'ordre du menu!
+                switch(i) {
+                    case 0: // Feu
+                        MapDisplay.feuFilter = filterTypeBtn(value, menu.findItem(R.id.cB_fire));
+                    case 1: // Eau
+                        MapDisplay.eauFilter = filterTypeBtn(value, menu.findItem(R.id.cB_water));
+                    case 2: // Terrain
+                        MapDisplay.terrainFilter = filterTypeBtn(value, menu.findItem(R.id.cB_terrain));
+                    case 3: // Météo
+                        MapDisplay.meteoFilter = filterTypeBtn(value, menu.findItem(R.id.cB_meteo));
+                    case 4: // MZ
+                        MapDisplay.showMonitoredZones = filterTypeBtn(value, menu.findItem(R.id.cB_zones));
+                    case 5: // UserPins
+                        MapDisplay.showUserPins = filterTypeBtn(value, menu.findItem(R.id.cB_users));
+                    case 6: // Histo
+                        MapDisplay.historiqueFilter = filterTypeBtn(value, menu.findItem(R.id.cB_histo));
                 }
             }
         } else {
             // If first time launching app: initialize default filter string
             SharedPreferences.Editor editor = f_sP.edit();
-            editor.putString(KEY_SP_FILTERS_LIST, "");
+            editor.putString(KEY_SP_FILTERS_LIST, "1111110");
             editor.apply();
         }
     }
@@ -160,9 +146,43 @@ public class Preferences {
         monitoredZones.add(newMZ);
     }
 
+    /**
+     * Pour changer la valeur en mémoire de la préférence de l'usager pour une CB-filtre.
+     *
+     * @param item se doit d'être une CB.
+     * @param pos 1 = feu, 2 = eau, etc. ... en ordre du menu d'options.
+     * @return TRUE si le CB est rendu CHECKED, FALSE sinon.
+     */
+    public static boolean toggleFilterPref(MenuItem item, int pos) {
+
+        boolean bool = toggleFilterCB(item);
+
+        SharedPreferences.Editor editor = f_sP.edit();
+        String toUpdate = f_sP.getString(KEY_SP_FILTERS_LIST, "");
+        String tmp = "";
+
+        if(pos != 0)
+            tmp = toUpdate.substring(0,pos);
+        else // si position 0
+            tmp = toUpdate.substring(0,pos);
+
+        if(bool)
+            tmp += "1";
+        else
+            tmp += "0";
+
+        if(pos != toUpdate.length())
+            tmp += toUpdate.substring(pos+1,toUpdate.length());
+
+        editor.putString(KEY_SP_FILTERS_LIST, tmp);
+        editor.apply();
+
+        return bool;
+    }
+
     public static void clearPreferences() {
         clearMZSP();
-        clearFSP();
+        resetFSP();
     }
 
     public static void clearMZSP() {
@@ -171,9 +191,35 @@ public class Preferences {
         editor.apply();
     }
 
-    public static void clearFSP() {
+    public static void resetFSP() {
         SharedPreferences.Editor editor = f_sP.edit();
-        editor.putString(KEY_SP_FILTERS_LIST, "");
+        editor.putString(KEY_SP_FILTERS_LIST, "1111110");
         editor.apply();
+    }
+
+
+    /*
+    Section des méthodes privées
+     */
+
+    private static boolean filterTypeBtn(int bool, MenuItem item) {
+        if(bool == 0) { // false
+            item.setChecked(false);
+            return false;
+        } else { // true
+            item.setChecked(true);
+            return true;
+        }
+    }
+
+    /**
+     * Pour toggle le CheckBox Item.
+     *
+     * @param item se doit d'être un CB.
+     * @return TRUE si l'état final du CB est "checked".
+     */
+    private static boolean toggleFilterCB(MenuItem item) {
+        item.setChecked(!item.isChecked());
+        return item.isChecked();
     }
 }

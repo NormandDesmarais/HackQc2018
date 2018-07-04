@@ -166,7 +166,7 @@ public class Manager {
         try {
             myMap.updateLists(serverPins, userPins);
         } catch (Exception e){
-            Log.w("PIN", "could not load new icons");
+            Log.w("Manager.generatePins", "Could not load new icons");
         }
 
     }

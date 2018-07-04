@@ -11,6 +11,7 @@ import android.widget.TextView;
 import org.json.JSONArray;
 import org.json.JSONObject;
 
+// TODO: Thread on URL server request
 
 /**
  * Classe de la Page d'Acceuil. C'est la fenêtre qui s'ouvre au lancement de l'application.

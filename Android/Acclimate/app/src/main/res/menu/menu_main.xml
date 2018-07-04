@@ -65,16 +65,15 @@
         android:title="@string/cB_zones"
         app:showAsAction="never" />
     <item
+        android:id="@+id/cB_users"
+        android:checkable="true"
+        android:checked="true"
+        android:title="@string/cB_users" />
+    <item
         android:id="@+id/cB_histo"
         android:checkable="true"
         android:checked="false"
         android:title="@string/cB_histo"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/cB_users"
-        android:checkable="true"
-        android:checked="false"
-        android:title="@string/cB_users"
         app:showAsAction="never" />
 
     <!-- User profile button -->
