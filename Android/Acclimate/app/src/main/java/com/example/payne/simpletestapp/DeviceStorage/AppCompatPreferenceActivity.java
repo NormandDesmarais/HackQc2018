@@ -1,4 +1,4 @@
-package com.example.payne.simpletestapp;
+package com.example.payne.simpletestapp.DeviceStorage;
 
 import android.content.res.Configuration;
 import android.os.Bundle;

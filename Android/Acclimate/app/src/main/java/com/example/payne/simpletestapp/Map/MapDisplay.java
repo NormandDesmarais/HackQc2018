@@ -1,17 +1,29 @@
-package com.example.payne.simpletestapp;
+package com.example.payne.simpletestapp.Map;
 
+import android.content.Context;
+import android.graphics.Bitmap;
 import android.graphics.Color;
+import android.graphics.drawable.BitmapDrawable;
 import android.graphics.drawable.Drawable;
+import android.location.LocationManager;
+import android.util.Log;
 import android.view.View;
+
+import com.example.payne.simpletestapp.MainActivities.MainActivity;
+import com.example.payne.simpletestapp.Objects.Alerte;
+import com.example.payne.simpletestapp.R;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
+import org.osmdroid.bonuspack.clustering.RadiusMarkerClusterer;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.util.GeoPoint;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.MapEventsOverlay;
 import org.osmdroid.views.overlay.Marker;
 import org.osmdroid.views.overlay.Polygon;
+import org.osmdroid.views.overlay.mylocation.GpsMyLocationProvider;
+import org.osmdroid.views.overlay.mylocation.MyLocationNewOverlay;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -24,10 +36,10 @@ import java.util.List;
 
 public class MapDisplay {
 
+    private Context ctx;
     public MapView map;
     private double[] lastTouch = {0, 0};
     public static boolean currentlyPlacingPin = false;
-    public static String last_type_put_down;
     public static final BoundingBox QUEBEC_BOUNDING_BOX = new BoundingBox(63,-58,40,-84);
 
     // Ensembles de Pins (Markers) pour chaque type de filtre possible
@@ -37,7 +49,14 @@ public class MapDisplay {
     public ArrayList<Marker> meteoAlerts = new ArrayList<>();
 
     public ArrayList<Marker> userPins = new ArrayList<>();
-    public ArrayList<Marker> historique = new ArrayList<>(); // TODO: remove?
+
+    // Histo Clusters
+    public ArrayList<Marker> histoPins = new ArrayList<>();
+    public RadiusMarkerClusterer histoClusters;
+    public static Bitmap histoClusterIcon;
+
+    // Position GPS
+    public MyLocationNewOverlay locationOverlay;
 
     // Rectangles colorés (zones surveillées)
     public ArrayList<Polygon> monitoredZones = new ArrayList<>();
@@ -64,20 +83,28 @@ public class MapDisplay {
     public static Drawable userMeteoIcon;
 
 
+
     public MapDisplay(MapView map) {
         this.map = map;
+        this.ctx = MainActivity.mainActivity;
+        initMyLocationNewOverlay();
+
+        // TODO: Setting up the MarkerClusters
+        histoClusters = new RadiusMarkerClusterer(ctx);
+        histoClusterIcon = ((BitmapDrawable)ctx.getResources().getDrawable(R.drawable.marker_cluster)).getBitmap();
+        histoClusters.setIcon(histoClusterIcon);
 
         // Setting up the image of the Official Pins
-        eauIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_goutte);
-        feuIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_feu);
-        terrainIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_seisme);
-        meteoIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_vent);
+        eauIcon = ctx.getResources().getDrawable(R.drawable.pin_goutte);
+        feuIcon = ctx.getResources().getDrawable(R.drawable.pin_feu);
+        terrainIcon = ctx.getResources().getDrawable(R.drawable.pin_seisme);
+        meteoIcon = ctx.getResources().getDrawable(R.drawable.pin_vent);
 
         // User Pins
-        userEauIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_user_water);
-        userFeuIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_user_fire);
-        userTerrainIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_user_earth);
-        userMeteoIcon = MainActivity.mainActivity.getResources().getDrawable(R.drawable.pin_user_wind);
+        userEauIcon = ctx.getResources().getDrawable(R.drawable.pin_user_water);
+        userFeuIcon = ctx.getResources().getDrawable(R.drawable.pin_user_fire);
+        userTerrainIcon = ctx.getResources().getDrawable(R.drawable.pin_user_earth);
+        userMeteoIcon = ctx.getResources().getDrawable(R.drawable.pin_user_wind);
     }
 
 
@@ -102,6 +129,7 @@ public class MapDisplay {
         return result;
     }
 
+    // TODO: remove? @Oli: J'ai plutôt créé "ajouterPolygon".
     public void highlightCurrent(View view) {
 
         double[] corners = getBoundingBox();
@@ -150,14 +178,13 @@ public class MapDisplay {
         map.getOverlays().add(0, mapEventsOverlay);
 
         this.map.invalidate();
-
     }
 
     /**
      * Create a single temporary default pin and puts it on the map.
      * Used for User input on the phone.
      *
-     * @param   pos     position fr the defaul pin
+     * @param   pos     position for the default pin
      */
     public void addUserPin(GeoPoint pos) {
 
@@ -384,10 +411,14 @@ public class MapDisplay {
         }
 
         if (historiqueFilter) {
-            for (Marker h : userPins) {
-                map.getOverlayManager().add(h);
+            for (Marker h : histoPins) {
+                histoClusters.add(h); // TODO: test if it's re-adding all the Markers a second time
             }
+            map.getOverlayManager().add(histoClusters);
         }
+
+        // Position GPS
+        map.getOverlayManager().add(locationOverlay);
 
         this.map.invalidate();
     }
@@ -396,5 +427,11 @@ public class MapDisplay {
         this.removeAll(MainActivity.mainActivity.findViewById(android.R.id.content),
                 MainActivity.mapEventsOverlay);
         this.redrawScreen();
+    }
+
+    private void initMyLocationNewOverlay() {
+        GpsMyLocationProvider provider = new GpsMyLocationProvider(ctx);
+        provider.addLocationSource(LocationManager.NETWORK_PROVIDER);
+        locationOverlay = new MyLocationNewOverlay(provider, map);
     }
 }

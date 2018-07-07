@@ -5,21 +5,26 @@ import android.util.Log;
 import android.view.View;
 import android.widget.Toast;
 
+import com.example.payne.simpletestapp.MainActivities.MainActivity;
+import com.example.payne.simpletestapp.Map.MapDisplay;
+import com.example.payne.simpletestapp.Objects.Alerte;
+import com.example.payne.simpletestapp.Server.ServerConnection;
+
 import org.json.JSONArray;
 import org.json.JSONObject;
 import org.osmdroid.util.BoundingBox;
 import org.osmdroid.views.MapView;
 import org.osmdroid.views.overlay.Marker;
-import org.osmdroid.views.overlay.infowindow.MarkerInfoWindow;
 
 import java.io.File;
 import java.util.ArrayList;
 
-import static com.example.payne.simpletestapp.MapDisplay.QUEBEC_BOUNDING_BOX;
-import static com.example.payne.simpletestapp.MapDisplay.eauIcon;
-import static com.example.payne.simpletestapp.MapDisplay.feuIcon;
-import static com.example.payne.simpletestapp.MapDisplay.meteoIcon;
-import static com.example.payne.simpletestapp.MapDisplay.terrainIcon;
+import static com.example.payne.simpletestapp.Map.MapDisplay.QUEBEC_BOUNDING_BOX;
+import static com.example.payne.simpletestapp.Map.MapDisplay.eauIcon;
+import static com.example.payne.simpletestapp.Map.MapDisplay.feuIcon;
+import static com.example.payne.simpletestapp.Map.MapDisplay.histoClusterIcon;
+import static com.example.payne.simpletestapp.Map.MapDisplay.meteoIcon;
+import static com.example.payne.simpletestapp.Map.MapDisplay.terrainIcon;
 
 public class Manager {
 
@@ -178,7 +183,7 @@ public class Manager {
         myMap.eauAlerts = new ArrayList<>();
         myMap.meteoAlerts = new ArrayList<>();
         myMap.userPins = new ArrayList<>();
-        myMap.historique = new ArrayList<>();
+        myMap.histoPins = new ArrayList<>();
 
         this.getPinsFromServer();
         myMap.redrawScreen();
@@ -210,18 +215,19 @@ public class Manager {
                     case "Feu":
                         currentIcon = feuIcon;
                         break;
-                    case "Meteo":
-                        currentIcon = meteoIcon;
-                        break;
                     case "Terrain":
                         currentIcon = terrainIcon;
                         break;
+                    case "Meteo":
                     default:
                         currentIcon = meteoIcon;
+                        break;
                 }
 
-                myMap.historique.add(myMap.createAlertPin(new Alerte(histoAlert), currentIcon));
-
+                // TODO: Create another type of Pin for HISTO !!
+                myMap.histoPins.add(myMap.createAlertPin(new Alerte(histoAlert), currentIcon));
+//                for(Marker m : myMap.histoPins) // TODO: related to tests on re-adding... remove?
+//                    myMap.histoClusters.add(m);
             }
         } catch (Exception e){
             e.printStackTrace();

@@ -1,4 +1,4 @@
-package com.example.payne.simpletestapp;
+package com.example.payne.simpletestapp.WIP;
 
 /**
  * Conteneur pour les styles des polygones à afficher

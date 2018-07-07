@@ -1,4 +1,4 @@
-package com.example.payne.simpletestapp;
+package com.example.payne.simpletestapp.Server;
 
 public class Response {
 

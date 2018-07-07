@@ -1,5 +1,9 @@
-package com.example.payne.simpletestapp;
+package com.example.payne.simpletestapp.Server;
 
+
+import android.util.Log;
+
+import com.example.payne.simpletestapp.Objects.Alerte;
 
 import org.osmdroid.util.BoundingBox;
 
@@ -7,8 +11,6 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
-
-import javax.net.ssl.HttpsURLConnection;
 
 
 public class ServerConnection {

@@ -1,4 +1,4 @@
-package com.example.payne.simpletestapp;
+package com.example.payne.simpletestapp.DeviceStorage;
 
 
 import android.content.Context;
@@ -6,11 +6,17 @@ import android.content.SharedPreferences;
 import android.view.Menu;
 import android.view.MenuItem;
 
+import com.example.payne.simpletestapp.MainActivities.MainActivity;
+import com.example.payne.simpletestapp.Map.MapDisplay;
+import com.example.payne.simpletestapp.Objects.MonitoredZone;
+import com.example.payne.simpletestapp.R;
+
 import java.util.ArrayList;
 
 
 /**
  * https://developer.android.com/training/data-storage/shared-preferences#java
+ * https://stackoverflow.com/questions/2614719/how-do-i-get-the-sharedpreferences-from-a-preferenceactivity-in-android?rq=1
  */
     /*
     Android stores Shared Preferences settings as XML file in shared_prefs folder under
@@ -38,6 +44,7 @@ public class Preferences {
     public static final String MZ_COORD_SEPARATOR = "&";
 
     public static final String KEY_SP_FILTERS_LIST = "flist";
+    public static final String DEFAULT_FILTERS = "1111110";
 
     private static SharedPreferences mZ_sP;
     private static SharedPreferences f_sP;
@@ -112,7 +119,7 @@ public class Preferences {
         } else {
             // If first time launching app: initialize default filter string
             SharedPreferences.Editor editor = f_sP.edit();
-            editor.putString(KEY_SP_FILTERS_LIST, "1111110");
+            editor.putString(KEY_SP_FILTERS_LIST, DEFAULT_FILTERS);
             editor.apply();
         }
     }
@@ -189,11 +196,12 @@ public class Preferences {
         SharedPreferences.Editor editor = mZ_sP.edit();
         editor.putString(KEY_SP_MZS_LIST, "");
         editor.apply();
+        MainActivity.myMapDisplay.monitoredZones.clear();
     }
 
     public static void resetFSP() {
         SharedPreferences.Editor editor = f_sP.edit();
-        editor.putString(KEY_SP_FILTERS_LIST, "1111110");
+        editor.putString(KEY_SP_FILTERS_LIST, DEFAULT_FILTERS);
         editor.apply();
     }
 

@@ -1,4 +1,4 @@
-package com.example.payne.simpletestapp;
+package com.example.payne.simpletestapp.Authentification;
 
 import android.os.Bundle;
 import android.support.annotation.NonNull;

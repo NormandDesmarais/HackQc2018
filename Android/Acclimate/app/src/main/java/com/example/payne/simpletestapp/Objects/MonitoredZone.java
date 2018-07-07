@@ -1,4 +1,6 @@
-package com.example.payne.simpletestapp;
+package com.example.payne.simpletestapp.Objects;
+
+import com.example.payne.simpletestapp.DeviceStorage.Preferences;
 
 public class MonitoredZone {
 

@@ -1,9 +1,11 @@
 package com.example.payne.simpletestapp;
 
 import android.content.Context;
-import android.provider.SyncStateContract;
 import android.util.Log;
-import android.widget.Toast;
+
+import com.example.payne.simpletestapp.MainActivities.MainActivity;
+import com.example.payne.simpletestapp.Objects.Alerte;
+import com.example.payne.simpletestapp.Server.ServerConnection;
 
 import org.json.JSONArray;
 import org.json.JSONException;

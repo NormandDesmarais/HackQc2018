@@ -9,6 +9,10 @@
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <uses-permission android:name="android.permission.INTERNET" />
     <uses-permission android:name="android.permission.VIBRATE" />
+    <!-- To auto-complete the email text field in the login form with the user's emails -->
+    <uses-permission android:name="android.permission.GET_ACCOUNTS" />
+    <uses-permission android:name="android.permission.READ_PROFILE" />
+    <uses-permission android:name="android.permission.READ_CONTACTS" />
 
     <application
         android:allowBackup="true"
@@ -17,31 +21,30 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-
         <activity
-            android:name=".Home"
+            android:name=".MainActivities.Home"
             android:label="@string/app_name"
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
-            android:name=".MainActivity"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-
+            android:name=".MainActivities.MainActivity"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".FirebaseAuthenticator"
-            android:theme="@style/AppTheme.NoActionBar">
-        </activity>
-
+            android:name=".Authentification.FirebaseAuthenticator"
+            android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".SettingsActivity"
-            android:label="@string/title_activity_settings">
-        </activity>
-
+            android:name=".DeviceStorage.SettingsActivity"
+            android:label="@string/title_activity_settings" />
+        <activity
+            android:name=".Authentification.LoginActivity"
+            android:label="@string/title_activity_login" />
+        <activity android:name=".Authentification.tests.GoogleSignInActivity" />
+        <activity android:name=".Map.ShowLocationActivity"></activity>
     </application>
+
 </manifest>
