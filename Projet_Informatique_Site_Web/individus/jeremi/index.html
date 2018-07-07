@@ -32,7 +32,24 @@
             </br>
 
             <h3>Semaine 2 juillet</h3>
-            <blockquote>Plusieurs heures de recherche pour décider d'utiliser Firebase pour le Log/Sign In system (début d'intégration dans l'application Android). Encore de la recherche pour déterminer que SharedPreference sera utilisé pour conserver des informations sur l'usager à l'interne (intégration elle aussi commencée: on peut désormais sauvegarder les zones qu'on désire surveiller!). Un peu de refactor sur le code (entre autres: 20% moins de lignes dans notre MainActivity en enlevant la répétition de code). Fix pour qu'on puisse de nouveau utiliser l'option "Instant Run" offerte par AndroidStudio (ce qui améliore considérablement la vitesse de chargement pour faire des tests).</blockquote>
+            <ul>
+                <li><b>[Android]</b> Plusieurs heures de recherches pour tenter d'intégrer un système d'authentification indépendant. (Considération d'implémentation manuelle, FireBase, Google SignIn et Spring OAuth.)</li>
+                <li><b>[Android]</b> Recherche sur, et intégration des SharedPreference pour sauvegarder dans la mémoire interne certaines choses (les zones d'abonnements et les filtres, pour l'instant).</li>
+                <li><b>[Android]</b> Refactor du code à plusieurs endroits. Certaines classes sont 25% plus courtes.</li>
+                <li><b>[Android]</b> Réorganisation des classes dans des packages afin d'avoir une meilleure séparation.</li>
+                <li><b>[Android]</b> Découverte et fix du bug qui empêchait d'utilise InstantRun d'Android Studio: la vitesse de chargement pour des tests est désormais largement plus rapide.</li>
+                <li><b>[Android]</b> Intégration d'une Activité de "Settings". Présentement encore incertain de son utilisation précise dans le futur.</li>
+                <li><b>[Android]</b> Début du renommement du package du projet pour passer de "simpleTestApp" à "Acclimate".</li>
+                <li><b>[Android]</b> Intégration des User Pins, pour les différencier des Pins officielles.</li>
+                <li><b>[Android]</b> Localisation GPS intégrée. Fonctionne hors-ligne et en mode avion.</li>
+                <li><b>[Android]</b> Intégration des "Marker Clusters" pour les bases de données statiques (les Pins dites "historiques") afin de réduire le lag lors du visionnement.</li>
+                <li><b>[Android]</b> Intégration de plusieurs Threads: la Home Page fetch désormais les données en parallèle ce qui permet une initialisation plus rapide de l'app. De même pour le fetch des Pins historiques.</li>
+                <li><b>[Frontend]</b> La WebApp est désormais déployée à l'adresse suivante: <a href="https://acclimate-web.herokuapp.com/">https://acclimate-web.herokuapp.com/</a></li>
+                <li><b>[Frontend]</b> Corrections de certaines erreurs sur la classification des Pins.</li>
+                <li><b>[Frontend]</b> Retouche sur les User Pins afin d'avoir une taille uniformisée.</li>
+                <li><b>[Backend]</b> Commencement de l'intégration de QuartzScheduler au niveau du Server.</li>
+                <li><b>[Général]</b> Mise en place d'un "robot moniteur" qui permet de garder le serveur ainsi que la WebApp toujours actifs (<a href="https://uptimerobot.com/">https://uptimerobot.com/</a>).</li>
+            </ul>
 
             <h3>Semaine 25 juin</h3>
             <blockquote>Fin des examens intras. Rencontre avec l'équipe. J'ai retouché le site web (WebApp) pour corriger certaines erreurs d'interprétation des types de PIN et aussi pour intégrer les USER PIN. Il reste à décider de la grosseur de ces pins (sera fait plus tard).</blockquote>
