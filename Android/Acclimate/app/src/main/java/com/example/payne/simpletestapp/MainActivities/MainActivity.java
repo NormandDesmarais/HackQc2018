@@ -18,9 +18,8 @@ import android.util.Log;
 import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.widget.Toast;
 
-import com.example.payne.simpletestapp.Authentification.LoginActivity;
+import com.example.payne.simpletestapp.Authentification.FirebaseActivity;
 import com.example.payne.simpletestapp.DeviceStorage.Preferences;
 import com.example.payne.simpletestapp.DeviceStorage.SettingsActivity;
 import com.example.payne.simpletestapp.JSONWrapper;
@@ -51,6 +50,8 @@ import org.osmdroid.views.overlay.infowindow.InfoWindow;
         - Confirmation email when people are registering
         - Refactor the Redraw in MapDisplay to use "FolderOverlay"
         - Add new icon drawing for HistoPins
+        - Refactor "redraw" (reduce cost of operation)
+        - Analyze Data Structures
  */
 
 /**
@@ -413,9 +414,11 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 MapDisplay.showUserPins = Preferences.toggleFilterPref(item, 5);
                 myMapDisplay.refresh(); break;
 
+                /*
+                Firebase Authenticator Activity! :)
+                 */
             case (R.id.profileBtn):
-                // TODO: Launch FIREBASE Activity here
-                Intent intent2 = new Intent(getApplicationContext(), LoginActivity.class);
+                Intent intent2 = new Intent(getApplicationContext(), FirebaseActivity.class);
                 startActivity(intent2);
                 break;
 
