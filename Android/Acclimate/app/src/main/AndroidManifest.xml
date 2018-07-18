@@ -42,7 +42,7 @@
             android:name=".DeviceStorage.SettingsActivity"
             android:label="@string/title_activity_settings" />
         <activity android:name=".Map.ShowLocationActivity" />
-        <activity android:name=".Authentification.FirebaseActivity" />
+        <activity android:name=".Authentification.AuthUIActivity" />
     </application>
 
 </manifest>

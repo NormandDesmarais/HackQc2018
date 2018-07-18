@@ -19,7 +19,7 @@ import android.view.View;
 import android.view.Menu;
 import android.view.MenuItem;
 
-import com.example.payne.simpletestapp.Authentification.FirebaseActivity;
+import com.example.payne.simpletestapp.Authentification.AuthUIActivity;
 import com.example.payne.simpletestapp.DeviceStorage.Preferences;
 import com.example.payne.simpletestapp.DeviceStorage.SettingsActivity;
 import com.example.payne.simpletestapp.JSONWrapper;
@@ -418,7 +418,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 Firebase Authenticator Activity! :)
                  */
             case (R.id.profileBtn):
-                Intent intent2 = new Intent(getApplicationContext(), FirebaseActivity.class);
+                Intent intent2 = new Intent(getApplicationContext(), AuthUIActivity.class);
                 startActivity(intent2);
                 break;
 

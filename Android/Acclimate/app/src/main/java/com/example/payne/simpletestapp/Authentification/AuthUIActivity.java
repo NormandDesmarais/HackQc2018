@@ -38,6 +38,7 @@ import com.google.firebase.auth.GoogleAuthProvider;
         - Test "Auth" when disconnecting from Internet
         - Try getting Uid and IdTokens
         - Try getting Uid and IdTokens when viewing Map
+        - "onActivityResult" and "signOutGoogle" are necessarily related to Google ?
  */
 
 
@@ -79,7 +80,7 @@ identity provider, and then convert them into credentials usable by Firebase ser
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-public class FirebaseActivity extends BaseActivity implements View.OnClickListener {
+public class AuthUIActivity extends BaseActivity implements View.OnClickListener {
     // TODO: Implement "EmailPasswordAuth" and "GoogleAuth" as INTERFACES ?
 
     private static final String TAG = "GoogleActivity"; // TODO: Remove once tests are done
@@ -90,7 +91,7 @@ public class FirebaseActivity extends BaseActivity implements View.OnClickListen
     // Variables globales utilisées pour la sélection de méthode d'authentification
     private static boolean hasSelectedAuthMethod = false;
     private static AuthMethod authMethod;
-    private enum AuthMethod { GOOGLE, EMAIL, ANONYMOUS, UNKNOWN } // TODO: "UNKNOWN" utile ?
+    private enum AuthMethod { GOOGLE, EMAIL }
 
     // Pour Google mode
     private GoogleSignInClient mGoogleSignInClient;
@@ -206,7 +207,6 @@ public class FirebaseActivity extends BaseActivity implements View.OnClickListen
 
     /**
      * Pour updater le UI en correspondance avec les réponses d'actions.
-     * TODO: Intégrer la MÉTHODE EN PARAMÈTRE pour afficher les bonnes options
      * TODO: Intégrer "onAuthChange" pour appeler updateUI à chaque fois
      *
      * @param user le user
@@ -240,13 +240,8 @@ public class FirebaseActivity extends BaseActivity implements View.OnClickListen
                 case "password":
                     authMethod = AuthMethod.EMAIL;
                     break;
-                case "anonymous": // TODO: test if properly named
-                    Toast.makeText(this, "anonymous", Toast.LENGTH_SHORT).show();
-                    authMethod = AuthMethod.ANONYMOUS;
-                    break;
                 default:
                     Toast.makeText(this, "unknown", Toast.LENGTH_SHORT).show();
-                    authMethod = AuthMethod.UNKNOWN;
                     break;
             }
 
@@ -306,11 +301,7 @@ public class FirebaseActivity extends BaseActivity implements View.OnClickListen
                         findViewById(R.id.google_sign_out_fields).setVisibility(View.GONE);
                         break;
 
-                    case ANONYMOUS: // TODO: Integrate!
-                        break;
-
                     default:
-                    case UNKNOWN:
                         break;
                 }
 
@@ -321,6 +312,13 @@ public class FirebaseActivity extends BaseActivity implements View.OnClickListen
         }
     }
 
+    /**
+     * TODO: Figure out if this is necessarily related to Google.
+     *
+     * @param requestCode
+     * @param resultCode
+     * @param data
+     */
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
@@ -339,12 +337,6 @@ public class FirebaseActivity extends BaseActivity implements View.OnClickListen
                 updateUI(null);
             }
         }
-
-        /*
-        if (requestCode == RC_SIGN_IN) {
-            handleSignInResponse(resultCode, data);
-        }
-         */
     }
 
 
@@ -483,7 +475,7 @@ public class FirebaseActivity extends BaseActivity implements View.OnClickListen
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(FirebaseActivity.this, "Authentication failed.",
+                            Toast.makeText(AuthUIActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
@@ -519,7 +511,7 @@ public class FirebaseActivity extends BaseActivity implements View.OnClickListen
                         } else {
                             // If sign in fails, display a message to the user.
                             Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(FirebaseActivity.this, "Authentication failed.",
+                            Toast.makeText(AuthUIActivity.this, "Authentication failed.",
                                     Toast.LENGTH_SHORT).show();
                             updateUI(null);
                         }
@@ -574,34 +566,16 @@ public class FirebaseActivity extends BaseActivity implements View.OnClickListen
                         verify_email_btn.setEnabled(true);
 
                         if (task.isSuccessful()) {
-                            Toast.makeText(FirebaseActivity.this,
+                            Toast.makeText(AuthUIActivity.this,
                                     "Verification email sent to " + user.getEmail(),
                                     Toast.LENGTH_SHORT).show();
                         } else {
                             Log.e(TAG, "sendEmailVerification", task.getException());
-                            Toast.makeText(FirebaseActivity.this,
+                            Toast.makeText(AuthUIActivity.this,
                                     "Failed to send verification email.",
                                     Toast.LENGTH_SHORT).show();
                         }
                     }
                 });
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    /*
-    TODO : ADD Anonymous log in
-    https://firebase.google.com/docs/auth/android/anonymous-auth?utm_source=studio
-     */
 }

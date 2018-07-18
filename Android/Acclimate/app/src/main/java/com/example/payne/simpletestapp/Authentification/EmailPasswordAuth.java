@@ -40,7 +40,7 @@
 //                        } else {
 //                            // If sign in fails, display a message to the user.
 //                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-//                            Toast.makeText(FirebaseActivity.this, "Authentication failed.",
+//                            Toast.makeText(AuthUIActivity.this, "Authentication failed.",
 //                                    Toast.LENGTH_SHORT).show();
 //                            updateUI(null);
 //                        }
@@ -76,7 +76,7 @@
 //                        } else {
 //                            // If sign in fails, display a message to the user.
 //                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-//                            Toast.makeText(FirebaseActivity.this, "Authentication failed.",
+//                            Toast.makeText(AuthUIActivity.this, "Authentication failed.",
 //                                    Toast.LENGTH_SHORT).show();
 //                            updateUI(null);
 //                        }
@@ -131,12 +131,12 @@
 //                        verify_email_btn.setEnabled(true);
 //
 //                        if (task.isSuccessful()) {
-//                            Toast.makeText(FirebaseActivity.this,
+//                            Toast.makeText(AuthUIActivity.this,
 //                                    "Verification email sent to " + user.getEmail(),
 //                                    Toast.LENGTH_SHORT).show();
 //                        } else {
 //                            Log.e(TAG, "sendEmailVerification", task.getException());
-//                            Toast.makeText(FirebaseActivity.this,
+//                            Toast.makeText(AuthUIActivity.this,
 //                                    "Failed to send verification email.",
 //                                    Toast.LENGTH_SHORT).show();
 //                        }
