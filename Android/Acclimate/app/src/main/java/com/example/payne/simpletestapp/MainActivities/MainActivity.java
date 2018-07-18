@@ -41,13 +41,12 @@ import org.osmdroid.views.overlay.infowindow.InfoWindow;
 
 /*
     TODO: (JEREMI ?)
-        - FireBase integration
         - Adapt "SettingsActivity"
+        - Design different Profile Icon for different SignIn states (color?)
         - Clicking on Pins -> Center screen with Pin at bottom (for long description InfoWindows)
         - Search precision (centering is off)
         - Notifications for added pins in Monitored Zones
         - Initial center of loaded mapView = Preference ? Final position ?
-        - Confirmation email when people are registering
         - Refactor the Redraw in MapDisplay to use "FolderOverlay"
         - Add new icon drawing for HistoPins
         - Refactor "redraw" (reduce cost of operation)

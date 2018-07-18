@@ -11,6 +11,7 @@
     <ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent">
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,15 +38,12 @@
                 android:paddingLeft="30dp"
                 android:paddingRight="30dp">
 
-                <Button
-                    android:id="@+id/google_selector"
-                    style="@style/Widget.AppCompat.Button.Colored"
-                    android:layout_width="match_parent"
+                <TextView
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="center"
-                    android:layout_marginBottom="20dp"
-                    android:drawableLeft="@drawable/btn_moreinfo"
-                    android:text="Sign in with Google account"
+                    android:layout_marginBottom="30dp"
+                    android:text="Select a method to sign in"
+                    android:textSize="24sp"
                     android:textStyle="bold" />
 
                 <Button
@@ -55,8 +53,19 @@
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
                     android:layout_marginBottom="20dp"
-                    android:drawableLeft="@drawable/btn_moreinfo"
-                    android:text="Sign in/Register with email"
+                    android:drawableLeft="@drawable/logo_couleur_icon"
+                    android:text="Acclimate"
+                    android:textStyle="bold" />
+
+                <Button
+                    android:id="@+id/google_selector"
+                    style="@style/Widget.AppCompat.Button.Colored"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_marginBottom="20dp"
+                    android:drawableLeft="@drawable/fui_ic_googleg_color_24dp"
+                    android:text="Google"
                     android:textStyle="bold" />
 
             </LinearLayout>
@@ -65,6 +74,7 @@
                 android:id="@+id/Selected_Method"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:layout_gravity="bottom|center"
                 android:orientation="vertical"
                 android:paddingLeft="30dp"
                 android:paddingRight="30dp">
@@ -77,6 +87,7 @@
                     android:gravity="center"
                     android:orientation="vertical">
 
+                    <!-- Si pas encore Signed In -->
                     <LinearLayout
                         android:id="@+id/email_not_signed_in_fields"
                         android:layout_width="match_parent"
@@ -151,22 +162,39 @@
 
                         </LinearLayout>
 
-                        <Button
-                            android:id="@+id/email_verify_button"
-                            style="@style/Widget.AppCompat.Button.Colored"
-                            android:layout_width="wrap_content"
-                            android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="@string/verify_email" />
-
                         <!-- Si déjà Signed In-->
-                        <Button
-                            android:id="@+id/email_sign_out_button"
-                            style="@style/Widget.AppCompat.Button.Colored"
-                            android:layout_width="wrap_content"
+                        <LinearLayout
+                            android:id="@+id/email_sign_out_fields"
+                            android:layout_width="match_parent"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="@string/email_sign_out" />
+                            android:gravity="center"
+                            android:orientation="vertical">
+
+                            <TextView
+                                android:id="@+id/email_show"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_marginBottom="40dp"
+                                android:layout_marginTop="40dp"
+                                android:text="Email"
+                                android:textSize="14sp" />
+
+                            <Button
+                                android:id="@+id/email_verify_button"
+                                style="@style/Widget.AppCompat.Button.Colored"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@string/verify_email" />
+
+                            <Button
+                                android:id="@+id/email_sign_out_button"
+                                style="@style/Widget.AppCompat.Button.Colored"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="@string/email_sign_out" />
+                        </LinearLayout>
 
                     </LinearLayout>
                 </LinearLayout>
@@ -186,28 +214,64 @@
                         android:layout_height="wrap_content"
                         android:layout_gravity="center" />
 
+                    <!-- Once Signed In with Google -->
                     <LinearLayout
-                        android:id="@+id/google_sign_out_buttons"
+                        android:id="@+id/google_sign_out_fields"
                         android:layout_width="match_parent"
-                        android:layout_height="match_parent"
+                        android:layout_height="wrap_content"
                         android:gravity="center"
-                        android:orientation="horizontal">
+                        android:orientation="vertical">
 
-                        <Button
-                            android:id="@+id/google_disconnect_button"
+                        <ImageView
+                            android:id="@+id/google_Photo"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="Disconnect" />
+                            android:layout_marginBottom="40dp"
+                            android:layout_marginTop="40dp"
+                            android:clickable="false"
+                            android:text="Photo"
+                            android:textSize="18sp"
+                            app:srcCompat="@drawable/logo_blanc" />
 
-                        <Button
-                            android:id="@+id/google_sign_out_button"
+                        <TextView
+                            android:id="@+id/google_DisplayName"
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_gravity="center"
-                            android:text="Sign Out" />
+                            android:text="DisplayName"
+                            android:textSize="18sp" />
+
+                        <TextView
+                            android:id="@+id/google_Email"
+                            android:layout_width="wrap_content"
+                            android:layout_height="wrap_content"
+                            android:layout_marginBottom="40dp"
+                            android:text="Email"
+                            android:textSize="14sp" />
+
+                        <LinearLayout
+                            android:layout_width="match_parent"
+                            android:layout_height="match_parent"
+                            android:gravity="center"
+                            android:orientation="horizontal">
+
+                            <Button
+                                android:id="@+id/google_disconnect_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Disconnect" />
+
+                            <Button
+                                android:id="@+id/google_sign_out_button"
+                                android:layout_width="wrap_content"
+                                android:layout_height="wrap_content"
+                                android:layout_gravity="center"
+                                android:text="Sign Out" />
+                        </LinearLayout>
 
                     </LinearLayout>
+
                 </LinearLayout>
 
 
@@ -216,8 +280,8 @@
                     style="@style/Widget.AppCompat.Button.Colored"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_gravity="bottom|center"
-                    android:layout_marginBottom="50dp"
+                    android:layout_gravity="center"
+                    android:layout_marginTop="50dp"
                     android:text="Retour"
                     android:textStyle="bold" />
 

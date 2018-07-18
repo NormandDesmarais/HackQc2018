@@ -12,6 +12,8 @@ import android.view.View;
 import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -29,12 +31,22 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 /*
-TODO: For verification on backend server!
-https://developers.google.com/identity/sign-in/android/backend-auth
+    TODO: For verification on backend server!
+    https://developers.google.com/identity/sign-in/android/backend-auth
+
+    TODO: TESTS
+        - Test "Auth" when disconnecting from Internet
+        - Try getting Uid and IdTokens
+        - Try getting Uid and IdTokens when viewing Map
  */
 
 
 /*
+FirebaseUser.getIdToken()     : use to authenticate on backend server
+FirebaseUser.getUid()         : unique ID in the app
+
+
+
 Firebase ID tokens : Created by Firebase when a user signs in to a Firebase app.
 
 These tokens are signed JWTs that securely identify a user in a Firebase project.
@@ -50,6 +62,7 @@ These tokens can have different formats, but are often OAuth 2.0 access tokens.
 Firebase apps use these tokens to verify that users have successfully authenticated with the
 identity provider, and then convert them into credentials usable by Firebase services.
  */
+
 
 /**
  * Copyright 2016 Google Inc. All Rights Reserved.
@@ -67,7 +80,7 @@ identity provider, and then convert them into credentials usable by Firebase ser
  * limitations under the License.
  */
 public class FirebaseActivity extends BaseActivity implements View.OnClickListener {
-    // TODO: Implement "EmailPasswordAuth" and "GoogleAuth" as INTERFACES !
+    // TODO: Implement "EmailPasswordAuth" and "GoogleAuth" as INTERFACES ?
 
     private static final String TAG = "GoogleActivity"; // TODO: Remove once tests are done
     private static final int RC_SIGN_IN = 9001; // arbitrary number
@@ -77,7 +90,7 @@ public class FirebaseActivity extends BaseActivity implements View.OnClickListen
     // Variables globales utilisées pour la sélection de méthode d'authentification
     private static boolean hasSelectedAuthMethod = false;
     private static AuthMethod authMethod;
-    private enum AuthMethod { GOOGLE, EMAIL, ANONYMOUS, UNKNOWN }
+    private enum AuthMethod { GOOGLE, EMAIL, ANONYMOUS, UNKNOWN } // TODO: "UNKNOWN" utile ?
 
     // Pour Google mode
     private GoogleSignInClient mGoogleSignInClient;
@@ -156,55 +169,35 @@ public class FirebaseActivity extends BaseActivity implements View.OnClickListen
 
         // Google
         if        (i == R.id.google_sign_in_button) {
-            Snackbar.make(findViewById(R.id.auth_logo_acclimate),
-                    "google_sign_in_button", Snackbar.LENGTH_SHORT).show();
             signInGoogle();
         } else if (i == R.id.google_sign_out_button) {
-            Snackbar.make(findViewById(R.id.auth_logo_acclimate),
-                    "google_sign_out_button", Snackbar.LENGTH_SHORT).show();
             hasSelectedAuthMethod = false;
             signOutGoogle();
         } else if (i == R.id.google_disconnect_button) {
-            Snackbar.make(findViewById(R.id.auth_logo_acclimate),
-                    "google_disconnect_button", Snackbar.LENGTH_SHORT).show();
             hasSelectedAuthMethod = false;
             revokeAccessGoogle();
 
         // Email and Password
         } else if (i == R.id.email_verify_button) {
-            Snackbar.make(findViewById(R.id.auth_logo_acclimate),
-                    "email_verify_button", Snackbar.LENGTH_SHORT).show();
             sendEmailVerification();
         } else if (i == R.id.email_register_button) {
-            Snackbar.make(findViewById(R.id.auth_logo_acclimate),
-                    "email_register_button", Snackbar.LENGTH_SHORT).show();
             createAccount(mEmailField.getText().toString(), mPasswordField.getText().toString());
         } else if (i == R.id.email_sign_in_button) {
-            Snackbar.make(findViewById(R.id.auth_logo_acclimate),
-                    "email_sign_in_button", Snackbar.LENGTH_SHORT).show();
             signInEmail(mEmailField.getText().toString(), mPasswordField.getText().toString());
         } else if (i == R.id.email_sign_out_button) {
-            Snackbar.make(findViewById(R.id.auth_logo_acclimate),
-                    "email_sign_out_button", Snackbar.LENGTH_SHORT).show();
             hasSelectedAuthMethod = false;
             signOutGoogle(); // TODO: Test if necessary to separate
 
         // Auth Method Selectors
         } else if (i == R.id.google_selector) {
-            Snackbar.make(findViewById(R.id.auth_logo_acclimate),
-                    "google_selector", Snackbar.LENGTH_SHORT).show();
             authMethod = AuthMethod.GOOGLE;
             hasSelectedAuthMethod = true;
             updateUI(mAuth.getCurrentUser());
         } else if (i == R.id.email_selector) {
-            Snackbar.make(findViewById(R.id.auth_logo_acclimate),
-                    "email_selector", Snackbar.LENGTH_SHORT).show();
             authMethod = AuthMethod.EMAIL;
             hasSelectedAuthMethod = true;
             updateUI(mAuth.getCurrentUser());
         } else if (i == R.id.back_to_mode_selection) {
-            Snackbar.make(findViewById(R.id.auth_logo_acclimate),
-                    "back_to_mode_selection", Snackbar.LENGTH_SHORT).show();
             authMethod = null;
             hasSelectedAuthMethod = false;
             updateUI(mAuth.getCurrentUser());
@@ -227,26 +220,6 @@ public class FirebaseActivity extends BaseActivity implements View.OnClickListen
         findViewById(R.id.Selected_Method).setVisibility(View.GONE);
         findViewById(R.id.Mode_Selection).setVisibility(View.GONE);
 
-        /*
-        TODO: Pour les User/Passw
-         */
-//        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-//        if (user != null) {
-//            // Name, email address, and profile photo Url
-//            String name = user.getDisplayName();
-//            String email = user.getEmail();
-//            Uri photoUrl = user.getPhotoUrl();
-//
-//            // Check if user's email is verified
-//            boolean emailVerified = user.isEmailVerified();
-//
-//            // The user's ID, unique to the Firebase project. Do NOT use this value to
-//            // authenticate with your backend server, if you have one. Use
-//            // FirebaseUser.getIdToken() instead.
-//            String uid = user.getUid();
-//        }
-
-
 
         if(user != null) { // IS signed in
             hasSelectedAuthMethod = true;
@@ -259,6 +232,7 @@ public class FirebaseActivity extends BaseActivity implements View.OnClickListen
             TODO: Intégrer la synchronisation des MonitoredZones entre la mémoire interne et le backend
              */
 
+            // Pour obtenir le ProviderID (type de l'authenticateur fédérale)
             switch(user.getProviders().get(0)) {
                 case "google.com":
                     authMethod = AuthMethod.GOOGLE;
@@ -279,23 +253,32 @@ public class FirebaseActivity extends BaseActivity implements View.OnClickListen
             // Google
             if(authMethod == AuthMethod.GOOGLE) {
                 findViewById(R.id.google_sign_in_button).setVisibility(View.GONE);
-                findViewById(R.id.google_sign_out_buttons).setVisibility(View.VISIBLE);
+                findViewById(R.id.google_sign_out_fields).setVisibility(View.VISIBLE);
                 findViewById(R.id.Google_Method).setVisibility(View.VISIBLE);
+
+                // Show user info
+                ((TextView) findViewById(R.id.google_DisplayName)).setText(user.getDisplayName());
+                ((TextView) findViewById(R.id.google_Email)).setText(user.getEmail());
+                ((ImageView) findViewById(R.id.google_Photo)).setImageURI(user.getPhotoUrl());
             }
 
             // Email/password
             if(authMethod == AuthMethod.EMAIL) {
-                findViewById(R.id.email_not_signed_in_buttons).setVisibility(View.GONE);
+                findViewById(R.id.google_sign_out_fields).setVisibility(View.GONE);
                 findViewById(R.id.email_not_signed_in_fields).setVisibility(View.GONE);
-                findViewById(R.id.email_sign_out_button).setVisibility(View.VISIBLE);
+                findViewById(R.id.email_not_signed_in_buttons).setVisibility(View.GONE);
+                findViewById(R.id.email_sign_out_fields).setVisibility(View.VISIBLE);
                 findViewById(R.id.Email_Method).setVisibility(View.VISIBLE);
+
+                // Show email
+                ((TextView) findViewById(R.id.email_show)).setText(user.getEmail());
 
                 // Email verificator
                 if(user.isEmailVerified()) {
-                    Snackbar.make(findViewById(R.id.auth_logo_acclimate), "user IS verified by email!", Snackbar.LENGTH_SHORT).show();
                     findViewById(R.id.email_verify_button).setVisibility(View.GONE);
                 } else {
-                    Snackbar.make(findViewById(R.id.auth_logo_acclimate), "user NOT verified by email", Snackbar.LENGTH_SHORT).show();
+                    Snackbar.make(findViewById(R.id.auth_logo_acclimate),
+                            "You have not yet been verified by email!", Snackbar.LENGTH_SHORT).show();
                     findViewById(R.id.email_verify_button).setVisibility(View.VISIBLE);
                 }
             }
@@ -314,14 +297,13 @@ public class FirebaseActivity extends BaseActivity implements View.OnClickListen
                         findViewById(R.id.Email_Method).setVisibility(View.VISIBLE);
                         findViewById(R.id.email_not_signed_in_buttons).setVisibility(View.VISIBLE);
                         findViewById(R.id.email_not_signed_in_fields).setVisibility(View.VISIBLE);
-                        findViewById(R.id.email_verify_button).setVisibility(View.GONE);
-                        findViewById(R.id.email_sign_out_button).setVisibility(View.GONE);
+                        findViewById(R.id.email_sign_out_fields).setVisibility(View.GONE);
                         break;
 
                     case GOOGLE:
                         findViewById(R.id.Google_Method).setVisibility(View.VISIBLE);
                         findViewById(R.id.google_sign_in_button).setVisibility(View.VISIBLE);
-                        findViewById(R.id.google_sign_out_buttons).setVisibility(View.GONE);
+                        findViewById(R.id.google_sign_out_fields).setVisibility(View.GONE);
                         break;
 
                     case ANONYMOUS: // TODO: Integrate!
@@ -367,34 +349,6 @@ public class FirebaseActivity extends BaseActivity implements View.OnClickListen
 
 
 
-//    @OnClick(R.id.sign_in)
-//    public void signIn(View view) {
-//        startActivityForResult(
-//                AuthUI.getInstance().createSignInIntentBuilder()
-//                        .setTheme(getSelectedTheme())
-//                        .setLogo(getSelectedLogo())
-//                        .setAvailableProviders(getSelectedProviders())
-//                        .setTosAndPrivacyPolicyUrls(getSelectedTosUrl(),
-//                                getSelectedPrivacyPolicyUrl())
-//                        .setIsSmartLockEnabled(mEnableCredentialSelector.isChecked(),
-//                                mEnableHintSelector.isChecked())
-//                        .build(),
-//                RC_SIGN_IN);
-//    }
-
-//    @Override
-//    protected void onResume() {
-//        super.onResume();
-//        FirebaseAuth auth = FirebaseAuth.getInstance();
-//        if (auth.getCurrentUser() != null) {
-//            startSignedInActivity(null);
-//            finish();
-//        }
-//    }
-
-
-
-
 
 
 
@@ -416,19 +370,6 @@ public class FirebaseActivity extends BaseActivity implements View.OnClickListen
      *
      * The GoogleSignInAccount object contains information
      * about the signed-in user, such as the user's name.
-     *
-     * You can also get the user's email address with getEmail, the user's Google ID
-     * (for client-side use) with getId, and an ID token for the user with getIdToken.
-     *
-     *   GoogleSignInAccount acct = GoogleSignIn.getLastSignedInAccount(getActivity());
-         if (acct != null) {
-             String personName = acct.getDisplayName();
-             String personGivenName = acct.getGivenName();
-             String personFamilyName = acct.getFamilyName();
-             String personEmail = acct.getEmail();
-             String personId = acct.getId();
-             Uri personPhoto = acct.getPhotoUrl();
-         }
      *
      * @param acct the signed in account
      */
@@ -645,27 +586,6 @@ public class FirebaseActivity extends BaseActivity implements View.OnClickListen
                     }
                 });
     }
-
-    /*
-
-    // If a user has signed in successfully you can get their
-    // account data at any point with the getCurrentUser method.
-    FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
-    if (user != null) {
-        // Name, email address, and profile photo Url
-        String name = user.getDisplayName();
-        String email = user.getEmail();
-        Uri photoUrl = user.getPhotoUrl();
-
-        // Check if user's email is verified
-        boolean emailVerified = user.isEmailVerified();
-
-        // The user's ID, unique to the Firebase project. Do NOT use this value to
-        // authenticate with your backend server, if you have one. Use
-        // FirebaseUser.getToken() instead.
-        String uid = user.getUid();
-    }
-     */
 
 
 
