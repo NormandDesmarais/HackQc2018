@@ -4,13 +4,21 @@ package com.example.payne.simpletestapp.Server;
 import android.util.Log;
 
 import com.example.payne.simpletestapp.Objects.Alerte;
+import com.example.payne.simpletestapp.Objects.AlerteSpring;
 
 import org.osmdroid.util.BoundingBox;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.client.RestTemplate;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.Collections;
 
 
 public class ServerConnection {
@@ -113,6 +121,27 @@ public class ServerConnection {
         }
 
         return success;
+
+    }
+
+    public AlerteSpring[] testSpringRequest(){
+
+        String testUrl =
+                "https://acclimate-api.herokuapp.com/alertes/api/historical/alerts?north=45.5&south=44.5&west=-75.5&east=-74.5";
+
+        // Set the Accept header
+        HttpHeaders requestHeaders = new HttpHeaders();
+        requestHeaders.setAccept(Collections.singletonList(new MediaType("application","json")));
+        HttpEntity<?> requestEntity = new HttpEntity<Object>(requestHeaders);
+
+        // Create a new RestTemplate instance
+        RestTemplate restTemplate = new RestTemplate();
+
+        // Make the HTTP GET request, marshaling the response from JSON to an array of Events
+        ResponseEntity<AlerteSpring[]> responseEntity =
+                restTemplate.exchange(testUrl, HttpMethod.GET, requestEntity, AlerteSpring[].class);
+
+        return responseEntity.getBody();
 
     }
 

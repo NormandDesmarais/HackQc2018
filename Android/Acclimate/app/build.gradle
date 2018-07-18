@@ -6,6 +6,7 @@ android {
         applicationId "com.example.payne.simpletestapp"
         minSdkVersion 16
         targetSdkVersion 27
+        multiDexEnabled true
         versionCode 1
         versionName "1.0"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
@@ -40,6 +41,22 @@ dependencies {
     implementation 'org.osmdroid:osmdroid-mapsforge:6.0.1'
     implementation 'org.osmdroid:osmdroid-geopackage:6.0.1'
     api 'com.github.MKergall:osmbonuspack:6.5.1'
+
+
+    implementation 'org.springframework.android:spring-android-rest-template:2.0.0.M3'
+    api 'org.apache.httpcomponents:httpclient-android:4.3.5'
+
+
+    // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.9.6'
+
+
+}
+
+repositories {
+    maven {
+        url 'https://repo.spring.io/libs-milestone'
+    }
 }
 
 apply plugin: 'com.google.gms.google-services'
