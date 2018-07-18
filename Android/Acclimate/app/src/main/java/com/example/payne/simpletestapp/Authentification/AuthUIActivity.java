@@ -28,6 +28,7 @@ import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
 
 /*
@@ -39,14 +40,36 @@ import com.google.firebase.auth.GoogleAuthProvider;
         - Try getting Uid and IdTokens
         - Try getting Uid and IdTokens when viewing Map
         - "onActivityResult" and "signOutGoogle" are necessarily related to Google ?
+
+https://stackoverflow.com/questions/40838154/retrieve-google-access-token-after-authenticated-using-firebase-authentication
  */
 
 
 /*
-FirebaseUser.getIdToken()     : use to authenticate on backend server
+FirebaseUser.getIdToken(bool) : use to authenticate on backend server
 FirebaseUser.getUid()         : unique ID in the app
 
 
+To set up on server: https://firebase.google.com/docs/auth/admin/
+Token life-time = 1 hour
+
+----------------------------------------------------------------------------------------------------
+
+Verify ID Tokens :
+If your Firebase client app communicates with a custom backend server, you might need to identify
+the currently signed-in user on that server. To do so securely, after a successful sign-in, send
+the user's ID token to your server using HTTPS. Then, on the server, verify the integrity and
+authenticity of the ID token and retrieve the uid from it. You can use the uid transmitted in this
+way to securely identify the currently signed-in user on your server.
+
+----------------------------------------------------------------------------------------------------
+
+Firebase ID token and FCM token are two completely different things: the first is an authentication
+token, needed to authenticate a request on your backend server, the latter is to identify uniquely
+an instance of an app installation, to know to whom send the proper message. Consider also the
+Firebase user authentication ID - which is thread safe and unique id for a certain user account.
+
+----------------------------------------------------------------------------------------------------
 
 Firebase ID tokens : Created by Firebase when a user signs in to a Firebase app.
 
@@ -244,6 +267,28 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
                     Toast.makeText(this, "unknown", Toast.LENGTH_SHORT).show();
                     break;
             }
+
+
+            // TODO: Ce sont des tests pour les Tokens. Devraient être enlevés éventuellement.
+            String tokenTest1 = user.getUid();
+            Toast.makeText(this, "token1: " + tokenTest1, Toast.LENGTH_SHORT).show();
+            Log.w("Token test", "token1: " + tokenTest1);
+            user.getIdToken(false)
+                    .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
+                        public void onComplete(@NonNull Task<GetTokenResult> task) {
+                            if (task.isSuccessful()) {
+                                String idToken = task.getResult().getToken();
+                                Log.w("Token test", "token2: " + idToken);
+                                // Send token to your backend via HTTPS
+                                // ...
+                            } else {
+                                // Handle error -> task.getException();
+                                Log.w("Token test", "token failed: ");
+                                task.getException().printStackTrace();
+                            }
+                        }
+                    });
+
 
             // Google
             if(authMethod == AuthMethod.GOOGLE) {
