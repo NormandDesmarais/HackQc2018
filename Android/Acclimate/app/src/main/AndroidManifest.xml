@@ -28,7 +28,10 @@
             android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
+                <!--
+                TODO : add an ACTION-VIEW INTENT FILTER (to allow for Google to search for app)
+                https://stackoverflow.com/questions/34367875/android-adding-at-least-one-activity-with-an-action-view-intent-filter-after-u
+                -->
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -36,15 +39,10 @@
             android:name=".MainActivities.MainActivity"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".Authentification.FirebaseAuthenticator"
-            android:theme="@style/AppTheme.NoActionBar" />
-        <activity
             android:name=".DeviceStorage.SettingsActivity"
             android:label="@string/title_activity_settings" />
-        <activity
-            android:name=".Authentification.LoginActivity"
-            android:label="@string/title_activity_login" />
         <activity android:name=".Map.ShowLocationActivity" />
+        <activity android:name=".Authentification.AuthUIActivity" />
     </application>
 
 </manifest>

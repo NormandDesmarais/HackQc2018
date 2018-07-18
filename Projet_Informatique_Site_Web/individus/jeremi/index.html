@@ -31,6 +31,21 @@
             <h2>Rapport des contributions</h2>
             </br>
 
+            <h3>Semaine 16 juillet</h3>
+            <ul>
+                <li><b>[Android]</b> Intégration de "Google SignIn" et "Acclimate SignIn" complétée via <i>Firebase</i>. <b>OAuth 2</b> est donc intégré à l'application. Le fruit de quelques jours de travail!</li>
+                <li><b>[Android]</b> Le <i>design</i> et <i>flow</i> de "Auth UI Activity" est désormais passablement retouché (version Beta). Plusieurs heures passées à peaufiner le "activity_firebase.xml" et le code lui étant relié pour permettre une meilleure expérience.</li>
+                <li><b>[Android]</b> <i>Clean up</i> du code laissé derrière par certaines expérimentations liées aux tests d'intégration de méthode d'authentification.</li>
+                <li><b>[Android]</b> Début d'un travail de Refactoring pour mieux séparer le code de l'Authentification: idéalement, chaque méthode de SignIn serait une Interface?</li>
+                <li><b>[Design]</b> Création d'un mini logo (24px) pour les ImageButton concernant Acclimate</li>
+            </ul>
+
+            <h3>Semaine 9 juillet</h3>
+            <ul>
+                <li><b>[WebApp]</b> Changement du default_pin de "Feu" à "Météo"</li>
+                <li><b>[Général]</b> Le robot moniteur vérifie désormais toutes les 5 minutes</li>
+            </ul>
+
             <h3>Semaine 2 juillet</h3>
             <ul>
                 <li><b>[Android]</b> Plusieurs heures de recherches pour tenter d'intégrer un système d'authentification indépendant. (Considération d'implémentation manuelle, FireBase, Google SignIn et Spring OAuth.)</li>
@@ -44,9 +59,9 @@
                 <li><b>[Android]</b> Localisation GPS intégrée. Fonctionne hors-ligne et en mode avion.</li>
                 <li><b>[Android]</b> Intégration des "Marker Clusters" pour les bases de données statiques (les Pins dites "historiques") afin de réduire le lag lors du visionnement.</li>
                 <li><b>[Android]</b> Intégration de plusieurs Threads: la Home Page fetch désormais les données en parallèle ce qui permet une initialisation plus rapide de l'app. De même pour le fetch des Pins historiques.</li>
-                <li><b>[Frontend]</b> La WebApp est désormais déployée à l'adresse suivante: <a href="https://acclimate-web.herokuapp.com/">https://acclimate-web.herokuapp.com/</a></li>
-                <li><b>[Frontend]</b> Corrections de certaines erreurs sur la classification des Pins.</li>
-                <li><b>[Frontend]</b> Retouche sur les User Pins afin d'avoir une taille uniformisée.</li>
+                <li><b>[WebApp]</b> La WebApp est désormais déployée à l'adresse suivante: <a href="https://acclimate-web.herokuapp.com/">https://acclimate-web.herokuapp.com/</a></li>
+                <li><b>[WebApp]</b> Corrections de certaines erreurs sur la classification des Pins.</li>
+                <li><b>[WebApp]</b> Retouche sur les User Pins afin d'avoir une taille uniformisée.</li>
                 <li><b>[Backend]</b> Commencement de l'intégration de QuartzScheduler au niveau du Server.</li>
                 <li><b>[Général]</b> Mise en place d'un "robot moniteur" qui permet de garder le serveur ainsi que la WebApp toujours actifs (<a href="https://uptimerobot.com/">https://uptimerobot.com/</a>).</li>
             </ul>

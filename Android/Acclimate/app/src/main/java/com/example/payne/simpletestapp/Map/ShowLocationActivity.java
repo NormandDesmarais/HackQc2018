@@ -13,6 +13,10 @@ import android.widget.Toast;
 
 import com.example.payne.simpletestapp.R;
 
+/**
+ * For GPS test purposes. Works just fine! However, currently inaccessible from within the app.
+ * TODO: Remove for final release. Keep until then.
+ */
 public class ShowLocationActivity extends Activity implements LocationListener {
     private TextView latituteField;
     private TextView longitudeField;

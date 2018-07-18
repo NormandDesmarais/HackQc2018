@@ -1,8 +1,7 @@
 <resources>
     <string name="app_name">simpleTestApp</string>
 
-
-    <string name="logo">logo</string>
+    <!-- Top bar on MainActivity -->
     <string name="action_search">Search</string>
     <string name="profileBtn">Profile</string>
 
@@ -16,11 +15,13 @@
     <string name="circleBtn">circleBtn</string>
     -->
 
+    <!-- First options in the extendable menu -->
     <string name="highlight">Bound Request</string>
     <string name="maj">Mise à jour</string>
     <string name="add">Surveiller zone</string>
     <string name="clear_MZ">Effacer zones</string>
 
+    <!-- Filters in the extendable menu -->
     <string name="cB_fire">Feux</string>
     <string name="cB_water">Inondations</string>
     <string name="cB_terrain">Terrain</string>
@@ -30,17 +31,31 @@
     <string name="settings">Settings</string>
     <string name="cB_users">Alertes d\'usagers</string>
 
-
+    <!-- Dialog d'ajout de Pin -->
     <string name="warning">Ajouter une alerte de \nquel type au serveur ?</string>
     <string name="feu">Feu</string>
     <string name="eau">Eau</string>
     <string name="vent">Météo</string>
     <string name="seisme">Terrain</string>
     <string name="cancel">Annuler</string>
-    <string name="title_activity_settings">Settings</string>
+
+
+
+    <!-- Auth UI - Signed in -->
+    <string name="prompt_email">Email</string>
+    <string name="prompt_password">Password (optional)</string>
+    <string name="action_sign_in_short">Sign in</string>
+    <string name="loading">Loading</string>
+    <string name="verify_email">Resend verification email</string>
+    <string name="sign_in_email">Sign in</string>
+    <string name="register_email">Register</string>
+    <string name="email_sign_out">Sign out</string>
+
+
 
     <!-- Strings related to Settings -->
-
+    <string name="title_activity_settings">Settings</string>
+    <string name="pref_ringtone_silent">Ringtone Silent</string>
     <!-- Example General settings -->
     <string name="pref_header_general">General</string>
 
@@ -85,44 +100,12 @@
         <item>-1</item>
     </string-array>
 
-    <string-array name="list_preference_entries">
-        <item>Entry 1</item>
-        <item>Entry 2</item>
-        <item>Entry 3</item>
-    </string-array>
-
-    <string-array name="list_preference_entry_values">
-        <item>1</item>
-        <item>2</item>
-        <item>3</item>
-    </string-array>
-
-    <string-array name="multi_select_list_preference_default_value" />
-
     <string name="pref_title_system_sync_settings">System sync settings</string>
 
     <!-- Example settings for Notifications -->
     <string name="pref_header_notifications">Notifications</string>
-
     <string name="pref_title_new_message_notifications">New message notifications</string>
-
     <string name="pref_title_ringtone">Ringtone</string>
-    <string name="pref_ringtone_silent">Silent</string>
-
     <string name="pref_title_vibrate">Vibrate</string>
-    <string name="title_activity_login">Sign in</string>
-
-    <!-- Strings related to login -->
-    <string name="prompt_email">Email</string>
-    <string name="prompt_password">Password (optional)</string>
-    <string name="action_sign_in">Sign in or register</string>
-    <string name="action_sign_in_short">Sign in</string>
-    <string name="error_invalid_email">This email address is invalid</string>
-    <string name="error_invalid_password">This password is too short</string>
-    <string name="error_incorrect_password">This password is incorrect</string>
-    <string name="error_field_required">This field is required</string>
-    <string name="permission_rationale">"Contacts permissions are needed for providing email
-        completions."
-    </string>
 
 </resources>

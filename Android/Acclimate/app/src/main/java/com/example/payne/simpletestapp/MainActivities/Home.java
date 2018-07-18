@@ -50,8 +50,7 @@ public class Home extends AppCompatActivity {
         findViewById(R.id.textView).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // TODO: Currently testing GPS. Revert "ShowLocationActivity" to "MainActivity" !
-                Intent intent = new Intent(getApplicationContext(), ShowLocationActivity.class);
+                Intent intent = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intent);
             }
         });

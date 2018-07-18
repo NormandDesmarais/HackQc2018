@@ -23,6 +23,14 @@
           }
         },
         {
+          "client_id": "746348091619-6lcc5cq4bbtju3bqro7tt3qm0talji04.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.payne.simpletestapp",
+            "certificate_hash": "ad2265a26c0befb2b218b35bd8fc0fee75fdbe88"
+          }
+        },
+        {
           "client_id": "746348091619-eol6p6a03risogk3bds3e83l0tja2rfl.apps.googleusercontent.com",
           "client_type": 3
         }
