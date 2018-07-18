@@ -414,6 +414,7 @@ public class MainActivity extends AppCompatActivity implements MapEventsReceiver
                 MapDisplay.showUserPins = Preferences.toggleFilterPref(item, 5);
                 myMapDisplay.refresh(); break;
 
+
                 /*
                 Firebase Authenticator Activity! :)
                  */

@@ -156,8 +156,6 @@
 
     <!-- TODO: Auth UI -->
     <string name="launch_title">FirebaseUI Auth Demo</string>
-    <string name="sign_in_start">Start</string>
-    <string name="sign_in_silent">Sign in silently</string>
 
     <string name="providers_header">Auth providers</string>
     <string name="providers_google">Google</string>
@@ -234,10 +232,12 @@
 
 
 
-    <string name="firebase_status_fmt">Firebase User: %s</string>
-    <string name="google_status_fmt">Google User: %s</string>
     <string name="signed_out">Signed out</string>
     <!-- TODO: Base activity -->
     <string name="loading">Loading</string>
+    <string name="verify_email">Resend verification email</string>
+    <string name="sign_in_email">Sign in</string>
+    <string name="register_email">Register</string>
+    <string name="email_sign_out">Sign out</string>
 
 </resources>
