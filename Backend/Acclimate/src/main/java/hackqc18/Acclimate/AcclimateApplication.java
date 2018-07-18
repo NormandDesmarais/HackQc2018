@@ -18,7 +18,6 @@ import static org.quartz.TriggerBuilder.newTrigger;
 public class AcclimateApplication {
 
     public static void main(String[] args) {
-	// StaticParser staticParser = new StaticParser();
 
 //        try {
 //            // Grab the Scheduler instance from the Factory

@@ -142,49 +142,51 @@ public class LiveAlertRepository implements AlertRepository {
             double lng, lat;
             HashMap<String, Alert> newAlerts = new HashMap<>();
             Rss rssObject = xmlMapper.readValue(feed, Rss.class);
+            
+            if (rssObject.getChannel().getItem() != null) {
+            	for (ItemRSS item : rssObject.getChannel().getItem()) {
+                    // System.err.println(item.getDescription());
 
-            for (ItemRSS item : rssObject.getChannel().getItem()) {
-                // System.err.println(item.getDescription());
+                    /**
+                     * The name is stored in item.title
+                     */
+                    nom = item.getTitle();
 
-                /**
-                 * The name is stored in item.title
-                 */
-                nom = item.getTitle();
+                    /**
+                     * item.guid contains coordinates and alertId in the form of :
+                     * "{url}?...&center={lng},{lat}&...#{alertId}"
+                     * ex:"{url}/?context=avp&center=-73.6387202781213,45.6928705203507&zoom=10#MSP.SS.043208"
+                     */
+                    tmpStrs = item.getGuid().split("#");
+                    alertId = tmpStrs[1].replaceAll("\\.", "-");
+                    tmpStrs = tmpStrs[0].split("center=")[1].split("&")[0]
+                            .split(",");
+                    lng = Double.parseDouble(tmpStrs[0]);
+                    lat = Double.parseDouble(tmpStrs[1]);
 
-                /**
-                 * item.guid contains coordinates and alertId in the form of :
-                 * "{url}?...&center={lng},{lat}&...#{alertId}"
-                 * ex:"{url}/?context=avp&center=-73.6387202781213,45.6928705203507&zoom=10#MSP.SS.043208"
-                 */
-                tmpStrs = item.getGuid().split("#");
-                alertId = tmpStrs[1].replaceAll("\\.", "-");
-                tmpStrs = tmpStrs[0].split("center=")[1].split("&")[0]
-                        .split(",");
-                lng = Double.parseDouble(tmpStrs[0]);
-                lat = Double.parseDouble(tmpStrs[1]);
+                    /**
+                     * descriptions contains all other parameters in the form of key
+                     * value pairs: <b>{key}</b> : {value} separated by "<br/>
+                     * ".
+                     */
+                    tmpStrs = item.getDescription().split("<br/>");
+                    source = tmpStrs[0].split(":")[1].trim();
+                    type = tmpStrs[1].split(":")[1].trim();
+                    dateDeMiseAJour = tmpStrs[2].split(":")[1].trim();
+                    description = tmpStrs[3].split(":")[1].trim();
+                    severite = tmpStrs[4].split(":")[1].trim();
+                    territoire = tmpStrs[5].split(":")[1].trim();
+                    certitude = tmpStrs[6].split(":")[1].trim();
+                    urgence = tmpStrs[7].split(":")[1].trim();
 
-                /**
-                 * descriptions contains all other parameters in the form of key
-                 * value pairs: <b>{key}</b> : {value} separated by "<br/>
-                 * ".
-                 */
-                tmpStrs = item.getDescription().split("<br/>");
-                source = tmpStrs[0].split(":")[1].trim();
-                type = tmpStrs[1].split(":")[1].trim();
-                dateDeMiseAJour = tmpStrs[2].split(":")[1].trim();
-                description = tmpStrs[3].split(":")[1].trim();
-                severite = tmpStrs[4].split(":")[1].trim();
-                territoire = tmpStrs[5].split(":")[1].trim();
-                certitude = tmpStrs[6].split(":")[1].trim();
-                urgence = tmpStrs[7].split(":")[1].trim();
+                    newAlerts.put(alertId,
+                            new Alert(alertId, nom, source, territoire, certitude,
+                                    severite, type, dateDeMiseAJour, urgence,
+                                    description, lng, lat));
+                }
 
-                newAlerts.put(alertId,
-                        new Alert(alertId, nom, source, territoire, certitude,
-                                severite, type, dateDeMiseAJour, urgence,
-                                description, lng, lat));
+                alerts = newAlerts;
             }
-
-            alerts = newAlerts;
 
         } catch (MismatchedInputException ex) {
             Logger.getLogger(LiveAlertRepository.class.getName())
