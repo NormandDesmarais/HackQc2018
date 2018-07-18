@@ -13,6 +13,10 @@ import com.example.payne.simpletestapp.R;
 
 import java.util.ArrayList;
 
+/*
+    TODO:
+        - Add LastKnownGPS Coord for centering immediately on the second loading of app
+ */
 
 /**
  * https://developer.android.com/training/data-storage/shared-preferences#java

@@ -3,6 +3,7 @@ package com.example.payne.simpletestapp.Authentification;
 import com.example.payne.simpletestapp.R;
 
 import android.content.Intent;
+import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.os.Bundle;
@@ -30,6 +31,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
+import com.squareup.picasso.Picasso;
 
 /*
     TODO: For verification on backend server!
@@ -37,8 +39,6 @@ import com.google.firebase.auth.GoogleAuthProvider;
 
     TODO: TESTS
         - Test "Auth" when disconnecting from Internet
-        - Try getting Uid and IdTokens
-        - Try getting Uid and IdTokens when viewing Map
         - "onActivityResult" and "signOutGoogle" are necessarily related to Google ?
 
 https://stackoverflow.com/questions/40838154/retrieve-google-access-token-after-authenticated-using-firebase-authentication
@@ -109,7 +109,7 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
     private static final String TAG = "GoogleActivity"; // TODO: Remove once tests are done
     private static final int RC_SIGN_IN = 9001; // arbitrary number
 
-    private FirebaseAuth mAuth;
+    public static FirebaseAuth mAuth;
 
     // Variables globales utilisées pour la sélection de méthode d'authentification
     private static boolean hasSelectedAuthMethod = false;
@@ -168,7 +168,7 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
 
         // Initialisation de l'authentification
-        mAuth = FirebaseAuth.getInstance();
+        mAuth = FirebaseAuth.getInstance(); // TODO: Désormais intégré dans Home -> nécessaire ici ?
     }
 
     /**
@@ -178,8 +178,7 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
     public void onStart() {
         super.onStart();
         // Check if user is signed in (non-null) and update UI accordingly.
-        FirebaseUser currentUser = mAuth.getCurrentUser();
-        updateUI(currentUser);
+        updateUI(mAuth.getCurrentUser());
     }
 
     /**
@@ -242,6 +241,7 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
         // Pour afficher le bon mode
         findViewById(R.id.Selected_Method).setVisibility(View.GONE);
         findViewById(R.id.Mode_Selection).setVisibility(View.GONE);
+        findViewById(R.id.back_to_mode_selection).setVisibility(View.GONE);
 
 
         if(user != null) { // IS signed in
@@ -269,7 +269,7 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
             }
 
 
-            // TODO: Ce sont des tests pour les Tokens. Devraient être enlevés éventuellement.
+        //  [ TODO: Ce sont des tests pour les Tokens. Devraient être enlevés éventuellement. ]
             String tokenTest1 = user.getUid();
             Toast.makeText(this, "token1: " + tokenTest1, Toast.LENGTH_SHORT).show();
             Log.w("Token test", "token1: " + tokenTest1);
@@ -283,11 +283,12 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
                                 // ...
                             } else {
                                 // Handle error -> task.getException();
-                                Log.w("Token test", "token failed: ");
+                                Log.w("Token test", "token failed");
                                 task.getException().printStackTrace();
                             }
                         }
                     });
+        // [ FIN DU TEST ]
 
 
             // Google
@@ -299,7 +300,11 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
                 // Show user info
                 ((TextView) findViewById(R.id.google_DisplayName)).setText(user.getDisplayName());
                 ((TextView) findViewById(R.id.google_Email)).setText(user.getEmail());
-                ((ImageView) findViewById(R.id.google_Photo)).setImageURI(user.getPhotoUrl());
+                Picasso.get().load(user.getPhotoUrl())
+                        .placeholder(R.drawable.test) // TODO: Design a 'Placeholder' image 250x250
+                        .resize(250, 250)
+                        .centerCrop()
+                        .into((ImageView) findViewById(R.id.google_Photo));
             }
 
             // Email/password

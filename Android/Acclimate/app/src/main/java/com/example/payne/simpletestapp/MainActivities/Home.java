@@ -4,16 +4,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Vibrator;
+import android.support.annotation.NonNull;
+import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.example.payne.simpletestapp.Authentification.AuthUIActivity;
 import com.example.payne.simpletestapp.Manager;
 import com.example.payne.simpletestapp.Map.MapDisplay;
 import com.example.payne.simpletestapp.R;
 import com.example.payne.simpletestapp.Server.ServerConnection;
 import com.example.payne.simpletestapp.Map.ShowLocationActivity;
+import com.google.android.gms.tasks.OnCompleteListener;
+import com.google.android.gms.tasks.Task;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GetTokenResult;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
@@ -54,6 +63,18 @@ public class Home extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        // Lancée la vérification d'authentification conservée
+        AuthUIActivity.mAuth = FirebaseAuth.getInstance();
+        FirebaseUser user = AuthUIActivity.mAuth.getCurrentUser();
+        if(user != null) { // si déjà connecté
+            Toast.makeText(this, "connected as: " + user.getUid(), Toast.LENGTH_SHORT).show(); // TODO: remove once auth tests are done
+            Snackbar.make(findViewById(R.id.proceed),
+                    "You are logged in!", Snackbar.LENGTH_SHORT).show();
+        } else { // pas connecté
+            Snackbar.make(findViewById(R.id.proceed),
+                    "You are not logged in!", Snackbar.LENGTH_SHORT).show();
+        }
     }
 
     // À chaque retour sur le Home Page, on recalcule le nombre d'alertes.
@@ -65,9 +86,7 @@ public class Home extends AppCompatActivity {
         new Thread(new Runnable() {
             @Override
             public void run() {
-                Log.w("Thread", "started");
                 showAmountAlerts(true);
-                Log.w("Thread", "finished");
             }
         }).start();
     }
