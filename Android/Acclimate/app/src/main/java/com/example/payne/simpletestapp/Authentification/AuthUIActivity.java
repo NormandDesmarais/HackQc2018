@@ -3,7 +3,6 @@ package com.example.payne.simpletestapp.Authentification;
 import com.example.payne.simpletestapp.R;
 
 import android.content.Intent;
-import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.design.widget.Snackbar;
 import android.os.Bundle;
@@ -40,6 +39,7 @@ import com.squareup.picasso.Picasso;
     TODO: TESTS
         - Test "Auth" when disconnecting from Internet
         - "onActivityResult" and "signOutGoogle" are necessarily related to Google ?
+    - Add a "don't remember me" option for Sign In experience
 
 https://stackoverflow.com/questions/40838154/retrieve-google-access-token-after-authenticated-using-firebase-authentication
  */
@@ -47,6 +47,9 @@ https://stackoverflow.com/questions/40838154/retrieve-google-access-token-after-
 
 /*
 FirebaseUser.getIdToken(bool) : use to authenticate on backend server
+is a JWT (JSON Web Token)     : https://jwt.io/
+
+
 FirebaseUser.getUid()         : unique ID in the app
 
 
