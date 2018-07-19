@@ -30,6 +30,7 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.GetTokenResult;
 import com.google.firebase.auth.GoogleAuthProvider;
+
 import com.squareup.picasso.Picasso;
 
 /*
@@ -113,6 +114,7 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
     private static final int RC_SIGN_IN = 9001; // arbitrary number
 
     public static FirebaseAuth mAuth;
+    public static FirebaseAuth.AuthStateListener mAuthListener;
 
     // Variables globales utilisées pour la sélection de méthode d'authentification
     private static boolean hasSelectedAuthMethod = false;
@@ -133,45 +135,74 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_firebase);
 
-        // Input fields pour User/Passw
-        mEmailField = findViewById(R.id.email);
-        mPasswordField = findViewById(R.id.password);
-
-
-        // Set up the "Google Sign In" button
-        SignInButton signInButton = findViewById(R.id.google_sign_in_button);
-        signInButton.setSize(SignInButton.SIZE_STANDARD);
-
-        // Set up "email/passw" buttons
-        verify_email_btn = findViewById(R.id.email_verify_button);
-
-        // Google buttons listeners
-        signInButton.setOnClickListener(this);
-        findViewById(R.id.google_sign_out_button).setOnClickListener(this);
-        findViewById(R.id.google_disconnect_button).setOnClickListener(this);
-
-        // Email/Password buttons listeners
-        findViewById(R.id.email_sign_in_button).setOnClickListener(this);
-        findViewById(R.id.email_register_button).setOnClickListener(this);
-        findViewById(R.id.email_sign_out_button).setOnClickListener(this);
-        findViewById(R.id.email_verify_button).setOnClickListener(this);
 
         // Auth Mode Selectors listeners
         findViewById(R.id.email_selector).setOnClickListener(this);
         findViewById(R.id.google_selector).setOnClickListener(this);
         findViewById(R.id.back_to_mode_selection).setOnClickListener(this);
 
+        // Email/Password buttons listeners
+        findViewById(R.id.email_sign_in_button).setOnClickListener(this);
+        findViewById(R.id.email_register_button).setOnClickListener(this);
+        findViewById(R.id.email_sign_out_button).setOnClickListener(this);
+        verify_email_btn = findViewById(R.id.email_verify_button);
+        verify_email_btn.setOnClickListener(this);
+        // Input fields
+        mEmailField = findViewById(R.id.email);
+        mPasswordField = findViewById(R.id.password);
 
+        // Set up"Google Sign In" buttons listeners
+        SignInButton signInButton = findViewById(R.id.google_sign_in_button);
+        signInButton.setSize(SignInButton.SIZE_STANDARD);
+        signInButton.setOnClickListener(this);
+        findViewById(R.id.google_sign_out_button).setOnClickListener(this);
+        findViewById(R.id.google_disconnect_button).setOnClickListener(this); // TODO: remove this option ?
         // Configure Google Sign In
         GoogleSignInOptions gso = new GoogleSignInOptions.Builder(GoogleSignInOptions.DEFAULT_SIGN_IN)
                 .requestIdToken(getString(R.string.default_web_client_id)) // TODO: absent from tutorial.. ?
                 .requestEmail()
                 .build();
+        // TODO? : Its important that you request for token Id
+        // The string passed to requestIdToken, default_web_client_id,
+        // can be obtained from credentials page (https://console.developers.google.com/apis/credentials).
+        // There mentioned Web application type client ID is this string.
 
         mGoogleSignInClient = GoogleSignIn.getClient(this, gso);
+    }
 
-        // Initialisation de l'authentification
-        mAuth = FirebaseAuth.getInstance(); // TODO: Désormais intégré dans Home -> nécessaire ici ?
+    /**
+     * Utilisé pour s'assurer de bien initialiser la connection avec Firebase.
+     * @return l'utilisateur (null si pas authentifié!)
+     */
+    public static FirebaseUser setUpFirebaseAuth() {
+
+        mAuth = FirebaseAuth.getInstance();
+
+        /*
+            @Override
+            public void onStop() {
+                super.onStop();
+                if (mAuthListener != null) {
+                    mAuth.removeAuthStateListener(mAuthListener);
+                }
+            }
+         */ // TODO: Necessary? If so, add "mAuth.removeAuthListener()" in "onStop"
+        if(mAuthListener == null) {
+            mAuthListener = new FirebaseAuth.AuthStateListener() {
+                @Override
+                public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
+                    FirebaseUser user = firebaseAuth.getCurrentUser();
+                    if (user != null) { // User is signed in
+                        Log.w("AuthUI Activity", "onAuthStateChanged:signed_in:uid=" + user.getUid());
+                    } else { // User is signed out
+                        Log.w("AuthUI Activity", "onAuthStateChanged:signed_out");
+                    }
+                }
+            };
+            mAuth.addAuthStateListener(mAuthListener);
+        }
+
+        return mAuth.getCurrentUser(); // retourne "null" si usager pas authentifié
     }
 
     /**
@@ -180,8 +211,8 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
     @Override
     public void onStart() {
         super.onStart();
-        // Check if user is signed in (non-null) and update UI accordingly.
-        updateUI(mAuth.getCurrentUser());
+        // Initialisation de l'authentification
+        updateUI(setUpFirebaseAuth());
     }
 
     /**
@@ -232,7 +263,6 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
 
     /**
      * Pour updater le UI en correspondance avec les réponses d'actions.
-     * TODO: Intégrer "onAuthChange" pour appeler updateUI à chaque fois
      *
      * @param user le user
      */
@@ -276,7 +306,7 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
             String tokenTest1 = user.getUid();
             Toast.makeText(this, "token1: " + tokenTest1, Toast.LENGTH_SHORT).show();
             Log.w("Token test", "token1: " + tokenTest1);
-            user.getIdToken(false)
+            user.getIdToken(false) // boolean = refresh token
                     .addOnCompleteListener(new OnCompleteListener<GetTokenResult>() {
                         public void onComplete(@NonNull Task<GetTokenResult> task) {
                             if (task.isSuccessful()) {
@@ -386,23 +416,10 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
                 firebaseAuthWithGoogle(account);
             } catch (ApiException e) {
                 // Google Sign In failed, update UI appropriately
-                Log.w(TAG, "Google sign in failed", e);
                 updateUI(null);
             }
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
 
 
     /*
@@ -413,13 +430,9 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
      * Called to begin the Google Authentification.
      * Can be used to adapt the UI based on the response.
      *
-     * The GoogleSignInAccount object contains information
-     * about the signed-in user, such as the user's name.
-     *
      * @param acct the signed in account
      */
     private void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
-        Log.d(TAG, "firebaseAuthWithGoogle:" + acct.getId());
         showProgressDialog();
 
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
@@ -429,13 +442,12 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithCredential:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            updateUI(mAuth.getCurrentUser());
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithCredential:failure", task.getException());
-                            Snackbar.make(findViewById(R.id.auth_logo_acclimate), "Authentication Failed.", Snackbar.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.auth_logo_acclimate),
+                                    "Authentication Failed.",
+                                    Snackbar.LENGTH_SHORT).show();
                             updateUI(null);
                         }
 
@@ -450,7 +462,6 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
     }
 
     private void signOutGoogle() {
-        // Firebase sign out
         mAuth.signOut();
 
         // Google sign out
@@ -467,7 +478,6 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
      * Disconnect.
      */
     private void revokeAccessGoogle() {
-        // Firebase sign out
         mAuth.signOut();
 
         // Google revoke access
@@ -481,21 +491,6 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
     }
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
     /*
     USER/PASSWORD AUTH !!! (No google)
      */
@@ -507,10 +502,7 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
      * @param password password
      */
     private void createAccount(String email, String password) {
-        Log.d(TAG, "createAccount:" + email);
-        if (!validateForm()) {
-            return;
-        }
+        if (!validateForm()) return;
 
         showProgressDialog();
 
@@ -520,16 +512,14 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "createUserWithEmail:success");
                             FirebaseUser user = mAuth.getCurrentUser();
-                            // Send verification email
-                            user.sendEmailVerification();
+                            user.sendEmailVerification(); // Send verification email
                             updateUI(user);
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "createUserWithEmail:failure", task.getException());
-                            Toast.makeText(AuthUIActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.auth_logo_acclimate),
+                                    "Authentication Failed.",
+                                    Snackbar.LENGTH_SHORT).show();
                             updateUI(null);
                         }
 
@@ -545,10 +535,7 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
      * @param password password
      */
     private void signInEmail(String email, String password) {
-        Log.d(TAG, "signInEmail:" + email);
-        if (!validateForm()) {
-            return;
-        }
+        if (!validateForm()) return;
 
         showProgressDialog();
 
@@ -558,14 +545,12 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
                     public void onComplete(@NonNull Task<AuthResult> task) {
                         if (task.isSuccessful()) {
                             // Sign in success, update UI with the signed-in user's information
-                            Log.d(TAG, "signInWithEmail:success");
-                            FirebaseUser user = mAuth.getCurrentUser();
-                            updateUI(user);
+                            updateUI(mAuth.getCurrentUser());
                         } else {
                             // If sign in fails, display a message to the user.
-                            Log.w(TAG, "signInWithEmail:failure", task.getException());
-                            Toast.makeText(AuthUIActivity.this, "Authentication failed.",
-                                    Toast.LENGTH_SHORT).show();
+                            Snackbar.make(findViewById(R.id.auth_logo_acclimate),
+                                    "Authentication Failed.",
+                                    Snackbar.LENGTH_SHORT).show();
                             updateUI(null);
                         }
 
@@ -606,8 +591,7 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
      * Pour envoyer le email de vérification
      */
     private void sendEmailVerification() {
-        // Disable button
-        verify_email_btn.setEnabled(false);
+        verify_email_btn.setEnabled(false); // Disable button
 
         // Send verification email
         final FirebaseUser user = mAuth.getCurrentUser();
@@ -615,18 +599,16 @@ public class AuthUIActivity extends BaseActivity implements View.OnClickListener
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        // Re-enable button
-                        verify_email_btn.setEnabled(true);
+                        verify_email_btn.setEnabled(true); // Re-enable button
 
                         if (task.isSuccessful()) {
-                            Toast.makeText(AuthUIActivity.this,
+                            Snackbar.make(findViewById(R.id.auth_logo_acclimate),
                                     "Verification email sent to " + user.getEmail(),
-                                    Toast.LENGTH_SHORT).show();
+                                    Snackbar.LENGTH_SHORT).show();
                         } else {
-                            Log.e(TAG, "sendEmailVerification", task.getException());
-                            Toast.makeText(AuthUIActivity.this,
+                            Snackbar.make(findViewById(R.id.auth_logo_acclimate),
                                     "Failed to send verification email.",
-                                    Toast.LENGTH_SHORT).show();
+                                    Snackbar.LENGTH_SHORT).show();
                         }
                     }
                 });

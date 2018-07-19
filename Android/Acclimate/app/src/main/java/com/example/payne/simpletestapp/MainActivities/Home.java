@@ -64,11 +64,8 @@ public class Home extends AppCompatActivity {
             }
         });
 
-        // Lancée la vérification d'authentification conservée
-        AuthUIActivity.mAuth = FirebaseAuth.getInstance();
-        FirebaseUser user = AuthUIActivity.mAuth.getCurrentUser();
-        if(user != null) { // si déjà connecté
-            Toast.makeText(this, "connected as: " + user.getUid(), Toast.LENGTH_SHORT).show(); // TODO: remove once auth tests are done
+        // Lancer la vérification d'authentification conservée et utiliser l'usager retourné
+        if(AuthUIActivity.setUpFirebaseAuth() != null) { // si déjà connecté
             Snackbar.make(findViewById(R.id.proceed),
                     "You are logged in!", Snackbar.LENGTH_SHORT).show();
         } else { // pas connecté
