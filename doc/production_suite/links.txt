@@ -1,0 +1,30 @@
+Authentication (idToken verificationimport jjwt):
+https://stackoverflow.com/questions/39222072/firebase-verify-id-tokens-using-a-third-party-jwt-library
+
+
+
+
+
+Deployment:
+https://developer.android.com/studio/publish/app-signing#secure-key
+https://developer.android.com/studio/publish/
+
+
+
+
+
+Application manifest (renaming app/logo):
+https://developer.android.com/guide/topics/manifest/application-element
+
+
+
+
+
+Notification (choosing starting Activity):
+https://developer.android.com/training/notify-user/navigation
+
+[UNREAD]
+https://stackoverflow.com/questions/38451235/how-to-handle-the-fire-base-notification-when-app-is-in-foreground
+https://stackoverflow.com/questions/37711082/how-to-handle-notification-when-app-in-background-in-firebase
+https://stackoverflow.com/questions/39358835/open-activity-on-firebase-notification-received-in-foreground
+https://stackoverflow.com/questions/37590538/firebase-notifications-in-the-foreground
