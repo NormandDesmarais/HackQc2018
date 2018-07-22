@@ -32,29 +32,47 @@
             </br>
 
             <h3>Semaine 16 juillet</h3>
-            <ul>
-                <li><b>[Android]</b> Intégration de "<i>Google SignIn</i>" et "<i>Acclimate (Email/Password) SignIn</i>" complétée via <i>Firebase</i>. <b>OAuth 2</b> est donc intégré à l'application. Le fruit de plusieurs jours de travail!</li>
-                <li><b>[Android]</b> Plusieurs heures passées à peaufiner le "activity_firebase.xml" (AuthUI) et le code lui étant relié pour permettre une meilleure expérience.</li>
-                <li><b>[Android]</b> <i>Clean up</i> du code laissé derrière par certaines expérimentations liées aux tests d'intégration de méthode d'authentification.</li>
-                <li><b>[Android]</b> Début d'un travail de Refactoring pour mieux séparer le code de l'Authentification: idéalement, chaque méthode de SignIn serait une Interface?</li>
-                <li><b>[Android]</b> Meilleur set up du "<i>Firebase Console</i>" et intégration des 2 autres admins du projet (invitation envoyée).</li>
-                <li><b>[Android]</b> Migration du projet Android sur BitBucket pour commencer à séparer les différentes branches du projet en différents 'repo'. Va permettre une synchronisation plus efficace des projets individuels puisqu'on n'aura pas de problèmes de "Merge/Pull" lorsqu'un projet n'étant pas relié au notre a été mis à jour (par exemple, le Backend vs Android).</li>
-                <li><b>[Android]</b> Suite à l'intégration du traitement Spring sur les JSON (par Olivier), j'ai retravaillé sur l'option de recherche d'adresse/location dans la carte. Cette option fonctionne désormais parfaitement.</li>
-                <li><b>[Android]</b> Refactor du code des mthodes "@Override onCreate" du package "MainActivities": simple déplacement de certaines sections dans des procédures privées afin de rendre le tout plus lisible.</li>
-                <li><b>[Android]</b> Début de travail sur la localisation GPS afin d'obtenir le plus rapidement possible la position de l'usager afin de pouvoir savoir où centrer la Map avant même que celui-ci n'y accède (présentement, on centre toujours sur Montréal).</li>
-                <li><b>[Android]</b> Importation de la librairie "Picasso" pour mieux traiter les images provenant d'une URI associée à un ImageView.</li>
-                <li><b>[Design]</b> Création d'un mini logo (24px) pour les ImageButton concernant Acclimate.</li>
-                <li><b>[Design]</b> Design du UI de base pour l'authentification.</li>
-                <li><b>[Backend]</b> Set up d'un Robot Moniteur pour commencer la migration du serveur en backend.</li>
-                <li><b>[Général]</b> Explication sommaire du système de "Tokens" de l'authentification par OAuth 2 aux membres de l'équipe.</li>
-                <li><b>[Général]</b> Vu la nécessité de traiter de vérifier des signatures électroniques, il va falloir conserver un "secret" ou une "clé privée" quelque part dans le code du Backend. Ceci pose un problème de sécurité et j'ai donc proposé qu'on migre le Backend de GitHub vers BitBucket puisque ce dernier offre des 'repos' privés gratuitement (alors que GitHub ne nous permet de faire cela présentement que parce que nous sommes étudiants).</li>
-                <li><b>[Lecture]</b> Lecture sur la manière de cacher de l'information sensible dans le code du Backend. Quelques options s'offrent, mais il faut faire attention au "<i>reverse engineering</i>". J'approfondierai mes connaissances là-dessus au moment où on intégrera ces String dans le Backend.</li>
-                <li><b>[Lecture]</b> Lecture sur la manière de passer et interpréter les "<i>idToken</i>" générés par l'authentification d'OAuth 2.</li>
-                <li><b>[Lecture]</b> Lecture sur les différentes options qui s'offrent pour les notifications. Le problème actuel est la décision par rapport au "<i>minSDK</i>": il existe beaucoup de features intéressants pour les versions plus récentes d'Android, mais nous ne voudrions pas exclure une grande part du marché juste pour cela.</li>
-                <li><b>[Analyse]</b> Création de diagrammes d'activité pour le <i>flow</i> de l'authentification, d'une requête au serveur, et de l'ajout d'une <i>Monitored Zone</i>.</li>
-                <li><b>[Analyse]</b> Proposition d'une organisation de la structure de la Base de Données afin de permettre le déploiement plus efficace des notifications. Idée: semblable à un filtre de Bloom (mais sans hachage nécessaire), nous allons probablement utiliser des "tuiles" et classifier les Monitored Zones de chaque usager en fonction de quelles tuiles celles-ci touchent. Ainsi, lorsque le serveur va se demander à qui envoyer une notification, il y aura un tri plus rapide des options à considérer en fonction de dans quelle tuile se situe la Pin causerait l'envoie de notifications.</li>
-            </ul>
             <blockquote>
+                <u>Glossaire</u>:
+                <ul>
+                    <li><b><i>Firebase</i></b>: Ensemble de services offerts par Google pour les développeurs.</li>
+                    <li><b><i>Admin SDK</i></b>: Permet l'accès à certaines fonctionnalités d'un API de Firebase (modifier le mot-de-passe d'un usager de la base de données d'authentification, par exemple). Authentifie l'application faisant les requêtes. L'intégration de l'Admin SDK doit se faire en privé (elle nécessite dans le code de l'information sensible que le public ne doit pas connaître).</li>
+                    <li><b><i>FCM</i></b>: Firebase Cloud Messaging. Service facilitant l'envoie de Notifications à des appareils mobiles.</li>
+                    <li><b><i>registrationToken</i></b>: Chaque appareil mobile unique ayant téléchargé l'application reçoit un 'registrationToken' unique. C'est ce token que l'on doit utiliser pour envoyer des notifications avec FCM.</li>
+                    <li><b><i>OAuth 2</i></b>: Méthode d'authentification qui permet à un usager de s'authentifier sans nécessairement envoyer ses données sensibles (tel que son mot-de-passe) au serveur auquel il fait une requête.</li>
+                    <li><b><i>idToken</i></b>: C'est le token utilisé par le protocole OAuth 2 pour authentifier la requête d'un usager (la requête est envoyée avec ce token).</li>
+                    <li><b><i>JWT</i></b>: JSON Web Token. C'est un JSON encodé en base 64. Il possède la forme "XXX.YYY.ZZZ", où XXX est le 'header', YYY le 'payload' et ZZZ la 'signature'. Dans le cas de l'authentification via Firebase (où l'idToken est un JWT), le 'header' contient une clé publique de Google ainsi que l'algo utilisé pour la signature (soit RSA 256 bits, ou "RS256"), le 'payload' contient les informations en lien avec l'usager qui fait la requête (email, UID, etc.), et la 'signature' permet d'authentifier la requête.</li>
+                    <li><b><i>UID</i></b>: Chaîne de caractère unique assignée à tout utilisateur s'authentifiant via Firebase à une application.</li>
+                </ul>
+
+                <u>Progrès</u>:
+                <ul>
+                    <li><b>[Android]</b> Intégration de "<i>Google SignIn</i>" et "<i>Acclimate (Email/Password) SignIn</i>" complétée via <i>Firebase</i>. <b>OAuth 2</b> est donc intégré à l'application. Le fruit de plusieurs jours de travail!</li>
+                    <li><b>[Android]</b> Plusieurs heures passées à peaufiner le "activity_firebase.xml" (AuthUI) et le code lui étant relié pour permettre une meilleure expérience.</li>
+                    <li><b>[Android]</b> <i>Clean up</i> du code laissé derrière par certaines expérimentations liées aux tests d'intégration de méthode d'authentification.</li>
+                    <li><b>[Android]</b> Début d'un travail de Refactoring pour mieux séparer le code de l'Authentification: idéalement, chaque méthode de SignIn serait une Interface?</li>
+                    <li><b>[Android]</b> Meilleur set up du "<i>Firebase Console</i>" et intégration des 2 autres admins du projet (invitation envoyée).</li>
+                    <li><b>[Android]</b> Migration du projet Android sur BitBucket pour commencer à séparer les différentes branches du projet en différents 'repo'. Va permettre une synchronisation plus efficace des projets individuels puisqu'on n'aura pas de problèmes de "Merge/Pull" lorsqu'un projet n'étant pas relié au notre a été mis à jour (par exemple, le Backend vs Android).</li>
+                    <li><b>[Android]</b> Suite à l'intégration du traitement Spring sur les JSON (par Olivier), j'ai retravaillé sur l'option de recherche d'adresse/location dans la carte. Cette option fonctionne désormais parfaitement.</li>
+                    <li><b>[Android]</b> Refactor du code des méthodes "@Override onCreate" du package "MainActivities": simple déplacement de certaines sections dans des procédures privées afin de rendre le tout plus lisible.</li>
+                    <li><b>[Android]</b> Début de travail sur la localisation GPS afin d'obtenir le plus rapidement possible la position de l'usager afin de pouvoir savoir où centrer la Map avant même que celui-ci n'y accède (présentement, on centre toujours sur Montréal).</li>
+                    <li><b>[Android]</b> Importation de la librairie "Picasso" pour mieux traiter les images provenant d'une URI associée à un ImageView.</li>
+                    <li><b>[Design]</b> Création d'un mini logo (24px) pour les ImageButton concernant Acclimate.</li>
+                    <li><b>[Design]</b> Design du UI de base pour l'authentification.</li>
+                    <li><b>[Backend]</b> Set up d'un Robot Moniteur pour commencer la migration du serveur en backend.</li>
+                    <li><b>[Backend]</b> Intégration des notifications (utilise une liste de "registrationToken", qui chacun représente un appareil mobile)! (Plusieurs heures de recherche et information pour réussir cela.)</li>
+                    <li><b>[Backend]</b> Intégration de la vérification de la signature des <i>JWT</i> (JSON Web Token) ainsi que de l'extraction des UID (ID unique associé à chaque utilisateur s'étant authentifié au moins une fois dans l'application). Les requêtes faites au serveur peuvent donc désormais être guaranties authentiques et intègre.</li>
+                    <li><b>[Général]</b> Explication sommaire du système de "Tokens" de l'authentification par OAuth 2 aux membres de l'équipe.</li>
+                    <li><b>[Sécurité]</b> Vu la nécessité de traiter de vérifier des signatures électroniques, il va falloir conserver un "secret" ou une "clé privée" quelque part dans le code du Backend. Ceci pose un problème de sécurité et j'ai donc proposé qu'on migre le Backend de GitHub vers BitBucket puisque ce dernier offre des 'repos' privés gratuitement (alors que GitHub ne nous permet de faire cela présentement que parce que nous sommes étudiants).</li>
+                    <li><b>[Sécurité]</b> Selon mes recherches, l'unique faille de OAuth 2 est la possiblité du "replay attack". Il faudra trouver une manière d'intégrer un ID unique sur les requêtes, ou bien de s'assurer que le TimeStamp de création d'un idToken traité ne dépasse pas une certaine fenêtre de temps.</li>
+                    <li><b>[Lecture]</b> Lecture sur la manière de cacher de l'information sensible dans le code du Backend. Quelques options s'offrent, mais il faut faire attention au "<i>reverse engineering</i>". J'approfondierai mes connaissances là-dessus au moment où on intégrera ces String dans le Backend.</li>
+                    <li><b>[Lecture]</b> Lecture sur la manière de passer et interpréter les "<i>idToken</i>" générés par l'authentification d'OAuth 2.</li>
+                    <li><b>[Lecture]</b> Lecture sur les différentes options qui s'offrent pour les notifications. Le problème actuel est la décision par rapport au "<i>minSDK</i>": il existe beaucoup de features intéressants pour les versions plus récentes d'Android, mais nous ne voudrions pas exclure une grande part du marché juste pour cela.</li>
+                    <li><b>[Analyse]</b> Création de diagrammes d'activité pour le <i>flow</i> de l'authentification, d'une requête au serveur, et de l'ajout d'une <i>Monitored Zone</i>.</li>
+                    <li><b>[Analyse]</b> Proposition d'une organisation de la structure de la Base de Données afin de permettre le déploiement plus efficace des notifications. Idée: semblable à un filtre de Bloom (mais sans hachage nécessaire), nous allons probablement utiliser des "tuiles" et classifier les Monitored Zones de chaque usager en fonction de quelles tuiles celles-ci touchent. Ainsi, lorsque le serveur va se demander à qui envoyer une notification, il y aura un tri plus rapide des options à considérer en fonction de dans quelle tuile se situe la Pin causerait l'envoie de notifications.</li>
+                </ul>
+
+                <u>Screenshots/Diagrammes</u>:<br/><br/>
                 <img src="images/auth_screen2.png" alt="Screenshot 2" height="310" class="center"/>
                 <img src="images/auth_screen3.png" alt="Screenshot 3" height="310" class="center"/>
                 <img src="images/auth_screen4.png" alt="Screenshot 4" height="310" class="center"/>
@@ -62,8 +80,9 @@
                 <br/> <img src="images/Auth_flow.png" alt="Diagramme d'activite pour le Auth_flow" width="710" class="center"/>
                 <br/> <img src="images/add_MZ.png" alt="Diagramme d'activite pour l'ajout d'une Monitored Zone pour un utilisateur" width="710" class="center"/>
                 <br/> <img src="images/Server_Request.png" alt="Diagramme d'activite pour le lancement d'une requête au serveur" width="710" class="center"/>
+                <br/>
             </blockquote>
-            <br/>
+            
 
             <h3>Semaine 9 juillet</h3>
             <ul>
@@ -77,7 +96,7 @@
                 <li><b>[Android]</b> Recherche sur, et intégration des SharedPreference pour sauvegarder dans la mémoire interne certaines choses (les zones d'abonnements et les filtres, pour l'instant).</li>
                 <li><b>[Android]</b> Refactor du code à plusieurs endroits. Certaines classes sont 25% plus courtes.</li>
                 <li><b>[Android]</b> Réorganisation des classes dans des packages afin d'avoir une meilleure séparation.</li>
-                <li><b>[Android]</b> Découverte et fix du bug qui empêchait d'utilise InstantRun d'Android Studio: la vitesse de chargement pour des tests est désormais largement plus rapide.</li>
+                <li><b>[Android]</b> Découverte et fix du bug qui empêchait d'utiliser InstantRun d'Android Studio: la vitesse de chargement pour des tests est désormais largement plus rapide.</li>
                 <li><b>[Android]</b> Intégration d'une Activité de "Settings". Présentement encore incertain de son utilisation précise dans le futur.</li>
                 <li><b>[Android]</b> Début du renommement du package du projet pour passer de "simpleTestApp" à "Acclimate".</li>
                 <li><b>[Android]</b> Intégration des User Pins, pour les différencier des Pins officielles.</li>
