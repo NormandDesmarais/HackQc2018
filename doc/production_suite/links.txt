@@ -1,4 +1,4 @@
-Authentication (idToken verificationimport jjwt):
+Authentication (idToken verification import jjwt):
 https://stackoverflow.com/questions/39222072/firebase-verify-id-tokens-using-a-third-party-jwt-library
 
 
@@ -8,13 +8,6 @@ https://stackoverflow.com/questions/39222072/firebase-verify-id-tokens-using-a-t
 Deployment:
 https://developer.android.com/studio/publish/app-signing#secure-key
 https://developer.android.com/studio/publish/
-
-
-
-
-
-Application manifest (renaming app/logo):
-https://developer.android.com/guide/topics/manifest/application-element
 
 
 
