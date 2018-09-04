@@ -28,18 +28,76 @@
             <img alt="" src="https://www.webdepot.umontreal.ca/Usagers/p1071435/MonDepotPublic/Acclimate/images/app_image.png" class="center"/>
             </br>
 
-            <h2>Rapport des contributions</h2>
+            <h2>Rapport des contributions (environ 200 heures de travail)</h2>
             </br>
+
+            <h3>Semaine 3 septembre</h3>
+            <blockquote>
+                <ul>
+                    <li><b>[WebApp]</b> Fix de certains bugs en lien avec l'affichage des bons icônes dans le menu de gauche.</li>
+                    <li><b>[Android]</b> Intégration de l'info-bulle qui permet de supprimer une Zone Surveillée individuelle.</li>
+                    <li><b>[Android]</b> Intégration complète de la synchronisation entre l'appareil de l'usager (son contenu en mémoire interne) et le serveur.</li>
+                    <li><b>[Android]</b> Amélioration du 'feedback' à l'utilisateur (aperçus/notifications pendant l'attente de la réponse du serveur).</li>
+                    <li><b>[Android]</b> Intégration d'animations pour le plaisir de l'utilisateur.</li>
+                </ul>
+                <u>Screenshots (les "Cancel" ont bel et bien été remplacés par des "Annuler")</u>:<br/><br/>
+                    <img src="images/newer/email_auth_method.png" alt="Screenshot 2" height="310" class="center"/>
+                    <img src="images/newer/google_auth.png" alt="Screenshot 3" height="310" class="center"/>
+                    <img src="images/newer/user_post_username_prompt.png" alt="Screenshot 4" height="310" class="center"/>
+                    <img src="images/newer/restricted_action_feedback.png" alt="Screenshot 1" height="310" class="center"/>
+
+                    <img src="images/newer/search_feature.png" alt="Screenshot 2" height="310" class="center"/>
+                    <img src="images/newer/syncing_zones.png" alt="Screenshot 3" height="310" class="center"/>
+                    <img src="images/newer/preferences_ui.png" alt="Screenshot 4" height="310" class="center"/>
+                    <img src="images/newer/pref_alerts_filters.png" alt="Screenshot 1" height="310" class="center"/>
+
+                    <img src="images/newer/mz_post_type_prompt.png" alt="Screenshot 2" height="310" class="center"/>
+                    <img src="images/newer/mz_post_radius_preview.png" alt="Screenshot 3" height="310" class="center"/>
+                    <img src="images/newer/mz_post_name_input.png" alt="Screenshot 4" height="310" class="center"/>
+                    <img src="images/newer/mz_post_wait.png" alt="Screenshot 1" height="310" class="center"/>
+
+                    <img src="images/newer/mz_post_success.png" alt="Screenshot 2" height="310" class="center"/>
+                    <img src="images/newer/mz_info_ui.png" alt="Screenshot 3" height="310" class="center"/>
+                    <img src="images/newer/mz_delete_prompt.png" alt="Screenshot 4" height="310" class="center"/>
+                    <img src="images/newer/mz_delete_success.png" alt="Screenshot 1" height="310" class="center"/>
+            </blockquote>
+
+            <h3>Semaine 27 août</h3>
+            <ul>
+                <li><b>[Serveur]</b> Aide pour faire passer le temps de réponse pour une requête de "POST MonitoredZone" de 8 secondes à 1 seconde.</li>
+                <li><b>[WebApp]</b> Ajouts de catégories connues supplémentaires pour la classification d'alertes.</li>
+                <li><b>[WebApp]</b> Suite à l'inversion des coordonnées au niveau de l'API, il a fallu inverser les coordonnées au niveau de la WebApp: de (Lat,Lng) à (Lng,Lat).</li>
+                <li><b>[Android]</b> Nouvelle technique de récupération de la localisation GPS.</li>
+                <li><b>[Android]</b> Intégration du filtre de Préférence en lien avec la location GPS: l'utilisateur peut désormais refuser l'utilisation de ces données à l'application (même si la permission avait été accordée préalablement à l'application).</li>
+                <li><b>[Android]</b> Sauvegarde de la dernière localisation GPS en mémoire interne et récupération de celle-ci en cas d'absense de GPS pour centrer la carte sur un endroit connu de l'utilisateur.</li>
+                <li><b>[Android]</b> La position GPS actuelle de l'utilisateur est désormais affichée sur la carte (s'il le désire/le permet).</li>
+                <li><b>[Android]</b> L'utilisateur peut désormais choisir son "username" lors de la création de son compte.</li>
+                <li><b>[Android]</b> Retouches sur le design (UI) de l'authentification: désormais plus uniforme et intuitif (plus de bouton "Retour", complètement en français, couleur uniforme des boutons, feedback pour l'utilisateur en cas d'erreurs, etc.).</li>
+                <li><b>[Android]</b> Mise-à-jour de certaines librairies utilisése.</li>
+                <li><b>[Android]</b> Intégration complète des Zones Surveillées de forme Circulaire.</li>
+                <li><b>[Android]</b> Création d'un "Aperçu en directe" pour la sélection de la grosseur du rayon pour les Zones Surveillées Circulaires.</li>
+                <li><b>[Android]</b> Intégration complète de la mise-à-jour des "registrationToken" en fonction des "log in" et "log out".</li>
+                <li><b>[Android]</b> Intégration du "POST User" pour l'authentification avec Google.</li>
+                <li><b>[Android]</b> Intégration de l'outil "Crashlitics" qui permet de récolter des données sur les crashs occasionnés dans l'application (permet une meilleure maintenance).</li>
+                <li><b>[Android]</b> Intégration de l'option de supprimer toutes ses Zones Surveillées d'un coup.</li>
+            </ul>
 
             <h3>Semaine 20 août</h3>
             <ul>
-                <li><b>[WebApp]</b> Refactor de certaines parties du code.</li>
+                <li><b>[WebApp]</b> Refactor de certaines parties du code et ajout de commentaires.</li>
                 <li><b>[WebApp]</b> Fix de certains bugs en lien avec l'affichage des bons icônes dans le menu de gauche.</li>
-                <li><b>[WebApp]</b> Intégration de l'arrangement automatique du "Zoom Level" sur la map lors des recherches.</li>
-                <li><b>[WebApp]</b> Intégration des filtres complétées (menu de gauche).</li>
+                <li><b>[WebApp]</b> Intégration de l'arrangement automatique du "Zoom Level" sur la map lors des recherches de localisation.</li>
+                <li><b>[WebApp]</b> Intégration des filtres complétée (menu de gauche).</li>
                 <li><b>[Serveur]</b> Intégration de l'utilisation du Google API (Admin SDK) pour envoyer les notifications.</li>
                 <li><b>[Serveur]</b> Retravaille du code d'envoie des notifications.</li>
-                <li><b>[Android]</b> Avancement au niveau de la gérance des notifications une fois reçus et cliqués.</li>
+                <li><b>[Serveur]</b> Petit correctif sur un JUnit Test en lien avec Firebase.</li>
+                <li><b>[Android]</b> Refactor dans MainActivity.</li>
+                <li><b>[Android]</b> Début de travail sur une manière de synchroniser l'information du téléphone en local avec celle offerte par le Serveur.</li>
+                <li><b>[Android]</b> Intégration du "POST Zone Surveillée".</li>
+                <li><b>[Android]</b> Début d'intégration de la sauvegarde et récupération des Zones Surveillées dans la mémoire interne.</li>
+                <li><b>[Android]</b> Nouvelle intégration des Préférences des utilisateurs.</li>
+                <li><b>[Android]</b> Intégration des requêtes "POST User" au flow de l'authentification par Email (de même pour son "GET User" en cas de SignIn).</li>
+                <li><b>[Android]</b> Avancement au niveau de la gestion des notifications une fois reçus et cliqués.</li>
                 <li><b>[Android]</b> Adaptation du Manifest pour que la visualisation ne se fasse qu'en mode "Portrait"</li>
                 <li><b>[Android]</b> Fix du bug qui ralentissait le développement ("Clean Project" devait être effectué avant chaque test).</li>
             </ul>
@@ -47,6 +105,7 @@
             <h3>Semaine 13 août</h3>
             <ul>
                 <li><b>[WebApp]</b> Changement des URL des requêtes à l'API et adaptation de Angular pour que celles-ci demande des réponses en format JSON.</li>
+                <li><b>[WebApp]</b> Ajout des descriptions des alertes d'usagers dans les infobulles.</li>
                 <li><b>[Android]</b> Rajout d'animations pour enrichir l'expérience des utilisateurs et rendre certaines fonctionalités plus évidentes.</li>
                 <li><b>[Android]</b> Fix du crash occasionné par la demande de permission d'utiliser la Localisation GPS pour les API_Level 24+.</li>
                 <li><b>[Android]</b> Implémentation de la méthode concrète permettant de receuillir le idToken à envoyer au serveur pour une requête authentifiée.</li>
