@@ -12,9 +12,9 @@
     <body>
         <nav class="navBar" id="navBar">
             <ul>
-               <li><a class="active" href="https://www.webdepot.umontreal.ca/Usagers/p1071435/MonDepotPublic/Acclimate/index.xhtml">Accueil</a></li><!-- Pour enlever l'espace...
+               <li><a href="https://www.webdepot.umontreal.ca/Usagers/p1071435/MonDepotPublic/Acclimate/index.xhtml">Accueil</a></li><!-- Pour enlever l'espace...
             --><li><a href="https://www.webdepot.umontreal.ca/Usagers/p1071435/MonDepotPublic/Acclimate/plan.xhtml">Plan de travail</a></li><!-- https://css-tricks.com/fighting-the-space-between-inline-block-elements/
-            --><li><a href="https://www.webdepot.umontreal.ca/Usagers/p1071435/MonDepotPublic/Acclimate/about.xhtml">À propos</a></li><!--
+            --><li><a class="active" href="https://www.webdepot.umontreal.ca/Usagers/p1071435/MonDepotPublic/Acclimate/about.xhtml">À propos</a></li><!--
             --><li id="unique"><a href="javascript:void(0);" class="icon" onclick="showMenu()">&#9776;</a></li>
             </ul>
         </nav>
@@ -28,8 +28,31 @@
             <img alt="" src="https://www.webdepot.umontreal.ca/Usagers/p1071435/MonDepotPublic/Acclimate/images/app_image.png" class="center"/>
             </br>
 
-            <h2>Rapport des contributions (environ 200 heures de travail)</h2>
+            <h2>Rapport des contributions (environ 240 heures de travail)</h2>
             </br>
+
+            <h3>Semaine 10 septembre : <i><a href="https://www.webdepot.umontreal.ca/Usagers/p1071435/MonDepotPublic/ProjInfoPerso/documents/rapport_final.pdf">Rapport final</a> (pdf)</i></h3>
+            <blockquote>
+                <ul>
+                    <li><b>[WebApp]</b> Ajout d'hyperliens vers les sources officielles (SOPFEU, Environnement Canada et le Ministère de la Sécurité Publique du Québec) dans les InfoBulles.</li>
+                    <li><b>[Android]</b> Petit "fine tuning" sur le "checkInternetConnection" pour être un peu plus flexible.</li>
+                    <li><b>[Android]</b> Ajout de JavaDoc/commentaires et petit 'clean up' afin d'enlever des 'import' en trop.</li>
+                </ul>
+                <u>Screenshots les plus récents (français ajusté, etc.)</u>:<br/><br/>
+                    <img src="images/newest/search.png" alt="Screenshot 2" height="310" class="center"/>
+                    <img src="images/newest/mz_namePrompt.png" alt="Screenshot 2" height="310" class="center"/>
+                    <img src="images/newest/mz_typePrompt.png" alt="Screenshot 3" height="310" class="center"/>
+                    <img src="images/newest/mz_deletePrompt.png" alt="Screenshot 1" height="310" class="center"/>
+
+                    
+                    <img src="images/newest/notif.png" alt="Screenshot 4" height="310" class="center"/>
+                    <img src="images/newest/sync_before.png" alt="Screenshot 3" height="310" class="center"/>
+                    <img src="images/newest/sync_after.png" alt="Screenshot 4" height="310" class="center"/>
+                    <img src="images/newest/gps.png" alt="Screenshot 4" height="310" class="center"/>
+                    
+                    <img src="images/newest/Sync_diag_act.png" alt="Diagramme d'activite pour le lancement d'une requête au serveur" width="710" class="center"/>
+                    <br/>
+            </blockquote>
 
             <h3>Semaine 3 septembre</h3>
             <blockquote>
@@ -39,6 +62,10 @@
                     <li><b>[Android]</b> Intégration complète de la synchronisation entre l'appareil de l'usager (son contenu en mémoire interne) et le serveur.</li>
                     <li><b>[Android]</b> Amélioration du 'feedback' à l'utilisateur (aperçus/notifications pendant l'attente de la réponse du serveur).</li>
                     <li><b>[Android]</b> Intégration d'animations pour le plaisir de l'utilisateur.</li>
+                    <li><b>[Android]</b> ConstraintLayout pour "Home" Activity.</li>
+                    <li><b>[Android]</b> Arrangements esthétiques pour les textes des "AlertDialog" ("Zones Surveillées" -> "zones surveillées", etc.).</li>
+                    <li><b>[Android]</b> J'ai passé au travers des TODO dans le code pour en enlever quelques-un.</li>
+                    <li><b>[Android]</b> Intégration de Firebase Performance pour obtenir plus de métriques par rapport à la qualité du logiciel.</li>
                 </ul>
                 <u>Screenshots (les "Cancel" ont bel et bien été remplacés par des "Annuler")</u>:<br/><br/>
                     <img src="images/newer/email_auth_method.png" alt="Screenshot 2" height="310" class="center"/>
